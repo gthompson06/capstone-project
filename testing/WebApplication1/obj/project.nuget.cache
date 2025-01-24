@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "ED4+ewdpNWU=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\grego\\Documents\\GitHub\\capstone-project\\testing\\WebApplication1\\WebApplication1.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\grego\\.nuget\\packages\\awssdk.core\\3.7.401.3\\awssdk.core.3.7.401.3.nupkg.sha512",
+    "C:\\Users\\grego\\.nuget\\packages\\awssdk.dynamodbv2\\3.7.405.9\\awssdk.dynamodbv2.3.7.405.9.nupkg.sha512"
+  ],
+  "logs": []
+}
