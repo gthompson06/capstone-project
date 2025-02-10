@@ -1,22 +1,34 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View, Dimensions } from "react-native";
+import {
+ StyleSheet,
+ Text,
+ View,
+ Image,
+ SafeAreaView,
+ TouchableWithoutFeedback,
+} from "react-native";
 
 export default function App() {
- console.log(Dimensions.get("screen"));
-
  return (
-  <View style={styles.container}>
-   <Text>Project Worthy</Text>
-   <StatusBar style="auto" />
-  </View>
+  <SafeAreaView style={styles.container}>
+   <Text>Hello React Native</Text>
+   <TouchableWithoutFeedback onPress={() => console.log("Image Tapped")}>
+    <Image
+     source={{
+      width: 200,
+      height: 300,
+      uri: "https://picsum.photos/200/300",
+     }}
+    />
+   </TouchableWithoutFeedback>
+  </SafeAreaView>
  );
 }
-
 const styles = StyleSheet.create({
  container: {
   flex: 1,
-  backgroundColor: "dodgerblue",
+  backgroundColor: "orange",
   alignItems: "center",
-  justifyContent: "center",
+  alignContent: "center",
  },
 });
