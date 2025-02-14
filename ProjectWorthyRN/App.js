@@ -26,34 +26,12 @@ const GridScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: "#f8f9fa",
-  },
-  container: {
-    flex: 1,
-    padding: 10,
-  },
-  row: {
-    flexDirection: "row",
-    width: "100%",
-    justifyContent: "space-between",
-    marginBottom: 10,
-  },
-  col: {
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#007bff",
-    padding: 20,
-    borderRadius: 5,
-  },
-  col12: { width: "50%" },
-  col6: { width: "100%" },
-  col4: { width: "31%" },
-  text: {
-    color: "#fff",
-    fontSize: 18,
-  },
+container: {
+  flex: 1,
+  backgroundColor: "dodgerblue",
+  alignItems: "center",
+  justifyContent: "center",
+ },
 });
 
 export default GridScreen;
