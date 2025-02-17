@@ -3,15 +3,19 @@ import React, {useState} from 'react';
 import Logo from "../../../assets/images/TestImg.png";
 import CustomInput from '../../components/CustomInput/CustomInput';
 import CustomButton from '../../components/CustomButton/CustomButton';
+import { useNavigation } from '@react-navigation/native';
 
 const SignInScreen = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const navigation = useNavigation(); // Get navigation object
+
     const onSignInPressed = () => {
         console.warn("sign in button pressed")    
     }
     const onCreateAccountPressed = () => {
-        console.warn("create account button pressed")    
+        console.warn("create account button pressed")
+        navigation.navigate("CreateAccount"); // Navigate to CreateAccountScreen
     }
 
     const {height} = useWindowDimensions();
