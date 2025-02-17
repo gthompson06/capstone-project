@@ -1,11 +1,13 @@
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View, SafeAreaView } from "react-native";
 import SignInScreen from "./src/screens/SignInScreen";
+import CreateAccountScreen from "./src/screens/CreateAccountScreen/CreateAccountScreen";
 
 export default function App() {
  return (
   <SafeAreaView style={styles.container}>
-   <SignInScreen />
+   {/* <SignInScreen /> */}
+   <CreateAccountScreen />
    <StatusBar style="auto" />
   </SafeAreaView>
  );
@@ -14,7 +16,7 @@ export default function App() {
 const styles = StyleSheet.create({
  container: {
   flex: 1,
-  backgroundColor: 'white'
+  backgroundColor: "white",
  },
 });
 //in aksel branch
