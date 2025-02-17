@@ -24,7 +24,7 @@ const CreateAccountScreen = () => {
  const { height } = useWindowDimensions();
 
  return (
-  <View style={StyleSheet.root}>
+  <View style={styles.root}>
    <Image
     source={Logo}
     style={[styles.logo, { height: height * 0.3 }]}
