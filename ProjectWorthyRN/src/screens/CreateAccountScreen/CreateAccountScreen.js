@@ -9,7 +9,7 @@ import React, { useState } from "react";
 import Logo from "../../../assets/images/TestImg.png";
 import CustomInput from "../../components/CustomInput/CustomInput";
 import CustomButton from "../../components/CustomButton/CustomButton";
-// import CreateAccountStyles from "../../styles/Styles.js";
+import { CreateAccountStyles } from "../../styles/Styles.js";
 
 const CreateAccountScreen = () => {
  const [username, setUsername] = useState("");
@@ -24,10 +24,10 @@ const CreateAccountScreen = () => {
  const { height } = useWindowDimensions();
 
  return (
-  <View style={StyleSheet.root}>
+  <View style={CreateAccountStyles.root}>
    <Image
     source={Logo}
-    style={[Stylesheet.logo, { height: height * 0.3 }]}
+    style={[CreateAccountStyles.logo, { height: height * 0.3 }]}
     resizeMode="contain"
    />
    <Text style={{ fontSize: "40", paddingBottom: "30" }}>CREATE ACCOUNT</Text>
@@ -54,16 +54,16 @@ const CreateAccountScreen = () => {
  );
 };
 
-const styles = StyleSheet.create({
- root: {
-  alignItems: "center",
-  padding: 20,
- },
- logo: {
-  width: "70%",
-  maxWidth: 300,
-  maxHeight: 200,
- },
-});
+// const styles = StyleSheet.create({
+//  root: {
+//   alignItems: "center",
+//   padding: 20,
+//  },
+//  logo: {
+//   width: "70%",
+//   maxWidth: 300,
+//   maxHeight: 200,
+//  },
+// });
 
 export default CreateAccountScreen;
