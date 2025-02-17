@@ -9,6 +9,7 @@ import React, { useState } from "react";
 import Logo from "../../../assets/images/TestImg.png";
 import CustomInput from "../../components/CustomInput/CustomInput";
 import CustomButton from "../../components/CustomButton/CustomButton";
+// import CreateAccountStyles from "../../styles/Styles.js";
 
 const CreateAccountScreen = () => {
  const [username, setUsername] = useState("");
@@ -23,10 +24,10 @@ const CreateAccountScreen = () => {
  const { height } = useWindowDimensions();
 
  return (
-  <View style={styles.root}>
+  <View style={StyleSheet.root}>
    <Image
     source={Logo}
-    style={[styles.logo, { height: height * 0.3 }]}
+    style={[Stylesheet.logo, { height: height * 0.3 }]}
     resizeMode="contain"
    />
    <Text style={{ fontSize: "40", paddingBottom: "30" }}>CREATE ACCOUNT</Text>
