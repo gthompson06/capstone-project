@@ -11,7 +11,16 @@ const SignInScreen = () => {
     const navigation = useNavigation(); // Get navigation object
 
     const onSignInPressed = () => {
-        console.warn("sign in button pressed")    
+        console.warn("sign in button pressed")
+        console.warn("username: ", username)
+        console.warn("password: ", password) 
+        if (username == "Aksel" & password == "pwd"){
+            navigation.navigate("HomeScreen"); // Navigate to HomeScreen
+
+        }
+        else {
+            console.warn("wrong username or password")
+        }
     }
     const onCreateAccountPressed = () => {
         console.warn("create account button pressed")
