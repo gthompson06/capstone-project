@@ -27,7 +27,7 @@ const CreateAccountScreen = () => {
   <View style={StyleSheet.root}>
    <Image
     source={Logo}
-    style={[Stylesheet.logo, { height: height * 0.3 }]}
+    style={[styles.logo, { height: height * 0.3 }]}
     resizeMode="contain"
    />
    <Text style={{ fontSize: "40", paddingBottom: "30" }}>CREATE ACCOUNT</Text>
