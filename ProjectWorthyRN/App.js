@@ -1,20 +1,22 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, SafeAreaView } from "react-native";
+import SignInScreen from "./src/screens/SignInScreen";
+import CreateAccountScreen from "./src/screens/CreateAccountScreen/CreateAccountScreen";
 
 export default function App() {
  return (
-  <View style={styles.container}>
-   <Text>Project Worthy</Text>
+  <SafeAreaView style={styles.container}>
+   {/* <SignInScreen /> */}
+   <CreateAccountScreen />
    <StatusBar style="auto" />
-  </View>
+  </SafeAreaView>
  );
 }
 
 const styles = StyleSheet.create({
  container: {
   flex: 1,
-  backgroundColor: "dodgerblue",
-  alignItems: "center",
-  justifyContent: "center",
+  backgroundColor: "white",
  },
 });
+//in aksel branch
