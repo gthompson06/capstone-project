@@ -1,15 +1,10 @@
-import {
- View,
- Text,
- Image,
- StyleSheet,
- useWindowDimensions,
-} from "react-native";
+import { View, Text, Image, StyleSheet, useWindowDimensions, SafeAreaView} from "react-native";
 import React, { useState } from "react";
 import Logo from "../../../assets/images/TestImg.png";
 import CustomInput from "../../components/CustomInput/CustomInput";
 import CustomButton from "../../components/CustomButton/CustomButton";
 import { CreateAccountStyles } from "../../styles/Styles.js";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const CreateAccountScreen = () => {
  const [username, setUsername] = useState("");
@@ -24,7 +19,7 @@ const CreateAccountScreen = () => {
  const { height } = useWindowDimensions();
 
  return (
-  <View style={CreateAccountStyles.root}>
+  <SafeAreaView style={CreateAccountStyles.root}>
    <Image
     source={Logo}
     style={[CreateAccountStyles.logo, { height: height * 0.3 }]}
@@ -50,7 +45,7 @@ const CreateAccountScreen = () => {
     secureTextEntry
    />
    <CustomButton text="Create Account" onPress={createAccountPressed} />
-  </View>
+  </SafeAreaView>
  );
 };
 
