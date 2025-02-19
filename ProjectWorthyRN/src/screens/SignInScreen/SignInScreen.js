@@ -4,6 +4,7 @@ import Logo from "../../../assets/images/TestImg.png";
 import CustomInput from '../../components/CustomInput/CustomInput';
 import CustomButton from '../../components/CustomButton/CustomButton';
 import { useNavigation } from '@react-navigation/native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const SignInScreen = () => {
     const [username, setUsername] = useState('');
@@ -30,7 +31,7 @@ const SignInScreen = () => {
     const {height} = useWindowDimensions();
 
     return (
-        <View style={styles.root}>
+        <SafeAreaView style={styles.root}>
             <Image source={Logo}
                 style={[styles.logo, {height: height * 0.3}]}
                 resizeMode='contain'
@@ -57,7 +58,7 @@ const SignInScreen = () => {
                 type="secondary"
             />
 
-        </View>
+        </SafeAreaView>
     )
 }
 
