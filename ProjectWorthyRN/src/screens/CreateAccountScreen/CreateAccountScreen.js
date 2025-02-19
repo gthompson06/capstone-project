@@ -1,4 +1,4 @@
-import { View, Text, Image, StyleSheet, useWindowDimensions, SafeAreaView} from "react-native";
+import { View, Text, Image, StyleSheet, useWindowDimensions} from "react-native";
 import React, { useState } from "react";
 import Logo from "../../../assets/images/TestImg.png";
 import CustomInput from "../../components/CustomInput/CustomInput";
@@ -48,17 +48,5 @@ const CreateAccountScreen = () => {
   </SafeAreaView>
  );
 };
-
-// const styles = StyleSheet.create({
-//  root: {
-//   alignItems: "center",
-//   padding: 20,
-//  },
-//  logo: {
-//   width: "70%",
-//   maxWidth: 300,
-//   maxHeight: 200,
-//  },
-// });
 
 export default CreateAccountScreen;
