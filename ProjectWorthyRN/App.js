@@ -5,6 +5,7 @@ import { StyleSheet, Text, View, SafeAreaView } from "react-native";
 import SignInScreen from "./src/screens/SignInScreen";
 import CreateAccountScreen from "./src/screens/CreateAccountScreen/CreateAccountScreen";
 import HomeScreen from "./src/screens/HomeScreen";
+import ResetPasswordScreen from "./src/screens/ResetPasswordScreen";
 
 const Stack = createStackNavigator();
 
@@ -16,6 +17,7 @@ const App = () => {
                 <Stack.Screen name="SignIn" component={SignInScreen} />
                 <Stack.Screen name="CreateAccount" component={CreateAccountScreen} />
                 <Stack.Screen name="HomeScreen" component={HomeScreen} />
+                <Stack.Screen name="ResetPassword" component={ResetPasswordScreen} />
             </Stack.Navigator>
         </NavigationContainer>
     );
