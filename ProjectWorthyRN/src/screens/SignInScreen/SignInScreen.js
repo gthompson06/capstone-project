@@ -29,7 +29,7 @@ const SignInScreen = () => {
     }
     const onForgotPasswordPressed = () => {
         console.warn("forgot password pressed")
-        navigation.navigate("ForgotPasswordScreen");
+        navigation.navigate("ForgotPassword");
     }
 
     const {height} = useWindowDimensions();
