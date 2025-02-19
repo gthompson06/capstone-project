@@ -27,6 +27,10 @@ const SignInScreen = () => {
         console.warn("create account button pressed")
         navigation.navigate("CreateAccount"); // Navigate to CreateAccountScreen
     }
+    const onForgotPasswordPressed = () => {
+        console.warn("forgot password pressed")
+        navigation.navigate("ForgotPasswordScreen");
+    }
 
     const {height} = useWindowDimensions();
 
@@ -55,6 +59,11 @@ const SignInScreen = () => {
             <CustomButton
                 text="Create Account"
                 onPress={onCreateAccountPressed}
+                type="secondary"
+            />
+            <CustomButton
+                text="Forgot Password"
+                onPress={onForgotPasswordPressed}
                 type="secondary"
             />
 
