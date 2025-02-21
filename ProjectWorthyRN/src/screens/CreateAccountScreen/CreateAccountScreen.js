@@ -34,34 +34,36 @@ const CreateAccountScreen = () => {
 
  return (
   <SafeAreaView style={CreateAccountStyles.root}>
-   <ScrollView>
-    <Image
-     source={Logo}
-     style={[CreateAccountStyles.logo, { height: height * 0.3 }]}
-     resizeMode="contain"
-    />
-    <Text style={{ fontSize: 40, paddingBottom: 30 }}>CREATE ACCOUNT</Text>
-    <CustomInput
-     placeholder="User Name"
-     value={username}
-     setValue={setUsername}
-    />
-    <CustomInput placeholder="Email" value={email} setValue={setEmail} />
-    <CustomInput
-     placeholder="Password"
-     value={password}
-     setValue={setPassword}
-     secureTextEntry
-    />
-    <CustomInput
-     placeholder="Confirm Password"
-     value={confirmPassword}
-     setValue={setConfirmPassword}
-     secureTextEntry
-    />
-    <CustomButton text="Create Account" onPress={createAccountPressed} />
-    <CustomButton text="Reset Password" onPress={ResetPassword} />
-   </ScrollView>
+   <Image
+    source={Logo}
+    style={[CreateAccountStyles.logo, { height: height * 0.2 }]}
+    resizeMode="contain"
+   />
+   <Text style={{ fontSize: 20, paddingBottom: 15 }}>CREATE ACCOUNT</Text>
+   <CustomInput
+    placeholder="User Name"
+    value={username}
+    setValue={setUsername}
+   />
+   <CustomInput placeholder="Email" value={email} setValue={setEmail} />
+   <CustomInput
+    placeholder="Password"
+    value={password}
+    setValue={setPassword}
+    secureTextEntry
+   />
+   <CustomInput
+    placeholder="Confirm Password"
+    value={confirmPassword}
+    setValue={setConfirmPassword}
+    secureTextEntry
+   />
+   <CustomButton
+    text="Create Account"
+    onPress={createAccountPressed}
+    type="createAccount"
+   />
+   {/* <CustomButton text="Reset Password" onPress={ResetPassword} /> */}
   </SafeAreaView>
  );
 };
