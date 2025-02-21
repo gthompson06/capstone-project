@@ -13,7 +13,10 @@ namespace Interaction {
         public UserController (IDynamoDBContext context) {
             _context = context;
         }
-
+        [HttpGet("")]
+        public IActionResult Load () {
+            return Ok(new {Message = "Welcome"});
+        }
 
         [HttpGet("{userId}")]
         public async Task<IActionResult> GetUserById (string userId) {

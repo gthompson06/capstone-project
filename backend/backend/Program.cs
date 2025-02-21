@@ -42,8 +42,15 @@ builder.Services.AddCors(options =>
         });
 });
 
+builder.Services.AddControllers();
+
 var app = builder.Build();
 
 app.UseCors("AllowCORS"); // Apply CORS globally
+
+// Routes using http will automatically redirect to https (more secure)
+app.UseHttpsRedirection();
+
+app.MapControllers();
 
 app.Run();
