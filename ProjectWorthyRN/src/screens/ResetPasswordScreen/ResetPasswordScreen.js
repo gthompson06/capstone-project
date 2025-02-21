@@ -25,7 +25,7 @@ const ResetPasswordScreen = () => {
 
  return (
   <SafeAreaView style={ResetPasswordStyles.root}>
-   <Text style={{ fontSize: "40", paddingBottom: "30" }}>RESET PASSWORD</Text>
+   <Text style={{ fontSize: 40, paddingBottom: 30 }}>RESET PASSWORD</Text>
    <CustomInput
     placeholder="Current Password"
     value={confirmPassword}
