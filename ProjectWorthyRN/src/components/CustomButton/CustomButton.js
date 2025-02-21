@@ -31,6 +31,11 @@ const styles = StyleSheet.create({
  container_secondary: {
   backgroundColor: "white",
  },
+ container_createAccount: {
+  backgroundColor: "red",
+  height: "10%",
+  width: "50%",
+ },
  text: {
   fontSize: 25,
   textAlign: "center",
