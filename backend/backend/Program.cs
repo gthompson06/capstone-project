@@ -1,41 +1,49 @@
+using Amazon;
+using Amazon.DynamoDBv2;
+using Amazon.DynamoDBv2.DataModel;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using System;
+using System.Threading.Tasks;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+// Get ConfigurationManager from Microsoft Extension
+var config = builder.Configuration;
+
+// Get region from configuration file
+var awsRegion = config["AWS:Region"] ?? "us-east-1";
+
+// Set region for AWS SDK
+var region = RegionEndpoint.GetBySystemName(awsRegion);
+
+// Setup AWS DynamoDB client (lower-level interaction with database)
+var dynamoDbClient = new AmazonDynamoDBClient(RegionEndpoint.GetBySystemName(awsRegion));
+
+// Add client to app services
+builder.Services.AddSingleton<IAmazonDynamoDB>(dynamoDbClient);
+
+// Add higher-level database interaction object to app services
+builder.Services.AddSingleton<IDynamoDBContext>(new DynamoDBContext(dynamoDbClient));
+
+// Allow Cross-Origin Resource Sharing (CORS) from anywhere to allow requests from React Native
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowCORS",
+        policy =>
+        {
+            policy.AllowAnyOrigin()
+                  .AllowAnyMethod()
+                  .AllowAnyHeader();
+        });
+});
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-}
-
-app.UseHttpsRedirection();
-
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast = Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast");
+app.UseCors("AllowCORS"); // Apply CORS globally
 
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
