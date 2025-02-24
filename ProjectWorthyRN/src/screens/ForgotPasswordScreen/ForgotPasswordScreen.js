@@ -14,11 +14,11 @@ const ForgotPasswordScreen = () => {
         <SafeAreaView style={CreateAccountStyles.root}>
             <Text style={{ fontSize: 40, paddingBottom: 30 }}>FORGOT PASSWORD?</Text>
             <CustomInput
-                placeholder="Enter"
+                placeholder="Enter Email"
                 value={email}
                 setValue={setEmail}
             />
-            <CustomButton text="Sign In" onPress={onEnterEmailPressed} />
+            <CustomButton text="Submit" onPress={onEnterEmailPressed} />
        </SafeAreaView>
       );
      };
