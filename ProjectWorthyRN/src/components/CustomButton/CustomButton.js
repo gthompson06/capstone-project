@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
 
   maxWidth: 450,
   alignItems: "center",
-  justifyContent: "venter",
+  justifyContent: "center",
  },
  container_primary: {
   width: "75%",
