@@ -34,6 +34,11 @@ const styles = StyleSheet.create({
     width: "75%",
   backgroundColor: "white",
  },
+ container_createAccount: {
+    backgroundColor: "red",
+    height: "10%",
+    width: "50%",
+   },
  container_signIn: {
     width: "50%",
     backgroundColor: "lightblue",
