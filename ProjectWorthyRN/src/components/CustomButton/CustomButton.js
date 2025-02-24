@@ -14,7 +14,7 @@ const CustomButton = ({ onPress, text, type = "primary" }) => {
 
 const styles = StyleSheet.create({
  container: {
-  hminHeight: 50,
+  minHeight: 50,
 
   borderColor: "white",
   borderWidth: 2,
