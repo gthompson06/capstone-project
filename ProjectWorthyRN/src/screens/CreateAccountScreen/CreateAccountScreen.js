@@ -35,11 +35,13 @@ const CreateAccountScreen = () => {
 
  return (
   <SafeAreaView style={CreateAccountStyles.root}>
-   <CustomButton
-    text="Go Back"
-    onPress={() => navigation.goBack()}
-    type="BackButton"
-   />
+   <View style={CreateAccountStyles.button}>
+    <CustomButton
+     text="Go Back"
+     onPress={() => navigation.goBack()}
+     type="BackButton"
+    />
+   </View>
    <Image
     source={Logo}
     style={[CreateAccountStyles.logo, { height: height * 0.2 }]}

@@ -43,11 +43,12 @@ const styles = StyleSheet.create({
  },
  container_BackButton: {
   position: "absolute:",
-  right: "13%",
+  marginLeft: 10,
   backgroundColor: "lightblue",
   height: 30,
   width: 90,
   justifyContent: "center",
+  alignItems: "center",
  },
  container_signIn: {
   width: "50%",
