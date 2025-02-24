@@ -14,8 +14,7 @@ const CustomButton = ({ onPress, text, type = "primary" }) => {
 
 const styles = StyleSheet.create({
  container: {
-  width: "75%",
-  height: "10%",
+  hminHeight: 50,
 
   borderColor: "white",
   borderWidth: 2,
@@ -24,22 +23,24 @@ const styles = StyleSheet.create({
   marginVertical: 10,
 
   maxWidth: 450,
+  alignItems: 'center',
+  justifyContent: 'venter',
  },
  container_primary: {
+    width: "75%",
   backgroundColor: "lightblue",
  },
  container_secondary: {
+    width: "75%",
   backgroundColor: "white",
  },
- container_createAccount: {
-  backgroundColor: "red",
-  height: "10%",
-  width: "50%",
- },
+ container_signIn: {
+    width: "50%",
+    backgroundColor: "lightblue",
+   },
  text: {
   fontSize: 25,
   textAlign: "center",
-  flex: 1,
   padding: 20,
   fontWeight: "bold",
  },
@@ -49,6 +50,9 @@ const styles = StyleSheet.create({
  text_secondary: {
   color: "gray",
  },
+ text_signIn: {
+    color: "white",
+   },
 });
 
 export default CustomButton;
