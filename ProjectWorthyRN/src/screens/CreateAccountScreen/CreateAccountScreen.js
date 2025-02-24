@@ -5,6 +5,7 @@ import {
  StyleSheet,
  useWindowDimensions,
  ScrollView,
+ Button,
 } from "react-native";
 import React, { useState } from "react";
 import Logo from "../../../assets/images/TestImg.png";
@@ -19,7 +20,7 @@ const CreateAccountScreen = () => {
  const [email, setEmail] = useState("");
  const [password, setPassword] = useState("");
  const [confirmPassword, setConfirmPassword] = useState("");
- const navigation = useNavigation(); // Get navigation object
+ const navigation = useNavigation();
 
  const createAccountPressed = () => {
   console.log("create account button pressed");
@@ -34,6 +35,11 @@ const CreateAccountScreen = () => {
 
  return (
   <SafeAreaView style={CreateAccountStyles.root}>
+   <CustomButton
+    text="Go Back"
+    onPress={() => navigation.goBack()}
+    type="BackButton"
+   />
    <Image
     source={Logo}
     style={[CreateAccountStyles.logo, { height: height * 0.2 }]}
@@ -61,7 +67,7 @@ const CreateAccountScreen = () => {
    <CustomButton
     text="Create Account"
     onPress={createAccountPressed}
-    type="createAccount"
+    type="CreateAccount"
    />
    {/* <CustomButton text="Reset Password" onPress={ResetPassword} /> */}
   </SafeAreaView>
