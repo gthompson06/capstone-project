@@ -3,7 +3,7 @@ import {
  Text,
  Image,
  StyleSheet,
- useWindowDimensions,
+ useWindowDimensions, TouchableOpacity
 } from "react-native";
 import React, { useState } from "react";
 import Logo from "../../../assets/images/TestImg.png";
@@ -46,28 +46,20 @@ const SignInScreen = () => {
     resizeMode="contain"
    />
    <Text style={{ fontSize: 40, paddingBottom: 30 }}>LOGIN</Text>
-   <CustomInput
-    placeholder="Username"
-    value={username}
-    setValue={setUsername}
-   />
-   <CustomInput
-    placeholder="Password"
-    value={password}
-    setValue={setPassword}
-    secureTextEntry
-   />
-   <CustomButton text="Sign In" onPress={onSignInPressed} />
-   <CustomButton
-    text="Create Account"
-    onPress={onCreateAccountPressed}
-    type="secondary"
-   />
-   <CustomButton
-        text="Forgot Password"
-        onPress={onForgotPasswordPressed}
-        type="secondary"
-    />
+   <CustomInput placeholder="Username" value={username} setValue={setUsername} />
+   <CustomInput placeholder="Password" value={password} setValue={setPassword} secureTextEntry />
+
+   <View style={styles.rowContainer}>
+    <View style={styles.linkContainer}>
+     <TouchableOpacity onPress={onCreateAccountPressed}>
+      <Text style={styles.linkText}>Create Account</Text>
+     </TouchableOpacity>
+     <TouchableOpacity onPress={onForgotPasswordPressed}>
+      <Text style={styles.linkText}>Forgot Password?</Text>
+     </TouchableOpacity>
+    </View>
+    <CustomButton text="Sign In" type="signIn" onPress={onSignInPressed} />
+   </View>
   </View>
  );
 };
@@ -82,6 +74,21 @@ const styles = StyleSheet.create({
   maxWidth: 300,
   maxHeight: 200,
  },
+ rowContainer: {
+  flexDirection: "row",
+  alignItems: "center",
+  marginTop: 10,
+  justifyContent: "flex-start",
+ },
+ linkContainer: {
+  marginRight: 15,
+ },
+ linkText: {
+  fontSize: 16,
+  color: "black",
+  marginVertical: 5,
+ },
 });
+
 
 export default SignInScreen;
