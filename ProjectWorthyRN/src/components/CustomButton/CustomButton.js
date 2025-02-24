@@ -23,26 +23,36 @@ const styles = StyleSheet.create({
   marginVertical: 10,
 
   maxWidth: 450,
-  alignItems: 'center',
-  justifyContent: 'venter',
+  alignItems: "center",
+  justifyContent: "venter",
  },
  container_primary: {
-    width: "75%",
+  width: "75%",
   backgroundColor: "lightblue",
  },
  container_secondary: {
-    width: "75%",
+  width: "75%",
   backgroundColor: "white",
  },
- container_createAccount: {
-    backgroundColor: "red",
-    height: "10%",
-    width: "50%",
-   },
+ container_CreateAccount: {
+  backgroundColor: "lightblue",
+  height: "10%",
+  width: "50%",
+  justifyContent: "center",
+  borderRadius: 15,
+ },
+ container_BackButton: {
+  position: "absolute:",
+  right: "13%",
+  backgroundColor: "lightblue",
+  height: 30,
+  width: 90,
+  justifyContent: "center",
+ },
  container_signIn: {
-    width: "50%",
-    backgroundColor: "lightblue",
-   },
+  width: "50%",
+  backgroundColor: "lightblue",
+ },
  text: {
   fontSize: 25,
   textAlign: "center",
@@ -56,8 +66,15 @@ const styles = StyleSheet.create({
   color: "gray",
  },
  text_signIn: {
-    color: "white",
-   },
+  color: "white",
+ },
+ text_BackButton: {
+  color: "white",
+  fontSize: 10,
+ },
+ text_CreateAccount: {
+  color: "white",
+ },
 });
 
 export default CustomButton;
