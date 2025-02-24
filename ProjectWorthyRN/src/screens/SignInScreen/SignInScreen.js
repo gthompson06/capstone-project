@@ -3,7 +3,8 @@ import {
  Text,
  Image,
  StyleSheet,
- useWindowDimensions, TouchableOpacity
+ useWindowDimensions, TouchableOpacity,
+ SafeAreaView
 } from "react-native";
 import React, { useState } from "react";
 import Logo from "../../../assets/images/TestImg.png";
@@ -39,7 +40,7 @@ const SignInScreen = () => {
  const { height } = useWindowDimensions();
 
  return (
-  <View style={styles.root}>
+  <SafeAreaView style={styles.root}>
    <Image
     source={Logo}
     style={[styles.logo, { height: height * 0.3 }]}
@@ -60,7 +61,7 @@ const SignInScreen = () => {
     </View>
     <CustomButton text="Sign In" type="signIn" onPress={onSignInPressed} />
    </View>
-  </View>
+  </SafeAreaView>
  );
 };
 
