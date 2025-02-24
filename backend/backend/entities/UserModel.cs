@@ -2,12 +2,12 @@ using Amazon.DynamoDBv2.DataModel;
 using System.Collections.Generic;
 
 namespace UserModel {
-    
+
     [DynamoDBTable("Users")]
     public class User {
 
         [DynamoDBHashKey]
-        public string UserID {get;set;}
+        public string UserName {get;set;}
 
         [DynamoDBRangeKey]
         public DateTime CreationDate {get;set;}
