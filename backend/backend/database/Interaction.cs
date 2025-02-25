@@ -1,30 +1,40 @@
 using Amazon.DynamoDBv2.DataModel;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using UserModel;
+using backend.Services;
+using backend.entities;
 
-namespace Interaction {
+namespace Interaction
+{
     [ApiController]
-    [Route("worthy")]
-    public class UserController : ControllerBase {
+    [Route("User")]
+    public class UsersController : ControllerBase
+    {
+        private readonly DynamoDbService _dynamoDbService;
 
-        // Load context for use when controller is called
-        private readonly IDynamoDBContext _context;
-        public UserController (IDynamoDBContext context) {
-            _context = context;
+        public UsersController(DynamoDbService dynamoDbService)
+        {
+            _dynamoDbService = dynamoDbService;
         }
-        [HttpGet("")]
-        public IActionResult Load () {
-            return Ok(new {Message = "Welcome"});
-        }
+        [HttpPost]
+        public async Task<IActionResult> CreateUser([FromBody] User user)
+        {
+            await _dynamoDbService.InsertItemAsync(user.UserName, user.FirstName, user.LastName, user.DateOfBirth, user.Email, user.Password);
 
-        [HttpGet("{userId}")]
-        public async Task<IActionResult> GetUserById (string userId) {
-            var user = await _context.LoadAsync<User>(userId);
-            if(user == null){
-                return NotFound(new {Message = "User not found."});
+            return Ok("User Created");
+        }
+        [HttpGet("{userName}")]
+        public async Task<IActionResult> GetUser(string userName)
+        {
+            var user = await _dynamoDbService.GetItemAsync(userName);
+            if (user == null)
+            {
+                return NotFound("User not found");
             }
+
             return Ok(user);
         }
+
+        // Need update and delete
     }
 }

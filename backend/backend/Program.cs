@@ -9,8 +9,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Threading.Tasks;
-
+using backend.Services;
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddSingleton<DynamoDbService>();
 
 // Get ConfigurationManager from Microsoft Extension
 var config = builder.Configuration;
@@ -42,15 +44,12 @@ builder.Services.AddCors(options =>
         });
 });
 
+// Add controller services (for API controllers)
 builder.Services.AddControllers();
 
 var app = builder.Build();
 
-app.UseCors("AllowCORS"); // Apply CORS globally
-
-// Routes using http will automatically redirect to https (more secure)
-app.UseHttpsRedirection();
-
+// Map API controllers (this is needed to route requests to UserController, etc.)
 app.MapControllers();
 
 app.Run();
