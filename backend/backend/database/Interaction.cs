@@ -1,30 +1,14 @@
 using Amazon.DynamoDBv2.DataModel;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 using UserModel;
 
-namespace Interaction {
-    [ApiController]
-    [Route("worthy")]
-    public class UserController : ControllerBase {
-
-        // Load context for use when controller is called
-        private readonly IDynamoDBContext _context;
-        public UserController (IDynamoDBContext context) {
-            _context = context;
-        }
-        [HttpGet("")]
-        public IActionResult Load () {
-            return Ok(new {Message = "Welcome"});
-        }
-
-        [HttpGet("{userId}")]
-        public async Task<IActionResult> GetUserById (string userId) {
-            var user = await _context.LoadAsync<User>(userId);
-            if(user == null){
-                return NotFound(new {Message = "User not found."});
-            }
-            return Ok(user);
-        }
+public class Interaction {
+    private readonly IDynamoDBContext _context;
+    public Interaction (IDynamoDBContext context){
+        _context = context;
+    }
+    public Task<User> GetUserById (string userId) {
+        var user = _context.LoadAsync<User>(userId);
+        return user;
     }
 }
