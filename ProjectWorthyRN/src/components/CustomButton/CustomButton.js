@@ -14,7 +14,7 @@ const CustomButton = ({ onPress, text, type = "primary" }) => {
 
 const styles = StyleSheet.create({
  container: {
-  hminHeight: 50,
+  minHeight: 50,
 
   borderColor: "white",
   borderWidth: 2,
@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
 
   maxWidth: 450,
   alignItems: "center",
-  justifyContent: "venter",
+  justifyContent: "center",
  },
  container_primary: {
   width: "75%",
@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
   position: "absolute:",
   marginLeft: 10,
   backgroundColor: "lightblue",
-  height: 30,
+  height: 40,
   width: 90,
   justifyContent: "center",
   alignItems: "center",
