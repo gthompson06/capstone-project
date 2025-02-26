@@ -1,10 +1,13 @@
 import React from 'react';
 import { View, Text, SafeAreaView } from 'react-native';
 
-const HomeScreen = () => {
+const HomeScreen = ({route}) => {
+  const { username } = route.params || {}; 
+
   return (
     <SafeAreaView>
-      <Text>Home Screen</Text>
+      <Text>Welcome to the Home Screen, {username} </Text>
+
     </SafeAreaView>
   );
 };

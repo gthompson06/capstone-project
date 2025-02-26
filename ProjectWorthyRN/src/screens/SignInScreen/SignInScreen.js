@@ -22,7 +22,7 @@ const SignInScreen = () => {
   console.warn("username: ", username);
   console.warn("password: ", password);
   if ((username == "Aksel") & (password == "pwd")) {
-   navigation.navigate("HomeScreen"); // Navigate to HomeScreen
+   navigation.navigate("HomeScreen", {username}); // Navigate to HomeScreen
   } else {
    console.warn("wrong username or password");
   }
