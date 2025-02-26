@@ -1,12 +1,4 @@
-import {
- View,
- Text,
- Image,
- StyleSheet,
- useWindowDimensions,
- ScrollView,
- Button,
-} from "react-native";
+import {View, Text, Image, StyleSheet, useWindowDimensions, Button, TouchableOpacity} from "react-native";
 import React, { useState } from "react";
 import Logo from "../../../assets/images/TestImg.png";
 import CustomInput from "../../components/CustomInput/CustomInput";
@@ -14,6 +6,8 @@ import CustomButton from "../../components/CustomButton/CustomButton";
 import { CreateAccountStyles } from "../../styles/Styles.js";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation } from "@react-navigation/native";
+import BackArrow from "../../../assets/images/backArrow.png";
+
 
 const CreateAccountScreen = () => {
  const [username, setUsername] = useState("");
@@ -35,13 +29,15 @@ const CreateAccountScreen = () => {
 
  return (
   <SafeAreaView style={CreateAccountStyles.root}>
-   <View style={CreateAccountStyles.button}>
-    <CustomButton
-     text="Go Back"
-     onPress={() => navigation.goBack()}
-     type="BackButton"
-    />
-   </View>
+   <View style={{display: 'flex', width: "100%", justifyContent: "flex-start", marginLeft: "20%"}}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+            <Image 
+            source={BackArrow} 
+            style={{ width: 40, height: 40 }}
+            resizeMode="contain" 
+            />
+       </TouchableOpacity>
+    </View>
    <Image
     source={Logo}
     style={[CreateAccountStyles.logo, { height: height * 0.2 }]}
