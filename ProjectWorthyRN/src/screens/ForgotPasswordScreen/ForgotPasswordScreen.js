@@ -28,12 +28,12 @@ const ForgotPasswordScreen = () => {
                 resizeMode="contain" 
             />
             </TouchableOpacity>
+            </View>
             <Image
                 source={Logo}
                 style={[CreateAccountStyles.logo, { height: height * 0.2 }]}
                 resizeMode="contain"
             />
-            </View>
             <Text style={{ fontSize: 40, paddingBottom: 30 }}>FORGOT PASSWORD?</Text>
             <CustomInput
                 placeholder="Enter Email"
