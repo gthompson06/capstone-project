@@ -10,6 +10,11 @@ export const CreateAccountStyles = StyleSheet.create({
   maxWidth: 300,
   maxHeight: 200,
  },
+ button: {
+  display: "flex",
+  width: "100%",
+  justifyContent: "flex-start",
+ },
 });
 
 export const ResetPasswordStyles = StyleSheet.create({

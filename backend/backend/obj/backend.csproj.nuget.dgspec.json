@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\grego\\Documents\\GitHub\\capstone-project\\backend\\backend\\backend.csproj": {}
+    "C:\\Users\\tonyp\\Documents\\Programming\\VSCode\\ProjectWorthy\\capstone-project\\capstone-project\\backend\\backend\\backend.csproj": {}
   },
   "projects": {
-    "C:\\Users\\grego\\Documents\\GitHub\\capstone-project\\backend\\backend\\backend.csproj": {
+    "C:\\Users\\tonyp\\Documents\\Programming\\VSCode\\ProjectWorthy\\capstone-project\\capstone-project\\backend\\backend\\backend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\grego\\Documents\\GitHub\\capstone-project\\backend\\backend\\backend.csproj",
+        "projectUniqueName": "C:\\Users\\tonyp\\Documents\\Programming\\VSCode\\ProjectWorthy\\capstone-project\\capstone-project\\backend\\backend\\backend.csproj",
         "projectName": "backend",
-        "projectPath": "C:\\Users\\grego\\Documents\\GitHub\\capstone-project\\backend\\backend\\backend.csproj",
-        "packagesPath": "C:\\Users\\grego\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\grego\\Documents\\GitHub\\capstone-project\\backend\\backend\\obj\\",
+        "projectPath": "C:\\Users\\tonyp\\Documents\\Programming\\VSCode\\ProjectWorthy\\capstone-project\\capstone-project\\backend\\backend\\backend.csproj",
+        "packagesPath": "C:\\Users\\tonyp\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\tonyp\\Documents\\Programming\\VSCode\\ProjectWorthy\\capstone-project\\capstone-project\\backend\\backend\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\grego\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\tonyp\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
