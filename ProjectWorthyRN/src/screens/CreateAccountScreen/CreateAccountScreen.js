@@ -43,7 +43,9 @@ const CreateAccountScreen = () => {
     style={[CreateAccountStyles.logo, { height: height * 0.2 }]}
     resizeMode="contain"
    />
-   <Text style={{ fontSize: 20, paddingBottom: 15 }}>CREATE ACCOUNT</Text>
+   <Text style={{ fontSize: 20, paddingBottom: 15, fontWeight: "bold" }}>
+    CREATE ACCOUNT
+   </Text>
    <CustomInput
     placeholder="User Name"
     value={username}
