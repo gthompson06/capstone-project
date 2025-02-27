@@ -30,6 +30,10 @@ builder.Services.AddSingleton<IAmazonDynamoDB>(dynamoDbClient);
 // Add higher-level database interaction object to app services
 builder.Services.AddSingleton<IDynamoDBContext>(new DynamoDBContext(dynamoDbClient));
 
+// Add app services
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<Interaction>();
+
 // Allow Cross-Origin Resource Sharing (CORS) from anywhere to allow requests from React Native
 builder.Services.AddCors(options =>
 {
