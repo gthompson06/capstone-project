@@ -34,3 +34,10 @@ yarn-error.*
 
 # typescript
 *.tsbuildinfo
+
+# build outputs
+bin/
+obj/
+
+# NuGet packages
+*.nupkg
