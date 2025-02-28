@@ -3,8 +3,9 @@ import {
  Text,
  Image,
  StyleSheet,
- useWindowDimensions, TouchableOpacity,
- SafeAreaView
+ useWindowDimensions,
+ TouchableOpacity,
+ SafeAreaView,
 } from "react-native";
 import React, { useState } from "react";
 import Logo from "../../../assets/images/TestImg.png";
@@ -21,11 +22,7 @@ const SignInScreen = () => {
   console.warn("sign in button pressed");
   console.warn("username: ", username);
   console.warn("password: ", password);
-  if ((username == "") & (password == "")) {
-   navigation.navigate("HomeScreen", {username}); // Navigate to HomeScreen
-  } else {
-   console.warn("wrong username or password");
-  }
+  navigation.navigate("HomeScreen", { username }); // Navigate to HomeScreen
  };
  const onCreateAccountPressed = () => {
   console.warn("create account button pressed");
@@ -33,9 +30,9 @@ const SignInScreen = () => {
  };
 
  const onForgotPasswordPressed = () => {
-    console.warn("forgot password pressed")
-    navigation.navigate("ForgotPassword");
-}
+  console.warn("forgot password pressed");
+  navigation.navigate("ForgotPassword");
+ };
 
  const { height } = useWindowDimensions();
 
@@ -47,8 +44,17 @@ const SignInScreen = () => {
     resizeMode="contain"
    />
    <Text style={{ fontSize: 40, paddingBottom: 30 }}>LOGIN</Text>
-   <CustomInput placeholder="Username" value={username} setValue={setUsername} />
-   <CustomInput placeholder="Password" value={password} setValue={setPassword} secureTextEntry />
+   <CustomInput
+    placeholder="Username"
+    value={username}
+    setValue={setUsername}
+   />
+   <CustomInput
+    placeholder="Password"
+    value={password}
+    setValue={setPassword}
+    secureTextEntry
+   />
 
    <View style={styles.rowContainer}>
     <View style={styles.linkContainer}>
@@ -90,6 +96,5 @@ const styles = StyleSheet.create({
   marginVertical: 5,
  },
 });
-
 
 export default SignInScreen;
