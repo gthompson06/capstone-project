@@ -6,12 +6,12 @@ public interface IUserService {
 }
 
 public class UserService : IUserService {
-    private readonly Interaction _interaction;
-    public UserService(Interaction interaction){
-        _interaction = interaction;
+    private readonly Database _database;
+    public UserService(Database database){
+        _database = database;
     }
     public async Task<string> GetFirstNameByUserName(string userName){
-        var user = await _interaction.GetUserById(userName);
+        var user = await _database.GetUserById(userName);
         if(user == null) return null;
         return user.UserName;
     }

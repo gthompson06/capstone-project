@@ -2,9 +2,9 @@ using Amazon.DynamoDBv2.DataModel;
 using Microsoft.AspNetCore.Mvc;
 using UserModel;
 
-public class Interaction {
+public class Database {
     private readonly IDynamoDBContext _context;
-    public Interaction (IDynamoDBContext context){
+    public Database (IDynamoDBContext context){
         _context = context;
     }
     public Task<User> GetUserById (string userId) {

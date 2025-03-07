@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Threading.Tasks;
+using DotNetEnv;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +25,9 @@ var region = RegionEndpoint.GetBySystemName(awsRegion);
 // Setup AWS DynamoDB client (lower-level interaction with database)
 var dynamoDbClient = new AmazonDynamoDBClient(RegionEndpoint.GetBySystemName(awsRegion));
 
+// Load environment variables (database credentials)
+Env.Load();
+
 // Add client to app services
 builder.Services.AddSingleton<IAmazonDynamoDB>(dynamoDbClient);
 
@@ -32,7 +36,9 @@ builder.Services.AddSingleton<IDynamoDBContext>(new DynamoDBContext(dynamoDbClie
 
 // Add app services
 builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<Interaction>();
+builder.Services.AddScoped<Database>();
+
+
 
 // Allow Cross-Origin Resource Sharing (CORS) from anywhere to allow requests from React Native
 builder.Services.AddCors(options =>
