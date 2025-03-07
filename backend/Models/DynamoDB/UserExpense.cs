@@ -1,7 +1,7 @@
 using Amazon.DynamoDBv2.DataModel;
 
 [DynamoDBTable("Expenses")]
-public class Expense {
+public class UserExpense {
 
     [DynamoDBHashKey] public required string ExpenseId {get;set;}
 

@@ -1,7 +1,7 @@
 using Amazon.DynamoDBv2.DataModel;
 
 [DynamoDBTable("BankAccounts")]
-public class BankAccount {
+public class UserBankAccount {
 
     [DynamoDBHashKey] public required int AccountId {get;set;}
 

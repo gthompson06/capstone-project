@@ -1,28 +1,22 @@
-public class CompleteUser {
+public class CompleteUser{
+    public required UserInfo UserInfo {get;set;}
+    public List<UserTask> Tasks {get;set;}
+    public List<UserExpense> Expenses {get;set;}
+    public List<UserBankAccount> BankAccounts {get;set;}
+    public List<UserSchedule> Schedule {get;set;}
 
-    public required string UserName {get;set;}
-
-    public required string Email {get;set;}
-
-    public string? FirstName {get;set;}
-
-    public string? LastName {get;set;}
-
-    public string? DateOfBirth {get;set;}
-
-    public string? City {get;set;}
-
-    public string? State {get;set;}
-
-    public string? School {get;set;}
-
-    public required string HashedPassword {get;set;}
-
-    public required List<Task> Tasks {get;set;} = [];  
-
-    public required List<Expense> Expenses {get;set;} = []; 
-
-    public required List<BankAccount> BankAccounts {get;set;} = []; 
-
-    public required List<Schedule> Schedule {get;set;} = []; 
+    public CompleteUser(
+        UserInfo user,
+        List<UserTask>? tasks = null,
+        List<UserExpense>? expenses = null,
+        List<UserBankAccount>? bankAccounts = null,
+        List<UserSchedule>? schedule = null
+    )
+    {
+        UserInfo = user;
+        Tasks = tasks ?? new List<UserTask>();
+        Expenses = expenses ?? new List<UserExpense>();
+        BankAccounts = bankAccounts ?? new List<UserBankAccount>();
+        Schedule = schedule ?? new List<UserSchedule>();
+    }
 }

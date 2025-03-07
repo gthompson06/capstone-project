@@ -1,7 +1,7 @@
 using Amazon.DynamoDBv2.DataModel;
 
 [DynamoDBTable("Users")]
-public class User {
+public class UserInfo {
 
     [DynamoDBHashKey] public required string UserName {get;set;}
 
