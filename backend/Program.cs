@@ -16,17 +16,22 @@ var builder = WebApplication.CreateBuilder(args);
 // Get ConfigurationManager from Microsoft Extension
 var config = builder.Configuration;
 
-// Get region from configuration file
-var awsRegion = config["AWS:Region"] ?? "us-east-1";
-
-// Set region for AWS SDK
-var region = RegionEndpoint.GetBySystemName(awsRegion);
-
-// Setup AWS DynamoDB client (lower-level interaction with database)
-var dynamoDbClient = new AmazonDynamoDBClient(RegionEndpoint.GetBySystemName(awsRegion));
-
 // Load environment variables (database credentials)
 Env.Load();
+
+// Get AWS credentials and region from environment variables
+var awsAccessKey = Environment.GetEnvironmentVariable("AWS_ACCESS_KEY_ID");
+var awsSecretKey = Environment.GetEnvironmentVariable("AWS_SECRET_ACCESS_KEY");
+var awsRegion = Environment.GetEnvironmentVariable("AWS_REGION") ?? "us-east-1";
+
+// Set AWS region
+var region = RegionEndpoint.GetBySystemName(awsRegion);
+
+// Create AWS DynamoDB client with credentials and region
+var dynamoDbClient = new AmazonDynamoDBClient(
+    new Amazon.Runtime.BasicAWSCredentials(awsAccessKey, awsSecretKey),
+    region
+);
 
 // Add client to app services
 builder.Services.AddSingleton<IAmazonDynamoDB>(dynamoDbClient);

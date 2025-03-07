@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using UserModel;
 
 public interface IUserService {
     public Task<string> GetFirstNameByUserName(string userName);

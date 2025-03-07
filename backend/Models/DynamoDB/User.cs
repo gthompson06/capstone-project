@@ -1,19 +1,25 @@
 using Amazon.DynamoDBv2.DataModel;
 
-[DynamoDBTable("User")]
+[DynamoDBTable("Users")]
 public class User {
 
     [DynamoDBHashKey] public required string UserName {get;set;}
 
     [DynamoDBProperty] public required string Email {get;set;}
 
-    [DynamoDBProperty] public required string FirstName {get;set;}
+    [DynamoDBProperty] public string? FirstName {get;set;}
 
-    [DynamoDBProperty] public required string LastName {get;set;}
+    [DynamoDBProperty] public string? LastName {get;set;}
 
-    [DynamoDBProperty] public required string DateOfBirth {get;set;}
+    [DynamoDBProperty] public string? DateOfBirth {get;set;}
 
-    [DynamoDBProperty] public required string Password {get;set;}
+    [DynamoDBProperty] public string? City {get;set;}
+
+    [DynamoDBProperty] public string? State {get;set;}
+
+    [DynamoDBProperty] public string? School {get;set;}
+
+    [DynamoDBProperty] public required string HashedPassword {get;set;}
 
     [DynamoDBProperty] public required List<Task> Tasks {get;set;} = [];  
 
