@@ -20,12 +20,4 @@ public class User {
     [DynamoDBProperty] public string? School {get;set;}
 
     [DynamoDBProperty] public required string HashedPassword {get;set;}
-
-    [DynamoDBProperty] public required List<Task> Tasks {get;set;} = [];  
-
-    [DynamoDBProperty] public required List<Expense> Expenses {get;set;} = []; 
-
-    [DynamoDBProperty] public required List<BankAccount> BankAccounts {get;set;} = []; 
-
-    [DynamoDBProperty] public required List<Schedule> Schedule {get;set;} = []; 
 }
