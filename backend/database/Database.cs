@@ -6,24 +6,24 @@ public class Database {
     public Database (IDynamoDBContext context){
         _context = context;
     }
-    public async Task<User> GetUserById (string userName) {
-        var user = await _context.LoadAsync<User>(userName);
+    public async Task<UserInfo> GetUserInfo (int userId) {
+        var user = await _context.LoadAsync<UserInfo>(userId);
         return user;
     }
-    public async Task<List<UTask>> GetUserTasks (string userName) {
-        var tasks = await _context.QueryAsync<UTask>(userName).GetRemainingAsync();
+    public async Task<List<UserTask>> GetUserTasks (int userId) {
+        var tasks = await _context.QueryAsync<UserTask>(userId).GetRemainingAsync();
         return tasks;
     }
-    public async Task<List<Expense>> GetUserExpenses (string userName) {
-        var expenses = await _context.QueryAsync<Expense>(userName).GetRemainingAsync();
+    public async Task<List<UserExpense>> GetUserExpenses (int userId) {
+        var expenses = await _context.QueryAsync<UserExpense>(userId).GetRemainingAsync();
         return expenses;
     }
-    public async Task<List<Schedule>> GetUserSchedules (string userName) {
-        var schedules = await _context.QueryAsync<Schedule>(userName).GetRemainingAsync();
+    public async Task<List<UserSchedule>> GetUserSchedules (int userId) {
+        var schedules = await _context.QueryAsync<UserSchedule>(userId).GetRemainingAsync();
         return schedules;
     }
-    public async Task<List<BankAccount>> GetUserBankAccounts (string userName) {
-        var bankAccounts = await _context.QueryAsync<BankAccount>(userName).GetRemainingAsync();
+    public async Task<List<UserBankAccount>> GetUserBankAccounts (int userId) {
+        var bankAccounts = await _context.QueryAsync<UserBankAccount>(userId).GetRemainingAsync();
         return bankAccounts;
     }
 

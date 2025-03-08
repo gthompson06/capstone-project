@@ -40,7 +40,7 @@ builder.Services.AddSingleton<IAmazonDynamoDB>(dynamoDbClient);
 builder.Services.AddSingleton<IDynamoDBContext>(new DynamoDBContext(dynamoDbClient));
 
 // Add app services
-builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<Database>();
 
 

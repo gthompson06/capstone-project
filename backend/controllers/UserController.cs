@@ -5,20 +5,18 @@ using static UserService;
 [Route("user")]
 public class UserController : ControllerBase {
 
-    public readonly IUserService _userService;
+    public readonly UserService _userService;
 
-    public UserController (IUserService userService) {
+    public UserController (UserService userService) {
         _userService = userService;
     }
     [HttpGet("")]
     public IActionResult Load () {
         return Ok(new {Message = "Welcome"});
     }
-
-    [HttpGet("{userName}")]
-    public async Task<IActionResult> GetFirstNameByUserName (string userName) {
-        var response = await _userService.GetFirstNameByUserName(userName);
-        if (response == null) return NotFound(new {Message = "User not found"});
-        return Ok(new {Message = $"{response}"});
+    [HttpGet("{userId}")]
+    public async Task<IActionResult> GetUserInfo(int userId){
+        var response = await _userService.GetUserInfo(userId);
+        return Ok(response);
     }
 }

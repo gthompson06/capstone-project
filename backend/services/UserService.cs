@@ -1,33 +1,40 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
-public interface IUserService {
-    public Task<string> GetFirstNameByUserName(string userName);
-}
-
-public class UserService : IUserService {
+public class UserService {
     private readonly Database _database;
     public UserService(Database database){
         _database = database;
     }
-    public async Task<string> GetFirstNameByUserName(string userName){
-        var user = await _database.GetUserById(userName);
-        if(user == null) return null;
-        return user.UserName;
+    public async Task<string> GetFirstNameByUserName(int userId){
+        var userInfo = await _database.GetUserInfo(userId);
+        if(userInfo == null) return null;
+        return userInfo.UserName;
     }
-    public async Task<CompleteUser> GetCompleteUser(string userName){
-        var user = await AssembleUser(userName);
-        return user;
+    public async Task<UserInfo> GetUserInfo(int userId){
+        var userInfo = await _database.GetUserInfo(userId);
+        return userInfo;
     }
+    // public async Task<User> GetUser(int userId){
+    //     var user = await AssembleUser(userId);
+    //     return user;
+    // }
 
-    private async Task<CompleteUser> AssembleUser(string userName){
-        var user = await _database.GetUserById(userName);
-        if(user == null) return null;
-        var bankAccounts = await _database.GetUserBankAccounts(userName);
-        var expenses = await _database.GetUserExpenses(userName);
-        var tasks = await _database.GetUserTasks(userName);
-        var schedules = await _database.GetUserSchedules(userName);
-        var completeUser = new CompleteUser(user, tasks, expenses, bankAccounts, schedules);
-        return completeUser;
-    }
+    // private async Task<User> AssembleUser(int userId){
+    //     var userInfo = await _database.GetUserInfo(userId);
+    //     if(userInfo == null) return null;
+    //     var userName = userInfo.UserName;
+    //     var bankAccounts = await _database.GetUserBankAccounts(userName);
+    //     var expenses = await _database.GetUserExpenses(userName);
+    //     var tasks = await _database.GetUserTasks(userName);
+    //     var schedules = await _database.GetUserSchedules(userName);
+    //     var user = new User{
+    //         UserInfo = userInfo,
+    //         Tasks = tasks,
+    //         Expenses = expenses,
+    //         BankAccounts = bankAccounts,
+    //         Schedules = schedules
+    //     };
+    //     return user;
+    // }
 }
