@@ -18,6 +18,18 @@ public class UserService {
     public async Task PostUserInfo(UserInfo newUser)
     {
 
-        await _database.PostUserInfo(newUser);  // Save the new user to the database
+        await _database.PostUserInfo(newUser);
+    }
+    public async Task UpdateUserInfo(UserInfo updatedUser)
+    {
+        await _database.SaveUserInfo(updatedUser);
+    }
+public async Task DeleteUserInfo(int userId)
+    {
+        var user = await _database.GetUserInfo(userId);
+        if (user != null)
+        {
+            await _database.DeleteUserInfo(userId);
+        }
     }
 }
