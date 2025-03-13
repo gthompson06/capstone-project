@@ -1,18 +1,23 @@
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using UserModel;
 
-public interface IUserService {
-    public Task<string> GetFirstNameByUserName(string userName);
-}
-
-public class UserService : IUserService {
-    private readonly Interaction _interaction;
-    public UserService(Interaction interaction){
-        _interaction = interaction;
+public class UserService {
+    private readonly Database _database;
+    public UserService(Database database){
+        _database = database;
     }
-    public async Task<string> GetFirstNameByUserName(string userName){
-        var user = await _interaction.GetUserById(userName);
-        if(user == null) return null;
-        return user.UserName;
+    public async Task<string> GetFirstNameByUserName(int userId){
+        var userInfo = await _database.GetUserInfo(userId);
+        if(userInfo == null) return null;
+        return userInfo.UserName;
+    }
+    public async Task<UserInfo> GetUserInfo(int userId){
+        var userInfo = await _database.GetUserInfo(userId);
+        return userInfo;
+    }
+    public async Task PostUserInfo(UserInfo newUser)
+    {
+
+        await _database.PostUserInfo(newUser);  // Save the new user to the database
     }
 }
