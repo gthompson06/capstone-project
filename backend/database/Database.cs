@@ -41,16 +41,24 @@ public class Database
     {
         await _context.SaveAsync(userInfo);
     }
-    public async Task SaveUserInfo(UserInfo updatedUser)
+    public async Task SaveUserInfo(UserInfo user)
     {
-        await _context.SaveAsync(updatedUser); 
+        await _context.SaveAsync(user); 
     }
     public async Task DeleteUserInfo(int userId)
     {
     var user = await _context.LoadAsync<UserInfo>(userId);
     if (user != null)
-    {
-        await _context.DeleteAsync(user);
+        {
+            await _context.DeleteAsync(user);
+        }
     }
-}
+    public async Task SaveUserBankAccountInfo(UserBankAccount account)
+    {
+        await _context.SaveAsync(account);
+    }
+    public async Task DeleteUserBankAccountInfo(UserBankAccount account)
+    {
+        await _context.DeleteAsync(account);
+    }
 }

@@ -17,4 +17,12 @@ public class BankAccountService
 
         await _database.PostUserBankAccountInfo(userInfo);
     }
+    public async Task UpdateBankAccountInfo(UserBankAccount account)
+    {
+        await _database.SaveUserBankAccountInfo(account);
+    }
+    public async Task DeleteBankAccountInfo(UserBankAccount account)
+    {
+        await _database.DeleteUserBankAccountInfo(account);
+    }
 }
