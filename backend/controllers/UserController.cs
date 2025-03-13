@@ -5,7 +5,6 @@ using static UserService;
 [Route("user")]
 public class UserController : ControllerBase
 {
-
     public readonly UserService _userService;
 
     public UserController(UserService userService)
