@@ -41,6 +41,7 @@ builder.Services.AddSingleton<IDynamoDBContext>(new DynamoDBContext(dynamoDbClie
 
 // Add app services
 builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<BankAccountService>();
 builder.Services.AddScoped<Database>();
 
 

@@ -15,26 +15,21 @@ public class UserService {
         var userInfo = await _database.GetUserInfo(userId);
         return userInfo;
     }
-    // public async Task<User> GetUser(int userId){
-    //     var user = await AssembleUser(userId);
-    //     return user;
-    // }
+    public async Task PostUserInfo(UserInfo newUser)
+    {
 
-    // private async Task<User> AssembleUser(int userId){
-    //     var userInfo = await _database.GetUserInfo(userId);
-    //     if(userInfo == null) return null;
-    //     var userName = userInfo.UserName;
-    //     var bankAccounts = await _database.GetUserBankAccounts(userName);
-    //     var expenses = await _database.GetUserExpenses(userName);
-    //     var tasks = await _database.GetUserTasks(userName);
-    //     var schedules = await _database.GetUserSchedules(userName);
-    //     var user = new User{
-    //         UserInfo = userInfo,
-    //         Tasks = tasks,
-    //         Expenses = expenses,
-    //         BankAccounts = bankAccounts,
-    //         Schedules = schedules
-    //     };
-    //     return user;
-    // }
+        await _database.PostUserInfo(newUser);
+    }
+    public async Task UpdateUserInfo(UserInfo updatedUser)
+    {
+        await _database.SaveUserInfo(updatedUser);
+    }
+public async Task DeleteUserInfo(int userId)
+    {
+        var user = await _database.GetUserInfo(userId);
+        if (user != null)
+        {
+            await _database.DeleteUserInfo(userId);
+        }
+    }
 }

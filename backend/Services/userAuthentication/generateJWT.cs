@@ -1,5 +1,4 @@
+public class generateJWT
+{
 
-
-public class generateJWT {
-    
 }
