@@ -52,9 +52,9 @@ public class UserController : ControllerBase
 
         await _userService.UpdateUserInfo(response);
 
-        return Ok(response); 
+        return Ok(response);
     }
-    
+
     [HttpDelete("{userId}")]
     public async Task<IActionResult> DeleteUser(int userId)
     {
@@ -64,6 +64,6 @@ public class UserController : ControllerBase
             return NotFound(new { Message = "User not found" });
         }
         await _userService.DeleteUserInfo(userId);
-        return NoContent(); 
+        return NoContent();
     }
 }

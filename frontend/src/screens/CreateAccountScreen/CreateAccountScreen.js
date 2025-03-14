@@ -6,28 +6,74 @@ import {
  useWindowDimensions,
  Button,
  TouchableOpacity,
+ SafeAreaView,
+ Alert,
 } from "react-native";
 import React, { useState } from "react";
 import Logo from "../../../assets/images/TestImg.png";
-import CustomInput from "../../components/CustomInput/CustomInput.js";
-import CustomButton from "../../components/CustomButton/CustomButton.js";
+import CustomInput from "../../components/CustomInput/CustomInput";
+import CustomButton from "../../components/CustomButton/CustomButton";
 import { CreateAccountStyles } from "../../styles/Styles.js";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation } from "@react-navigation/native";
 import BackArrow from "../../../assets/images/backArrow.png";
+import PasswordStrengthBar from "react-password-strength-bar";
 
 const CreateAccountScreen = () => {
  const [username, setUsername] = useState("");
  const [email, setEmail] = useState("");
  const [password, setPassword] = useState("");
  const [confirmPassword, setConfirmPassword] = useState("");
+ const [errorMessage, setErrorMessage] = useState("");
  const navigation = useNavigation();
 
- const createAccountPressed = () => {
-  console.log("create account button pressed");
-  console.log("username:" + username);
-  console.log("password:" + password);
+ const storeAccountInfo = async () => {
+  console.log("create account pressed");
+
+  //   if (!username || !email || !password || !confirmPassword) {
+  //    setErrorMessage("No fields can be empty");
+  //    return;
+  //   }
+
+  //   if (password !== confirmPassword) {
+  //    setErrorMessage("Passwords do not match");
+  //    return;
+  //   }
+
+  console.log("fetching db");
+
+  try {
+   const response = await fetch("http://localhost:5161/worthy/user/0", {
+    method: "GET",
+    headers: {
+     "Content-Type": "application/json",
+    },
+    // body: JSON.stringify({
+    //  userId: "3",
+    //  username: "tony",
+    //  email: "email@email.com",
+    //  firstName: "tony",
+    //  lastName: "positano",
+    //  DateOfBirth: "1-1-2025",
+    //  City: "Batavia",
+    //  State: "IL",
+    //  School: "Aurora University",
+    //  password: "password",
+    // }),
+   });
+
+   const data = await response.json();
+
+   if (response.ok) {
+    console.log("Account created successfully:", data);
+    navigation.navigate("HomeScreen");
+   } else {
+    console.log("Error creating account:", data);
+   }
+  } catch (error) {
+   console.log("Other error:", error);
+  }
  };
+
  const ResetPassword = () => {
   navigation.navigate("ResetPassword");
  };
@@ -70,6 +116,10 @@ const CreateAccountScreen = () => {
     setValue={setPassword}
     secureTextEntry
    />
+   <PasswordStrengthBar
+    password={password}
+    style={CreateAccountStyles.strengthBar}
+   />
    <CustomInput
     placeholder="Confirm Password"
     value={confirmPassword}
@@ -78,9 +128,12 @@ const CreateAccountScreen = () => {
    />
    <CustomButton
     text="Create Account"
-    onPress={createAccountPressed}
+    onPress={storeAccountInfo}
     type="CreateAccount"
    />
+   {errorMessage ? (
+    <Text style={{ color: "red", marginBottom: 10 }}>{errorMessage}</Text>
+   ) : null}
    {/* <CustomButton text="Reset Password" onPress={ResetPassword} /> */}
   </SafeAreaView>
  );
