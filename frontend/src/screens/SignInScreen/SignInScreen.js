@@ -61,13 +61,26 @@ const SignInScreen = () => {
 
     // Handle sign-in button press
     const onSignInPressed = async () => {
-        if (username === "" && password === "") { // Example login check
-            await storeUserToken();
-            navigation.replace("HomeScreen", { username }); // Navigate to HomeScreen
-        } else {
-            Alert.alert("Error", "Invalid username or password");
+        try {
+            const response = await fetch("http://localhost:5161/worthy/user/1");
+            if (!response.ok) {
+                throw new Error("Failed to fetch user data");
+            }
+    
+            const userData = await response.json();
+    
+            if (userData.userName === username && userData.hashedPassword === password) {
+                await storeUserToken();
+                navigation.replace("HomeScreen", { username: userData.userName });
+            } else {
+                Alert.alert("Error", "Invalid username or password");
+            }
+        } catch (error) {
+            console.error("Error fetching user data:", error);
+            Alert.alert("Error", "An error occurred while signing in");
         }
     };
+    
 
     // Check if user is already signed in when screen loads
     useEffect(() => {
