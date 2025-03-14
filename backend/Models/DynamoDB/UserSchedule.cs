@@ -1,7 +1,8 @@
 using Amazon.DynamoDBv2.DataModel;
 
 [DynamoDBTable("Schedules")]
-public class UserSchedule {
+public class UserSchedule
+{
     [DynamoDBHashKey("UserId")] public required int UserId {get;set;}
     [DynamoDBRangeKey("ScheduleId")] public required int ScheduleId {get;set;}
     [DynamoDBProperty("Title")] public required string Title {get;set;}

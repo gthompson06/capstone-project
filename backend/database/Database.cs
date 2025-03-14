@@ -33,8 +33,7 @@ public class Database
         var bankAccounts = await _context.QueryAsync<UserBankAccount>(userId).GetRemainingAsync();
         return bankAccounts;
     }
-    public async Task PostUserInfo(UserInfo userInfo)
-    {
+    public async Task PostUserInfo(UserInfo userInfo){
         await _context.SaveAsync(userInfo);
     }
     public async Task PostUserBankAccountInfo(UserBankAccount userInfo)

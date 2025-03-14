@@ -13,9 +13,6 @@ using DotNetEnv;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Get ConfigurationManager from Microsoft Extension
-var config = builder.Configuration;
-
 // Load environment variables (database credentials)
 Env.Load();
 
@@ -33,18 +30,20 @@ var dynamoDbClient = new AmazonDynamoDBClient(
     region
 );
 
-// Add client to app services
+// Add Services
+
+// Database client
 builder.Services.AddSingleton<IAmazonDynamoDB>(dynamoDbClient);
 
-// Add higher-level database interaction object to app services
+// Higher-level database interaction object to app services
 builder.Services.AddSingleton<IDynamoDBContext>(new DynamoDBContext(dynamoDbClient));
 
-// Add app services
+// Add built-in services
 builder.Services.AddScoped<UserService>();
-builder.Services.AddScoped<BankAccountService>();
 builder.Services.AddScoped<Database>();
+builder.Services.AddScoped<PasswordService>();
 
-
+builder.Services.AddControllers();
 
 // Allow Cross-Origin Resource Sharing (CORS) from anywhere to allow requests from React Native
 builder.Services.AddCors(options =>
@@ -58,15 +57,11 @@ builder.Services.AddCors(options =>
         });
 });
 
-builder.Services.AddControllers();
-
 var app = builder.Build();
 
+// Middleware
 app.UseCors("AllowCORS"); // Apply CORS globally
-
-// Routes using http will automatically redirect to https (more secure)
 app.UseHttpsRedirection();
-
 app.MapControllers();
 
 app.Run();
