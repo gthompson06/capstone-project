@@ -40,8 +40,8 @@ builder.Services.AddSingleton<IDynamoDBContext>(new DynamoDBContext(dynamoDbClie
 
 // Add built-in services
 builder.Services.AddScoped<UserService>();
-builder.Services.AddScoped<BankAccountService>();
 builder.Services.AddScoped<Database>();
+builder.Services.AddScoped<PasswordService>();
 
 builder.Services.AddControllers();
 
