@@ -9,30 +9,41 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Threading.Tasks;
+using DotNetEnv;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Get ConfigurationManager from Microsoft Extension
-var config = builder.Configuration;
+// Load environment variables (database credentials)
+Env.Load();
 
-// Get region from configuration file
-var awsRegion = config["AWS:Region"] ?? "us-east-1";
+// Get AWS credentials and region from environment variables
+var awsAccessKey = Environment.GetEnvironmentVariable("AWS_ACCESS_KEY_ID");
+var awsSecretKey = Environment.GetEnvironmentVariable("AWS_SECRET_ACCESS_KEY");
+var awsRegion = Environment.GetEnvironmentVariable("AWS_REGION") ?? "us-east-1";
 
-// Set region for AWS SDK
+// Set AWS region
 var region = RegionEndpoint.GetBySystemName(awsRegion);
 
-// Setup AWS DynamoDB client (lower-level interaction with database)
-var dynamoDbClient = new AmazonDynamoDBClient(RegionEndpoint.GetBySystemName(awsRegion));
+// Create AWS DynamoDB client with credentials and region
+var dynamoDbClient = new AmazonDynamoDBClient(
+    new Amazon.Runtime.BasicAWSCredentials(awsAccessKey, awsSecretKey),
+    region
+);
 
-// Add client to app services
+// Add Services
+
+// Database client
 builder.Services.AddSingleton<IAmazonDynamoDB>(dynamoDbClient);
 
-// Add higher-level database interaction object to app services
+// Higher-level database interaction object to app services
 builder.Services.AddSingleton<IDynamoDBContext>(new DynamoDBContext(dynamoDbClient));
 
-// Add app services
-builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<Interaction>();
+// Add built-in services
+builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<Database>();
+builder.Services.AddScoped<PasswordService>();
+
+builder.Services.AddControllers();
 
 // Allow Cross-Origin Resource Sharing (CORS) from anywhere to allow requests from React Native
 builder.Services.AddCors(options =>
@@ -46,15 +57,11 @@ builder.Services.AddCors(options =>
         });
 });
 
-builder.Services.AddControllers();
-
 var app = builder.Build();
 
+// Middleware
 app.UseCors("AllowCORS"); // Apply CORS globally
-
-// Routes using http will automatically redirect to https (more secure)
 app.UseHttpsRedirection();
-
 app.MapControllers();
 
 app.Run();
