@@ -2,7 +2,8 @@ using System.Globalization;
 using Amazon.DynamoDBv2.DataModel;
 
 [DynamoDBTable("Users")]
-public class UserInfo {
+public class UserInfo
+{
     [DynamoDBHashKey("UserId")] public required int UserId {get;set;}
     [DynamoDBProperty("UserName")] public required string UserName {get;set;}
     [DynamoDBProperty("Email")] public required string Email {get;set;}

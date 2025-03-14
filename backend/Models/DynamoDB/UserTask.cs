@@ -1,7 +1,8 @@
 using Amazon.DynamoDBv2.DataModel;
 
 [DynamoDBTable("Tasks")]
-public class UserTask {
+public class UserTask
+{
     [DynamoDBHashKey("UserId")] public required int UserId {get;set;}
     [DynamoDBRangeKey("TaskId")] public required int TaskId {get;set;}
     [DynamoDBProperty("Title")] public required string Title {get;set;}
