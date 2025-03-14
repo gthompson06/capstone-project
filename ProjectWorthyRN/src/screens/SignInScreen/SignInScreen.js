@@ -23,9 +23,9 @@ const SignInScreen = () => {
             const expirationTime = Date.now() + 30 * 1000; // Expires in 2 minutes
             await AsyncStorage.setItem("userToken", token);
             await AsyncStorage.setItem("tokenExpiration", expirationTime.toString());
-            console.log("Token stored, expires in 1 minute");
+            // console.log("Token stored, expires in 1 minute");
         } catch (error) {
-            console.error("Error saving token:", error);
+            // console.error("Error saving token:", error);
         }
     };
 
@@ -36,14 +36,14 @@ const SignInScreen = () => {
             const expiration = await AsyncStorage.getItem("tokenExpiration");
 
             if (!token || !expiration || Date.now() > parseInt(expiration)) {
-                console.log("Token expired or not found. Logging out...");
+                // console.log("Token expired or not found. Logging out...");
                 await logoutUser();
                 return null;
             }
-            console.log("User is still signed in.");
+            // console.log("User is still signed in.");
             return token;
         } catch (error) {
-            console.error("Error checking login:", error);
+            // console.error("Error checking login:", error);
             return null;
         }
     };
@@ -53,9 +53,9 @@ const SignInScreen = () => {
         try {
             await AsyncStorage.removeItem("userToken");
             await AsyncStorage.removeItem("tokenExpiration");
-            console.log("User logged out.");
+            // console.log("User logged out.");
         } catch (error) {
-            console.error("Error logging out:", error);
+            // console.error("Error logging out:", error);
         }
     };
 

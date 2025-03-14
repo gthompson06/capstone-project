@@ -15,6 +15,9 @@ export const CreateAccountStyles = StyleSheet.create({
   width: "100%",
   justifyContent: "flex-start",
  },
+ strengthBar: {
+  width: 400,
+ },
 });
 
 export const ResetPasswordStyles = StyleSheet.create({
