@@ -7,6 +7,7 @@ import {
  Button,
  TouchableOpacity,
  SafeAreaView,
+ Alert,
 } from "react-native";
 import React, { useState } from "react";
 import Logo from "../../../assets/images/TestImg.png";
@@ -28,26 +29,35 @@ const CreateAccountScreen = () => {
  const storeAccountInfo = async () => {
   console.log("create account pressed");
 
-  if (!username || !email || !password || !confirmPassword) {
-   setErrorMessage("No fields can be empty");
-   return;
-  }
+  //   if (!username || !email || !password || !confirmPassword) {
+  //    setErrorMessage("No fields can be empty");
+  //    return;
+  //   }
 
-  if (password !== confirmPassword) {
-   setErrorMessage("Passwords do not match");
-   return;
-  }
+  //   if (password !== confirmPassword) {
+  //    setErrorMessage("Passwords do not match");
+  //    return;
+  //   }
+
+  console.log("fetching db");
 
   try {
-   const response = await fetch("http://localhost:5161", {
+   const response = await fetch("http://localhost:5161/user", {
     method: "POST",
     headers: {
      "Content-Type": "application/json",
     },
     body: JSON.stringify({
-     username: username,
-     email: email,
-     password: password,
+     userId: "3",
+     username: "tony",
+     email: "email@email.com",
+     firstName: "tony",
+     lastName: "positano",
+     DateOfBirth: "1-1-2025",
+     City: "Batavia",
+     State: "IL",
+     School: "Aurora University",
+     HashedPassword: "password",
     }),
    });
 
