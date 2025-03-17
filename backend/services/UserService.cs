@@ -1,28 +1,27 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-
+using requests.Registration;
 public class UserService
 {
     private readonly Database _database;
-    private readonly PasswordService _passwordService;
-    private readonly UserInfo _userInfo;
-    public UserService(Database database, PasswordService passwordService)
+    public UserService(Database database)
     {
         _database = database;
-        _passwordService = passwordService;
-        // _userInfo = new UserInfo("", "");
+    }
+    public async Task<string> GetFirstNameByUserName(int userId)
+    {
+        var userInfo = await _database.GetUserInfo(userId);
+        if (userInfo == null) return null;
+        return userInfo.UserName;
     }
     public async Task<UserInfo> GetUserInfo(int userId)
     {
         var userInfo = await _database.GetUserInfo(userId);
         return userInfo;
     }
-    public async Task CreateUser(Registration registration)
+    public async Task PostUserInfo(UserInfo newUser)
     {
-        string password = registration.Password;
-        string hashedPassword = _passwordService.Hash(password);
-        _userInfo.HashedPassword = hashedPassword;
-        await _database.PostUserInfo(_userInfo);
+        await _database.PostUserInfo(newUser);
     }
     public async Task UpdateUserInfo(UserInfo updatedUser)
     {

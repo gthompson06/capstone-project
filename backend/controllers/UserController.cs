@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using static UserService;
+using requests.Registration;
 
 [ApiController]
 [Route("worthy/user")]
@@ -11,7 +12,6 @@ public class UserController : ControllerBase
     {
         _userService = userService;
     }
-
     [HttpGet("")]
     public IActionResult Load()
     {
@@ -26,9 +26,9 @@ public class UserController : ControllerBase
     }
 
     [HttpPost("create")]
-    public async Task<IActionResult> CreateUser([FromBody] Registration registration)
+    public async Task<IActionResult> CreateUser([FromBody] UserInfo registration)
     {
-        await _userService.CreateUser(registration);
+        await _userService.PostUserInfo(registration);
         return CreatedAtAction(nameof(GetUserInfo), new { userId = registration.UserName }, registration);
     }
 

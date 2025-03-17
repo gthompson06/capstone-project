@@ -1,5 +1,6 @@
 using Amazon.DynamoDBv2.DataModel;
 using Microsoft.AspNetCore.Mvc;
+using requests.Registration;
 
 public class Database
 {
