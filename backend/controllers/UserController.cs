@@ -22,14 +22,20 @@ public class UserController : ControllerBase
     public async Task<IActionResult> GetUserInfo(int userId)
     {
         var response = await _userService.GetUserInfo(userId);
+        if (response == null)
+        {
+            return NotFound(new { Message = "404: User not found" });
+        }
+
         return Ok(response);
+
     }
 
     [HttpPost("create")]
-    public async Task<IActionResult> CreateUser([FromBody] UserInfo registration)
+    public async Task<IActionResult> CreateUser([FromBody] UserInfo userInfo)
     {
-        await _userService.PostUserInfo(registration);
-        return CreatedAtAction(nameof(GetUserInfo), new { userId = registration.UserName }, registration);
+        await _userService.PostUserInfo(userInfo);
+        return CreatedAtAction(nameof(GetUserInfo), new { userId = userInfo.UserName }, userInfo);
     }
 
     [HttpPut("{userId}")]
