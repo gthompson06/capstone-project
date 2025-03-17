@@ -62,7 +62,7 @@ const SignInScreen = () => {
     // Handle sign-in button press
     const onSignInPressed = async () => {
         try {
-            const response = await fetch("http://localhost:5161/worthy/user/1");
+            const response = await fetch("http://localhost:5161/worthy/allUsers");
             if (!response.ok) {
                 throw new Error("Failed to fetch user data");
             }
