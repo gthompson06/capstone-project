@@ -62,24 +62,35 @@ const SignInScreen = () => {
     // Handle sign-in button press
     const onSignInPressed = async () => {
         try {
-            const response = await fetch("http://localhost:5161/worthy/allUsers");
+            const response = await fetch("http://localhost:5161/worthy/user/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    UserName: username,
+                    Password: password,
+                }),
+            });
+    
             if (!response.ok) {
-                throw new Error("Failed to fetch user data");
+                throw new Error("Invalid username or password");
             }
     
-            const userData = await response.json();
+            const data = await response.json();
     
-            if (userData.userName === username && userData.hashedPassword === password) {
-                await storeUserToken();
-                navigation.replace("HomeScreen", { username: userData.userName });
+            if (data.message === "Login successful" && data.user) {
+                await storeUserToken(); // Store token after successful login
+                navigation.replace("HomeScreen", { username });
             } else {
                 Alert.alert("Error", "Invalid username or password");
             }
         } catch (error) {
-            console.error("Error fetching user data:", error);
+            console.error("Error logging in:", error);
             Alert.alert("Error", "An error occurred while signing in");
         }
     };
+    
     
 
     // Check if user is already signed in when screen loads

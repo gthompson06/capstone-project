@@ -1,21 +1,54 @@
 using Microsoft.AspNetCore.Mvc;
-using static UserService;
+using Amazon.DynamoDBv2;
+using Amazon.DynamoDBv2.DataModel;
+using Amazon.DynamoDBv2.DocumentModel;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 [ApiController]
 [Route("worthy/user")]
 public class UserController : ControllerBase
 {
-    public readonly UserService _userService;
+    private readonly UserService _userService;
+    private readonly IDynamoDBContext _dbContext; // ✅ Inject DynamoDBContext
 
-    public UserController(UserService userService)
+    public UserController(UserService userService, IDynamoDBContext dbContext) // ✅ Inject IDynamoDBContext
     {
         _userService = userService;
+        _dbContext = dbContext;
     }
 
     [HttpGet("")]
     public IActionResult Load()
     {
         return Ok(new { Message = "Welcome" });
+    }
+
+    [HttpPost("login")]
+    public async Task<IActionResult> Login([FromBody] Registration request)
+    {
+        try
+        {
+            // ✅ Use QueryAsync instead of ScanAsync (Requires a GSI on UserName)
+            var queryConfig = new DynamoDBOperationConfig
+            {
+                IndexName = "UserName-index" // ✅ Ensure you have created this GSI in DynamoDB
+            };
+
+            var users = await _dbContext.QueryAsync<UserInfo>(request.UserName, queryConfig).GetRemainingAsync();
+
+            var matchedUser = users.FirstOrDefault(user => user.HashedPassword == request.Password); 
+
+            if (matchedUser == null)
+                return Unauthorized(new { message = "Invalid username or password" });
+
+            return Ok(new { message = "Login successful", user = matchedUser });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { message = "Error logging in", error = ex.Message });
+        }
     }
 
     [HttpGet("{userId}")]
@@ -40,6 +73,7 @@ public class UserController : ControllerBase
         {
             return NotFound(new { Message = "User not found" });
         }
+
         response.UserName = updatedUser.UserName ?? response.UserName;
         response.Email = updatedUser.Email ?? response.Email;
         response.FirstName = updatedUser.FirstName ?? response.FirstName;
@@ -51,7 +85,6 @@ public class UserController : ControllerBase
         response.HashedPassword = updatedUser.HashedPassword ?? response.HashedPassword;
 
         await _userService.UpdateUserInfo(response);
-
         return Ok(response);
     }
 
