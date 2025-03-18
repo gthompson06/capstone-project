@@ -26,9 +26,10 @@ public class UserController : ControllerBase
         {
             return NotFound(new { Message = "404: User not found" });
         }
-
-        return Ok(response);
-
+        else
+        {
+            return Ok(response);
+        }
     }
 
     [HttpPost("create")]
@@ -69,7 +70,11 @@ public class UserController : ControllerBase
         {
             return NotFound(new { Message = "User not found" });
         }
-        await _userService.DeleteUserInfo(userId);
-        return NoContent();
+        else
+        {
+            await _userService.DeleteUserInfo(userId);
+            return NoContent();
+        }
+
     }
 }

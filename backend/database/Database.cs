@@ -34,21 +34,22 @@ public class Database
         var bankAccounts = await _context.QueryAsync<UserBankAccount>(userId).GetRemainingAsync();
         return bankAccounts;
     }
-    public async Task PostUserInfo(UserInfo userInfo){
-        await _context.SaveAsync(userInfo);
-    }
-    public async Task PostUserBankAccountInfo(UserBankAccount userInfo)
+    public async Task PostUserInfo(UserInfo user)
     {
-        await _context.SaveAsync(userInfo);
+        await _context.SaveAsync(user);
+    }
+    public async Task PostUserBankAccountInfo(UserBankAccount user)
+    {
+        await _context.SaveAsync(user);
     }
     public async Task SaveUserInfo(UserInfo user)
     {
-        await _context.SaveAsync(user); 
+        await _context.SaveAsync(user);
     }
     public async Task DeleteUserInfo(int userId)
     {
-    var user = await _context.LoadAsync<UserInfo>(userId);
-    if (user != null)
+        var user = await _context.LoadAsync<UserInfo>(userId);
+        if (user != null)
         {
             await _context.DeleteAsync(user);
         }
@@ -60,5 +61,41 @@ public class Database
     public async Task DeleteUserBankAccountInfo(UserBankAccount account)
     {
         await _context.DeleteAsync(account);
+    }
+    public async Task PostUserExpenseInfo(UserExpense expense)
+    {
+        await _context.SaveAsync(expense);
+    }
+    public async Task SaveUserExpenseInfo(UserExpense expense)
+    {
+        await _context.SaveAsync(expense);
+    }
+    public async Task DeleteUserExpenseInfo(UserExpense expense)
+    {
+        await _context.DeleteAsync(expense);
+    }
+    public async Task PostUserTaskInfo(UserTask task)
+    {
+        await _context.SaveAsync(task);
+    }
+    public async Task SaveUserTaskInfo(UserTask task)
+    {
+        await _context.SaveAsync(task);
+    }
+    public async Task DeleteUserTaskInfo(UserTask task)
+    {
+        await _context.DeleteAsync(task);
+    }
+    public async Task PostUserScheduleInfo(UserSchedule schedule)
+    {
+        await _context.SaveAsync(schedule);
+    }
+    public async Task SaveUserScheduleInfo(UserSchedule schedule)
+    {
+        await _context.SaveAsync(schedule);
+    }
+    public async Task DeleteUserScheduleInfo(UserSchedule schedule)
+    {
+        await _context.DeleteAsync(schedule);
     }
 }

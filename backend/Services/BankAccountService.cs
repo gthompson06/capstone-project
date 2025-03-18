@@ -8,14 +8,14 @@ public class BankAccountService
 
     public async Task<List<UserBankAccount>> GetBankAccountInfo(int userId)
     {
-        var userInfo = await _database.GetUserBankAccounts(userId);
-        return userInfo;
+        var account = await _database.GetUserBankAccounts(userId);
+        return account;
     }
-    public async Task PostBankAccountInfo(UserBankAccount userInfo)
+    public async Task PostBankAccountInfo(UserBankAccount account)
     {
         // Might need to validate if user exists already
 
-        await _database.PostUserBankAccountInfo(userInfo);
+        await _database.PostUserBankAccountInfo(account);
     }
     public async Task UpdateBankAccountInfo(UserBankAccount account)
     {
