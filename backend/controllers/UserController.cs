@@ -1,12 +1,13 @@
 using Microsoft.AspNetCore.Mvc;
 using static UserService;
-using requests.Registration;
+using requests.RegistrationDTO;
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DataModel;
 using Amazon.DynamoDBv2.DocumentModel;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using requests.LoginDTO;
 
 [ApiController]
 [Route("worthy/user")]
@@ -27,7 +28,7 @@ public class UserController : ControllerBase
     }
 
     [HttpPost("login")]
-    public async Task<IActionResult> Login([FromBody] Registration request)
+    public async Task<IActionResult> Login([FromBody] LoginDTO request)
     {
         try
         {

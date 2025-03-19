@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using requests.Registration;
+using requests.RegistrationDTO;
 public class UserService
 {
     private readonly Database _database;
