@@ -24,6 +24,10 @@ public class UserService
         _userInfo.HashedPassword = hashedPassword;
         await _database.PostUserInfo(_userInfo);
     }
+    public async Task PostUserInfo(UserInfo newUser)
+    {
+        await _database.PostUserInfo(newUser);
+    }
     public async Task UpdateUserInfo(UserInfo updatedUser)
     {
         await _database.SaveUserInfo(updatedUser);

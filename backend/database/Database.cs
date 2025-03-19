@@ -33,23 +33,25 @@ public class Database
         var bankAccounts = await _context.QueryAsync<UserBankAccount>(userId).GetRemainingAsync();
         return bankAccounts;
     }
-    public async Task PostUserInfo(UserInfo userInfo){
+    public async Task PostUserInfo(UserInfo userInfo)
+    {
         await _context.SaveAsync(userInfo);
     }
+
     public async Task PostUserBankAccountInfo(UserBankAccount userInfo)
     {
         await _context.SaveAsync(userInfo);
     }
     public async Task SaveUserInfo(UserInfo updatedUser)
     {
-        await _context.SaveAsync(updatedUser); 
+        await _context.SaveAsync(updatedUser);
     }
     public async Task DeleteUserInfo(int userId)
     {
-    var user = await _context.LoadAsync<UserInfo>(userId);
-    if (user != null)
-    {
-        await _context.DeleteAsync(user);
+        var user = await _context.LoadAsync<UserInfo>(userId);
+        if (user != null)
+        {
+            await _context.DeleteAsync(user);
+        }
     }
-}
 }

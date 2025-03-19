@@ -26,10 +26,10 @@ public class UserController : ControllerBase
     }
 
     [HttpPost("create")]
-    public async Task<IActionResult> CreateUser([FromBody] Registration registration)
+    public async Task<IActionResult> CreateUser([FromBody] UserInfo userInfo)
     {
-        await _userService.CreateUser(registration);
-        return CreatedAtAction(nameof(GetUserInfo), new { userId = registration.UserName }, registration);
+        await _userService.PostUserInfo(userInfo);
+        return CreatedAtAction(nameof(GetUserInfo), new { userId = userInfo.UserName }, userInfo);
     }
 
     [HttpPut("{userId}")]
