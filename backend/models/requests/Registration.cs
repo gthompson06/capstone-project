@@ -1,3 +1,4 @@
+namespace requests.Registration;
 public class Registration
 {
     public string UserName {get;set;}

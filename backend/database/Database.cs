@@ -1,5 +1,6 @@
 using Amazon.DynamoDBv2.DataModel;
 using Microsoft.AspNetCore.Mvc;
+using requests.Registration;
 
 public class Database
 {
@@ -33,18 +34,17 @@ public class Database
         var bankAccounts = await _context.QueryAsync<UserBankAccount>(userId).GetRemainingAsync();
         return bankAccounts;
     }
-    public async Task PostUserInfo(UserInfo userInfo)
+    public async Task PostUserInfo(UserInfo user)
     {
-        await _context.SaveAsync(userInfo);
+        await _context.SaveAsync(user);
     }
-
-    public async Task PostUserBankAccountInfo(UserBankAccount userInfo)
+    public async Task PostUserBankAccountInfo(UserBankAccount user)
     {
-        await _context.SaveAsync(userInfo);
+        await _context.SaveAsync(user);
     }
-    public async Task SaveUserInfo(UserInfo updatedUser)
+    public async Task SaveUserInfo(UserInfo user)
     {
-        await _context.SaveAsync(updatedUser);
+        await _context.SaveAsync(user);
     }
     public async Task DeleteUserInfo(int userId)
     {
@@ -53,5 +53,49 @@ public class Database
         {
             await _context.DeleteAsync(user);
         }
+    }
+    public async Task SaveUserBankAccountInfo(UserBankAccount account)
+    {
+        await _context.SaveAsync(account);
+    }
+    public async Task DeleteUserBankAccountInfo(UserBankAccount account)
+    {
+        await _context.DeleteAsync(account);
+    }
+    public async Task PostUserExpenseInfo(UserExpense expense)
+    {
+        await _context.SaveAsync(expense);
+    }
+    public async Task SaveUserExpenseInfo(UserExpense expense)
+    {
+        await _context.SaveAsync(expense);
+    }
+    public async Task DeleteUserExpenseInfo(UserExpense expense)
+    {
+        await _context.DeleteAsync(expense);
+    }
+    public async Task PostUserTaskInfo(UserTask task)
+    {
+        await _context.SaveAsync(task);
+    }
+    public async Task SaveUserTaskInfo(UserTask task)
+    {
+        await _context.SaveAsync(task);
+    }
+    public async Task DeleteUserTaskInfo(UserTask task)
+    {
+        await _context.DeleteAsync(task);
+    }
+    public async Task PostUserScheduleInfo(UserSchedule schedule)
+    {
+        await _context.SaveAsync(schedule);
+    }
+    public async Task SaveUserScheduleInfo(UserSchedule schedule)
+    {
+        await _context.SaveAsync(schedule);
+    }
+    public async Task DeleteUserScheduleInfo(UserSchedule schedule)
+    {
+        await _context.DeleteAsync(schedule);
     }
 }
