@@ -23,10 +23,6 @@ public class UserService
     {
         await _database.PostUserInfo(newUser);
     }
-    public async Task PostUserInfo(UserInfo newUser)
-    {
-        await _database.PostUserInfo(newUser);
-    }
     public async Task UpdateUserInfo(UserInfo updatedUser)
     {
         await _database.SaveUserInfo(updatedUser);

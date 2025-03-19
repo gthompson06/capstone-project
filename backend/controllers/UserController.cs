@@ -66,10 +66,30 @@ public class UserController : ControllerBase
     }
 
     [HttpPost("create")]
-    public async Task<IActionResult> CreateUser([FromBody] UserInfo userInfo)
+    public async Task<IActionResult> CreateUser([FromBody] Registration request)
     {
-        await _userService.PostUserInfo(userInfo);
-        return CreatedAtAction(nameof(GetUserInfo), new { userId = userInfo.UserName }, userInfo);
+        try
+        {
+            var queryConfig = new DynamoDBOperationConfig
+            {
+                IndexName = "UserName-index"
+            };
+
+            var users = await _dbContext.QueryAsync<UserInfo>(request.UserName, queryConfig).GetRemainingAsync();
+
+            var matchedUser = users.FirstOrDefault(user => user.Email == request.Email);
+
+            if (matchedUser != null) {
+                return Unauthorized(new { message = "Username or Email already exists" });
+            }
+
+            await _userService.PostUserInfo(request);
+            return CreatedAtAction(nameof(GetUserInfo), new { userId = userInfo.UserName }, userInfo);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { message = "Error logging in", error = ex.Message });
+        }
     }
 
     [HttpPut("{userId}")]
