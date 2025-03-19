@@ -11,9 +11,9 @@ using System.Threading.Tasks;
 public class UserController : ControllerBase
 {
     private readonly UserService _userService;
-    private readonly IDynamoDBContext _dbContext; // ✅ Inject DynamoDBContext
+    private readonly IDynamoDBContext _dbContext;
 
-    public UserController(UserService userService, IDynamoDBContext dbContext) // ✅ Inject IDynamoDBContext
+    public UserController(UserService userService, IDynamoDBContext dbContext)
     {
         _userService = userService;
         _dbContext = dbContext;
@@ -30,15 +30,14 @@ public class UserController : ControllerBase
     {
         try
         {
-            // ✅ Use QueryAsync instead of ScanAsync (Requires a GSI on UserName)
             var queryConfig = new DynamoDBOperationConfig
             {
-                IndexName = "UserName-index" // ✅ Ensure you have created this GSI in DynamoDB
+                IndexName = "UserName-index"
             };
 
             var users = await _dbContext.QueryAsync<UserInfo>(request.UserName, queryConfig).GetRemainingAsync();
 
-            var matchedUser = users.FirstOrDefault(user => user.HashedPassword == request.Password); 
+            var matchedUser = users.FirstOrDefault(user => user.HashedPassword == request.Password);
 
             if (matchedUser == null)
                 return Unauthorized(new { message = "Invalid username or password" });
