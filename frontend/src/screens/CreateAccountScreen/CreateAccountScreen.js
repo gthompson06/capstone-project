@@ -16,7 +16,6 @@ import CustomButton from "../../components/CustomButton/CustomButton";
 import { CreateAccountStyles } from "../../styles/Styles.js";
 import { useNavigation } from "@react-navigation/native";
 import BackArrow from "../../../assets/images/backArrow.png";
-import PasswordStrengthBar from "react-password-strength-bar";
 
 const CreateAccountScreen = () => {
  const [username, setUsername] = useState("");
@@ -115,10 +114,6 @@ const CreateAccountScreen = () => {
     value={password}
     setValue={setPassword}
     secureTextEntry
-   />
-   <PasswordStrengthBar
-    password={password}
-    style={CreateAccountStyles.strengthBar}
    />
    <CustomInput
     placeholder="Confirm Password"
