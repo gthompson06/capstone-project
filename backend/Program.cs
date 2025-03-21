@@ -42,7 +42,10 @@ builder.Services.AddSingleton<IDynamoDBContext>(new DynamoDBContext(dynamoDbClie
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<Database>();
 builder.Services.AddScoped<PasswordService>();
-
+builder.Services.AddScoped<BankAccountService>();
+builder.Services.AddScoped<ExpenseService>();
+builder.Services.AddScoped<TaskService>();
+builder.Services.AddScoped<ScheduleService>();
 builder.Services.AddControllers();
 
 // Allow Cross-Origin Resource Sharing (CORS) from anywhere to allow requests from React Native

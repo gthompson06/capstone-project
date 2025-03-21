@@ -16,8 +16,6 @@ import CustomButton from "../../components/CustomButton/CustomButton";
 import { CreateAccountStyles } from "../../styles/Styles.js";
 import { useNavigation } from "@react-navigation/native";
 import BackArrow from "../../../assets/images/backArrow.png";
-// import PasswordStrengthBar from "react-password-strength-bar";
-// import PasswordStrengthMeterBar from "react-native-password-strength-meter-bar";
 
 const CreateAccountScreen = () => {
  const [username, setUsername] = useState("");
@@ -43,22 +41,22 @@ const CreateAccountScreen = () => {
   console.log("fetching db");
 
   try {
-   const response = await fetch("http://localhost:5161/worthy/user/9", {
+   const response = await fetch("http://localhost:5161/worthy/user/0", {
     method: "GET",
     headers: {
      "Content-Type": "application/json",
     },
     // body: JSON.stringify({
-    //  UserId: 9,
-    //  UserName: username,
-    //  Email: email,
-    //  FirstName: "",
-    //  LastName: "",
-    //  DateOfBirth: "",
-    //  City: "Chicago",
-    //  State: "Illinois",
+    //  userId: "3",
+    //  username: "tony",
+    //  email: "email@email.com",
+    //  firstName: "tony",
+    //  lastName: "positano",
+    //  DateOfBirth: "1-1-2025",
+    //  City: "Batavia",
+    //  State: "IL",
     //  School: "Aurora University",
-    //  HashedPassword: password,
+    //  password: "password",
     // }),
    });
 
@@ -68,10 +66,10 @@ const CreateAccountScreen = () => {
     console.log("Account created successfully:", data);
     navigation.navigate("HomeScreen");
    } else {
-    console.log("Error creating account:", data.response);
+    console.log("Error creating account:", data);
    }
   } catch (error) {
-   console.log("Other error:", error.message);
+   console.log("Other error:", error);
   }
  };
 
@@ -117,12 +115,6 @@ const CreateAccountScreen = () => {
     setValue={setPassword}
     secureTextEntry
    />
-   {/* <PasswordStrengthBar
-    password={password}
-    style={CreateAccountStyles.strengthBar}
-   /> */}
-   {/* <PasswordStrengthMeterBar password={password} /> */}
-
    <CustomInput
     placeholder="Confirm Password"
     value={confirmPassword}

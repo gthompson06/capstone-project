@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
-[Route("schedule")]
+[Route("schedules")]
 
 public class ScheduleController : ControllerBase
 {
@@ -49,7 +49,7 @@ public class ScheduleController : ControllerBase
         userSchedule.Frequency = updatedSchedule.Frequency;
         userSchedule.StartTime = updatedSchedule.StartTime;
         userSchedule.EndTime = updatedSchedule.EndTime;
-        // userSchedule.Days = updatedSchedule.Days;
+        userSchedule.Days = updatedSchedule.Days;
 
         await _scheduleService.UpdateScheduleInfo(userSchedule);
         return Ok(userSchedule);
