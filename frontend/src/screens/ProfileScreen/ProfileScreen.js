@@ -6,13 +6,11 @@ import { Ionicons } from "@expo/vector-icons";
 
 const Stack = createStackNavigator();
 
-const HomeScreen = ({ route }) => {
+const Profile = ({ route }) => {
   const navigation = useNavigation(); // Use this to get the correct navigation object
-  const { username, userId } = route.params || {};
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      {/* Custom Hamburger Menu Button */}
       <TouchableOpacity
         style={{ marginLeft: 15, marginTop: 10, padding: 10 }}
         onPress={() => navigation.openDrawer()} // Now this works
@@ -20,7 +18,6 @@ const HomeScreen = ({ route }) => {
         <Ionicons name="menu" size={30} color="black" />
       </TouchableOpacity>
 
-      {/* Welcome Text */}
       <Text
         style={{
           textAlign: "center",
@@ -29,22 +26,16 @@ const HomeScreen = ({ route }) => {
           paddingTop: 0,
         }}
       >
-        Welcome {username}. Your ID is {userId}
+        Profile Screen
       </Text>
     </SafeAreaView>
   );
 };
 
-// Exporting HomeScreen wrapped in Stack Navigator
 export default function HomeStack() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="Home" component={HomeScreen} />
+      <Stack.Screen name="Profile" component={Profile} />
     </Stack.Navigator>
   );
 }
-
-
-
-
-//on sign in screen edit out the backdoor
