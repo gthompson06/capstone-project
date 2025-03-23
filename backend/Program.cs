@@ -65,7 +65,6 @@ var app = builder.Build();
 
 // Middleware
 app.UseCors("AllowCORS"); // Apply CORS globally
-app.UseHttpsRedirection();
 app.MapControllers();
 
 app.Run();

@@ -12,10 +12,12 @@ const HomeScreen = ({route}) => {
     try {
         await AsyncStorage.removeItem("userToken");
         await AsyncStorage.removeItem("tokenExpiration");
+        return null;
         // console.log("User logged out.");
     } catch (error) {
         // console.error("Error logging out:", error);
     }
+    return null;
   };
 
   return (

@@ -26,21 +26,52 @@ const CreateAccountScreen = () => {
  const navigation = useNavigation();
 
  const register = async () => {
-    
+    if (!username || !email || !password || !confirmPassword) {
+        setErrorMessage("No fields can be empty");
+        return;
+    }
+    if (password !== confirmPassword) {
+        setErrorMessage("Passwords do not match");
+        return;
+    }
+    const url = "http://10.0.0.210:5161/worthy/user/register"
+    try {
+        const response = await fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                UserName: username,
+                Email: email,
+                Password: password
+            }),
+        });
+        const data = await response.json();
+        if (response.ok) {
+            console.log("Account created successfully:", data);
+            navigation.navigate("SignIn");
+        } else {
+            console.log("Error creating account:", data);
+        }
+    } catch (error) {
+    console.log("Other error:", error);
+    }
+
  }
 
  const storeAccountInfo = async () => {
   console.log("create account pressed");
 
-  //   if (!username || !email || !password || !confirmPassword) {
-  //    setErrorMessage("No fields can be empty");
-  //    return;
-  //   }
+    // if (!username || !email || !password || !confirmPassword) {
+    //  setErrorMessage("No fields can be empty");
+    //  return;
+    // }
 
-  //   if (password !== confirmPassword) {
-  //    setErrorMessage("Passwords do not match");
-  //    return;
-  //   }
+    // if (password !== confirmPassword) {
+    //  setErrorMessage("Passwords do not match");
+    //  return;
+    // }
 
   console.log("fetching db");
 
@@ -127,7 +158,7 @@ const CreateAccountScreen = () => {
    />
    <CustomButton
     text="Create Account"
-    onPress={storeAccountInfo}
+    onPress={register}
     type="CreateAccount"
    />
    {errorMessage ? (
