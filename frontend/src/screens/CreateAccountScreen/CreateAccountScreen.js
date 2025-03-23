@@ -25,6 +25,10 @@ const CreateAccountScreen = () => {
  const [errorMessage, setErrorMessage] = useState("");
  const navigation = useNavigation();
 
+ const register = async () => {
+    
+ }
+
  const storeAccountInfo = async () => {
   console.log("create account pressed");
 

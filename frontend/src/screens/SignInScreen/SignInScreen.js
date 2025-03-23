@@ -60,9 +60,10 @@ const SignInScreen = () => {
     };
 
     // Handle sign-in button press
-    const onSignInPressed = async () => {
+    const signInUser = async () => {
         try {
-            const response = await fetch("http://localhost:5161/worthy/user/login", {
+            const url = "http://10.0.0.210:5161/worthy/user/login";
+            const response = await fetch(url, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -72,7 +73,10 @@ const SignInScreen = () => {
                     Password: password,
                 }),
             });
-    
+            console.log(response);
+            if (response.status == 401) {
+                Alert.alert("no", "Invalid credentials bruh.");
+            }
             if (!response.ok) {
                 throw new Error("Invalid username or password");
             }
@@ -124,7 +128,7 @@ const SignInScreen = () => {
                         <Text style={styles.linkText}>Forgot Password?</Text>
                     </TouchableOpacity>
                 </View>
-                <CustomButton text="Sign In" type="signIn" onPress={onSignInPressed} />
+                <CustomButton text="Sign In" type="signIn" onPress={signInUser} />
             </View>
         </SafeAreaView>
     );

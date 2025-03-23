@@ -1,4 +1,5 @@
-public class User{
+public class User
+{
     public required UserInfo UserInfo {get;set;}
     public List<UserTask>? Tasks {get;set;}
     public List<UserExpense>? Expenses {get;set;}
