@@ -14,15 +14,16 @@ import FinancesSCreen from "./src/screens/FinancesScreen";
 import TasksScreen from "./src/screens/TasksScreen";
 import SchedulesScreen from "./src/screens/SchedulesScreen";
 import SettingsScreen from "./src/screens/SettingsScreen";
+import HamburgerLogout from "./src/components/HamburgerLogout/HamburgerLogout";
 
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 
-// Drawer Navigator (Wrap HomeScreen Inside Drawer)
+// Drawer Navigator
 const DrawerNavigator = () => {
   return (
-    <Drawer.Navigator screenOptions={{ headerShown: false }}>
+    <Drawer.Navigator screenOptions={{ headerShown: false }} drawerContent={(props) => <HamburgerLogout {...props} />}>
       <Drawer.Screen name="Home" component={HomeScreen} />
       <Drawer.Screen name="Calendar" component={CalendarScreen} />
       <Drawer.Screen name="Finances" component={FinancesSCreen} />
