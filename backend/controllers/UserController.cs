@@ -67,7 +67,7 @@ public class UserController : ControllerBase
     }
 
     [HttpPost("create")]
-    public async Task<IActionResult> CreateUser([FromBody] Registration request)
+    public async Task<IActionResult> CreateUser([FromBody] UserInfo request)
     {
         try
         {
@@ -85,7 +85,7 @@ public class UserController : ControllerBase
             }
 
             await _userService.PostUserInfo(request);
-            return CreatedAtAction(nameof(GetUserInfo), new { userId = userInfo.UserName }, userInfo);
+            return CreatedAtAction(nameof(GetUserInfo), new { userId = UserInfo.Username }, UserInfo);
         }
         catch (Exception ex)
         {
