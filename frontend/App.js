@@ -8,15 +8,30 @@ import CreateAccountScreen from "./src/screens/CreateAccountScreen/CreateAccount
 import HomeScreen from "./src/screens/HomeScreen"; // Ensure this is modified as I suggested before
 import ResetPasswordScreen from "./src/screens/ResetPasswordScreen";
 import ForgotPasswordScreen from "./src/screens/ForgotPasswordScreen/ForgotPasswordScreen";
+import ProfileScreen from "./src/screens/ProfileScreen";
+import CalendarScreen from "./src/screens/CalendarScreen";
+import FinancesSCreen from "./src/screens/FinancesScreen";
+import TasksScreen from "./src/screens/TasksScreen";
+import SchedulesScreen from "./src/screens/SchedulesScreen";
+import SettingsScreen from "./src/screens/SettingsScreen";
+import HamburgerLogout from "./src/components/HamburgerLogout/HamburgerLogout";
+
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 
-// Drawer Navigator (Wrap HomeScreen Inside Drawer)
+// Drawer Navigator
 const DrawerNavigator = () => {
   return (
-    <Drawer.Navigator screenOptions={{ headerShown: false }}>
+    <Drawer.Navigator screenOptions={{ headerShown: false }} drawerContent={(props) => <HamburgerLogout {...props} />}>
       <Drawer.Screen name="Home" component={HomeScreen} />
+      <Drawer.Screen name="Calendar" component={CalendarScreen} />
+      <Drawer.Screen name="Finances" component={FinancesSCreen} />
+      <Drawer.Screen name="Tasks" component={TasksScreen} />
+      <Drawer.Screen name="Schedules" component={SchedulesScreen} />
+      <Drawer.Screen name="Profile" component={ProfileScreen} />
+      <Drawer.Screen name="Settings" component={SettingsScreen} />
+
     </Drawer.Navigator>
   );
 };

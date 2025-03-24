@@ -10,7 +10,7 @@ const Stack = createStackNavigator();
 
 const HomeScreen = ({ route }) => {
   const navigation = useNavigation(); // Use this to get the correct navigation object
-  const { username } = route.params || {};
+  const { username, userId } = route.params || {};
 
   const navigation = useNavigation(); // Get navigation object
   
@@ -47,7 +47,7 @@ const HomeScreen = ({ route }) => {
           paddingTop: 0,
         }}
       >
-        Welcome {username}
+        Welcome {username}. Your ID is {userId}
       </Text>
     </SafeAreaView>
   );

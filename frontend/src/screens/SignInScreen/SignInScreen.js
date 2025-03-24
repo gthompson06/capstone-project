@@ -88,7 +88,7 @@ const SignInScreen = () => {
     
             if (data.message === "Login successful" && data.user) {
                 await storeUserToken(); // Store token after successful login
-                navigation.replace("HomeScreen", { username });
+                navigation.replace("HomeScreen", { username, userId: data.user.UserId });
             } else {
                 Alert.alert("Error", "Invalid username or password");
             }
