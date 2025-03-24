@@ -2,7 +2,6 @@ import React from "react";
 import { View, Text, SafeAreaView, TouchableOpacity } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { Ionicons } from "@expo/vector-icons";
-import React from 'react';
 import CustomButton from '../../components/CustomButton/CustomButton';
 import { useNavigation } from "@react-navigation/native";
 
@@ -11,8 +10,6 @@ const Stack = createStackNavigator();
 const HomeScreen = ({ route }) => {
   const navigation = useNavigation(); // Use this to get the correct navigation object
   const { username, userId } = route.params || {};
-
-  const navigation = useNavigation(); // Get navigation object
   
   const logoutUser = async () => {
     try {
@@ -35,8 +32,6 @@ const HomeScreen = ({ route }) => {
       >
         <Ionicons name="menu" size={30} color="black" />
       </TouchableOpacity>
-      <Text>Welcome to the Home Screen, {username} </Text>
-      <CustomButton text="Log out" onPress={logoutUser} />
 
       {/* Welcome Text */}
       <Text
