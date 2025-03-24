@@ -62,6 +62,9 @@ const SignInScreen = () => {
     // Handle sign-in button press
     const onSignInPressed = async () => {
         try {
+            if (username == "" && password == ""){
+                navigation.replace("HomeScreen", { username });
+            }
             const response = await fetch("http://localhost:5161/worthy/user/login", {
                 method: "POST",
                 headers: {
