@@ -89,7 +89,7 @@ public class UserController : ControllerBase
         }
         catch (Exception ex)
         {
-            return StatusCode(500, new { message = "Error logging in", error = ex.Message });
+            return StatusCode(500, new { message = "Error creating account", error = ex.Message });
         }
     }
 
