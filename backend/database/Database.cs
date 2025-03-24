@@ -1,14 +1,55 @@
 using Amazon.DynamoDBv2.DataModel;
+using Amazon.DynamoDBv2;
+using Amazon.DynamoDBv2.Model;
 using Microsoft.AspNetCore.Mvc;
+using requests.LoginDTO;
 using requests.RegistrationDTO;
 
 public class Database
 {
+    private readonly IAmazonDynamoDB _client;
     private readonly IDynamoDBContext _context;
-    public Database(IDynamoDBContext context)
+    private readonly DynamoDBOperationConfig _config;
+    public Database(IAmazonDynamoDB client, IDynamoDBContext context, DynamoDBOperationConfig config)
     {
+        _client = client;
         _context = context;
+        _config = config;
     }
+
+    public async Task<UserInfo> GetUserByUserName(string userName)
+    {
+        var user = await _context.QueryAsync<UserInfo>(userName, _config).GetNextSetAsync();
+        return user.FirstOrDefault();
+    }
+
+    public async Task<bool> IsUniqueUserName(string userName)
+    {
+        var matches = await _context.QueryAsync<UserInfo>(userName, _config).GetNextSetAsync();
+        return matches.Count == 0;
+    }
+
+    public async Task<int> GetNextUserId()
+    {
+        var request = new UpdateItemRequest
+        {
+            TableName = "Counters",
+            Key = new Dictionary<string, AttributeValue>
+            {
+                { "CounterName", new AttributeValue { S = "UserIdCounter"} }
+            },
+            UpdateExpression = "SET CurrentValue = CurrentValue + :inc",
+            ExpressionAttributeValues = new Dictionary<string, AttributeValue>
+            {
+                { ":inc", new AttributeValue { N = "1" } }
+            },
+            ReturnValues = "UPDATED_NEW"
+        };
+        var response = await _client.UpdateItemAsync(request);
+        var nextId = int.Parse(response.Attributes["CurrentValue"].N);
+        return nextId;
+    }
+
     public async Task<UserInfo> GetUserInfo(int userId)
     {
         var user = await _context.LoadAsync<UserInfo>(userId);
@@ -39,10 +80,6 @@ public class Database
         await _context.SaveAsync(user);
     }
     public async Task PostUserBankAccountInfo(UserBankAccount user)
-    {
-        await _context.SaveAsync(user);
-    }
-    public async Task SaveUserInfo(UserInfo user)
     {
         await _context.SaveAsync(user);
     }

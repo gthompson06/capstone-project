@@ -1,7 +1,7 @@
 using System.Security.Cryptography;
 using Microsoft.AspNetCore.Identity;
 
-public class PasswordService : IPasswordService
+public class PasswordService
 {
     private const int SaltSize = 128 / 8;
     private const int KeySize = 256 / 8;
