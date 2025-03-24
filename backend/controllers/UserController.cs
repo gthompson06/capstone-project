@@ -27,29 +27,27 @@ public class UserController : ControllerBase
         return Ok(new { Message = "Welcome" });
     }
 
+    [HttpPost("register")]
+    public async Task<IActionResult> Register([FromBody] RegistrationDTO request)
+    {
+        var result = await _userService.Register(request);
+        var response = new { message = result.Message };
+        if (result.Success)
+        {
+            return Ok(response);
+        }
+        return BadRequest(response);
+    }
+
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginDTO request)
     {
-        try
+        var user = await _userService.Login(request);
+        if(user == null)
         {
-            var queryConfig = new DynamoDBOperationConfig
-            {
-                IndexName = "UserName-index"
-            };
-
-            var users = await _dbContext.QueryAsync<UserInfo>(request.UserName, queryConfig).GetRemainingAsync();
-
-            var matchedUser = users.FirstOrDefault(user => user.HashedPassword == request.Password);
-
-            if (matchedUser == null)
-                return Unauthorized(new { message = "Invalid username or password" });
-
-            return Ok(new { message = "Login successful", user = matchedUser });
+            return Unauthorized(new { message = "Invalid username or password" });
         }
-        catch (Exception ex)
-        {
-            return StatusCode(500, new { message = "Error logging in", error = ex.Message });
-        }
+        return Ok(new { message = "Login successful", user = user });
     }
 
     [HttpGet("{userId}")]
