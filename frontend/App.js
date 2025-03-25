@@ -22,40 +22,45 @@ const Drawer = createDrawerNavigator();
 
 // Drawer Navigator
 const DrawerNavigator = () => {
-  return (
-    <Drawer.Navigator screenOptions={{ headerShown: false }} drawerContent={(props) => <HamburgerLogout {...props} />}>
-      <Drawer.Screen name="Home" component={HomeScreen} />
-      <Drawer.Screen name="Calendar" component={CalendarScreen} />
-      <Drawer.Screen name="Finances" component={FinancesSCreen} />
-      <Drawer.Screen name="Tasks" component={TasksScreen} />
-      <Drawer.Screen name="Schedules" component={SchedulesScreen} />
-      <Drawer.Screen name="Profile" component={ProfileScreen} />
-      <Drawer.Screen name="Settings" component={SettingsScreen} />
-
-    </Drawer.Navigator>
-  );
+ return (
+  <Drawer.Navigator
+   screenOptions={{ headerShown: false }}
+   drawerContent={(props) => <HamburgerLogout {...props} />}
+  >
+   <Drawer.Screen name="Home" component={HomeScreen} />
+   <Drawer.Screen name="Calendar" component={CalendarScreen} />
+   <Drawer.Screen name="Finances" component={FinancesSCreen} />
+   <Drawer.Screen name="Tasks" component={TasksScreen} />
+   <Drawer.Screen name="Schedules" component={SchedulesScreen} />
+   <Drawer.Screen name="Profile" component={ProfileScreen} />
+   <Drawer.Screen name="Settings" component={SettingsScreen} />
+  </Drawer.Navigator>
+ );
 };
 
 // Main Stack Navigator
 const App = () => {
-  return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="SignIn" screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="SignIn" component={SignInScreen} />
-        <Stack.Screen name="CreateAccount" component={CreateAccountScreen} />
-        <Stack.Screen name="HomeScreen" component={DrawerNavigator} /> 
-        <Stack.Screen name="ResetPassword" component={ResetPasswordScreen} />
-        <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
+ return (
+  <NavigationContainer>
+   <Stack.Navigator
+    initialRouteName="SignIn"
+    screenOptions={{ headerShown: false }}
+   >
+    <Stack.Screen name="SignIn" component={SignInScreen} />
+    <Stack.Screen name="CreateAccount" component={CreateAccountScreen} />
+    <Stack.Screen name="HomeScreen" component={DrawerNavigator} />
+    <Stack.Screen name="ResetPassword" component={ResetPasswordScreen} />
+    <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
+   </Stack.Navigator>
+  </NavigationContainer>
+ );
 };
 
 export default App;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "white",
-  },
+ container: {
+  flex: 1,
+  backgroundColor: "white",
+ },
 });

@@ -65,7 +65,7 @@ const SignInScreen = () => {
             if (username == "" && password == ""){
                 navigation.replace("HomeScreen", { username });
             }
-            const url = "http://10.0.0.210:5161/worthy/user/login";
+            const url = "http://40.141.207.2/worthy/user/login";
             const response = await fetch(url, {
                 method: "POST",
                 headers: {
