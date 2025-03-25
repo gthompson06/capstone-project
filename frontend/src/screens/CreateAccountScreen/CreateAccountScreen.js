@@ -50,7 +50,7 @@ const CreateAccountScreen = () => {
    const data = await response.json();
    if (response.ok) {
     console.log("Account created successfully:", data);
-    navigation.navigate("SignIn");
+    navigation.navigate("SecurityQuestion");
    } else {
     console.log("Error creating account:", data);
    }
