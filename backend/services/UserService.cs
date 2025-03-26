@@ -43,9 +43,10 @@ public class UserService
     public async Task<UserInfo?> Login(LoginDTO request)
     {
         var matchedUser = await _database.GetUserByUserName(request.UserName);
-        if(matchedUser == null) return null;
-        
-        if (!_passwordService.Verify(matchedUser.HashedPassword, request.Password))
+        if (matchedUser == null) return null;
+
+        var inputPwdHashed = _passwordService.Hash(request.Password);
+        if (matchedUser.HashedPassword != inputPwdHashed)
             throw new Exception("Invalid password.");
         // matchedUser.Token = generateJWT();
         return matchedUser;

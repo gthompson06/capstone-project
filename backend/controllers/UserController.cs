@@ -43,11 +43,11 @@ public class UserController : ControllerBase
     public async Task<IActionResult> Login([FromBody] LoginDTO request)
     {
         var user = await _userService.Login(request);
-        if(user == null)
+        if (user == null)
         {
             return Unauthorized(new { message = "Invalid username or password" });
         }
-        return Ok(new { message = "Login successful", user = user });
+        return Ok(new { message = "Login successful", user });
     }
 
     [HttpGet("{userId}")]
