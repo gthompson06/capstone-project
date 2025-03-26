@@ -27,6 +27,20 @@ public class UserController : ControllerBase
         return Ok(new { Message = "Welcome" });
     }
 
+    [HttpGet("allUsers")]
+    public async Task<IActionResult> GetAllUsers()
+    {
+        var response = await _userService.GetAllUsers();
+        if (response == null)
+        {
+            return NotFound(new { Message = "Bad Request" });
+        }
+        else
+        {
+            return Ok(response);
+        }
+    }
+
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegistrationDTO request)
     {
@@ -43,7 +57,7 @@ public class UserController : ControllerBase
     public async Task<IActionResult> Login([FromBody] LoginDTO request)
     {
         var user = await _userService.Login(request);
-        if(user == null)
+        if (user == null)
         {
             return Unauthorized(new { message = "Invalid username or password" });
         }
@@ -64,32 +78,32 @@ public class UserController : ControllerBase
         }
     }
 
-    [HttpPost("create")]
-    public async Task<IActionResult> CreateUser([FromBody] UserInfo request)
-    {
-        try
-        {
-            var queryConfig = new DynamoDBOperationConfig
-            {
-                IndexName = "UserName-index"
-            };
+    // [HttpPost("create")]
+    // public async Task<IActionResult> CreateUser([FromBody] UserInfo request)
+    // {
+    //     try
+    //     {
+    //         var queryConfig = new DynamoDBOperationConfig
+    //         {
+    //             IndexName = "UserName-index"
+    //         };
 
-            var users = await _dbContext.QueryAsync<UserInfo>(request.UserName, queryConfig).GetRemainingAsync();
+    //         var users = await _dbContext.QueryAsync<UserInfo>(request.UserName, queryConfig).GetRemainingAsync();
 
-            var matchedUser = users.FirstOrDefault(user => user.Email == request.Email);
+    //         var matchedUser = users.FirstOrDefault(user => user.Email == request.Email);
 
-            if (matchedUser != null) {
-                return Unauthorized(new { message = "Username or Email already exists" });
-            }
+    //         if (matchedUser != null) {
+    //             return Unauthorized(new { message = "Username or Email already exists" });
+    //         }
 
-            await _userService.PostUserInfo(request);
-            return CreatedAtAction(nameof(GetUserInfo), new { userId = UserInfo.Username }, UserInfo);
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, new { message = "Error creating account", error = ex.Message });
-        }
-    }
+    //         await _userService.PostUserInfo(request);
+    //         return CreatedAtAction(nameof(GetUserInfo), new { userId = UserInfo.Username }, UserInfo);
+    //     }
+    //     catch (Exception ex)
+    //     {
+    //         return StatusCode(500, new { message = "Error creating account", error = ex.Message });
+    //     }
+    // }
 
     [HttpPut("{userId}")]
     public async Task<IActionResult> UpdateUser(int userId, [FromBody] UserInfo updatedUser)

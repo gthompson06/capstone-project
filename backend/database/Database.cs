@@ -55,6 +55,12 @@ public class Database
         var user = await _context.LoadAsync<UserInfo>(userId);
         return user;
     }
+    public async Task<List<UserInfo>> GetAllUsers()
+    {
+        var scanConditions = new List<ScanCondition>();
+        var users = await _context.ScanAsync<UserInfo>(scanConditions).GetRemainingAsync();
+        return users;
+    }
     public async Task<List<UserTask>> GetUserTasks(int userId)
     {
         var tasks = await _context.QueryAsync<UserTask>(userId).GetRemainingAsync();

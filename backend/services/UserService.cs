@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Amazon.DynamoDBv2.DataModel;
 using Microsoft.AspNetCore.Mvc;
@@ -43,8 +44,8 @@ public class UserService
     public async Task<UserInfo?> Login(LoginDTO request)
     {
         var matchedUser = await _database.GetUserByUserName(request.UserName);
-        if(matchedUser == null) return null;
-        
+        if (matchedUser == null) return null;
+
         if (!_passwordService.Verify(matchedUser.HashedPassword, request.Password))
             throw new Exception("Invalid password.");
         // matchedUser.Token = generateJWT();
@@ -61,6 +62,11 @@ public class UserService
     {
         var userInfo = await _database.GetUserInfo(userId);
         return userInfo;
+    }
+    public async Task<List<UserInfo>> GetAllUsers()
+    {
+        return await _database.GetAllUsers();
+
     }
     public async Task PostUserInfo(UserInfo newUser)
     {
