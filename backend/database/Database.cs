@@ -4,6 +4,7 @@ using Amazon.DynamoDBv2.Model;
 using Microsoft.AspNetCore.Mvc;
 using requests.LoginDTO;
 using requests.RegistrationDTO;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 public class Database
 {
