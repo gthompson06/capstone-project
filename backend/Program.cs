@@ -10,6 +10,7 @@ using Microsoft.Extensions.Hosting;
 using System;
 using System.Threading.Tasks;
 using DotNetEnv;
+using System.IdentityModel.Tokens.Jwt;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -39,10 +40,14 @@ builder.Services.AddSingleton<IAmazonDynamoDB>(dynamoDbClient);
 builder.Services.AddSingleton<IDynamoDBContext>(new DynamoDBContext(dynamoDbClient));
 builder.Services.AddSingleton(new DynamoDBOperationConfig{ IndexName = "UserName-index" });
 
+// JWT
+builder.Services.AddSingleton<JwtSecurityTokenHandler>();
+
 // Add built-in services
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<Database>();
 builder.Services.AddScoped<PasswordService>();
+builder.Services.AddScoped<TokenService>();
 builder.Services.AddScoped<BankAccountService>();
 builder.Services.AddScoped<ExpenseService>();
 builder.Services.AddScoped<TaskService>();

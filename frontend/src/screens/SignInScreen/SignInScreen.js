@@ -16,16 +16,14 @@ const SignInScreen = () => {
     const navigation = useNavigation(); // Get navigation object
     const { height } = useWindowDimensions();
 
-    // Function to store user token with expiration
-    const storeUserToken = async () => {
+    const storeUserToken = async (token) => {
         try {
-            const token = "dummy_token_123"; // Replace with actual token from backend
-            const expirationTime = Date.now() + 30 * 1000; // Expires in 2 minutes
+            const token = this.token;
+            const expirationTime = Date.now() + 30 * 60 * 1000 // Expires in 30 minutes (minutes to seconds to milliseconds)
             await AsyncStorage.setItem("userToken", token);
             await AsyncStorage.setItem("tokenExpiration", expirationTime.toString());
-            // console.log("Token stored, expires in 1 minute");
         } catch (error) {
-            // console.error("Error saving token:", error);
+            console.error("Error saving token:", error);
         }
     };
 
@@ -36,28 +34,28 @@ const SignInScreen = () => {
             const expiration = await AsyncStorage.getItem("tokenExpiration");
 
             if (!token || !expiration || Date.now() > parseInt(expiration)) {
-                // console.log("Token expired or not found. Logging out...");
-                await logoutUser();
+                console.log("Token expired or not found. Logging out...");
+                await handleLogout();
                 return null;
             }
-            // console.log("User is still signed in.");
+            console.log("User is still signed in.");
             return token;
         } catch (error) {
-            // console.error("Error checking login:", error);
+            console.error("Error checking login:", error);
             return null;
         }
     };
 
-    // Logout function
-    const logoutUser = async () => {
+    const handleLogout = async () => {
         try {
             await AsyncStorage.removeItem("userToken");
             await AsyncStorage.removeItem("tokenExpiration");
-            // console.log("User logged out.");
+            navigation.navigate("SignInScreen");
         } catch (error) {
-            // console.error("Error logging out:", error);
+            console.error("Error logging out:", error);
         }
-    };
+        return null;
+      };
 
     // Handle sign-in button press
     const signInUser = async () => {
@@ -86,9 +84,12 @@ const SignInScreen = () => {
     
             const data = await response.json();
     
-            if (data.message === "Login successful" && data.user) {
-                await storeUserToken(); // Store token after successful login
-                navigation.replace("HomeScreen", { username, userId: data.user.UserId });
+            if (data.message === "Login successful" && data.user && data.token) {
+                await storeUserToken(data.token);
+                navigation.replace("HomeScreen", { 
+                    username: username, 
+                    userId: data.user.UserId
+                });
             } else {
                 Alert.alert("Error", "Invalid username or password");
             }
@@ -97,8 +98,6 @@ const SignInScreen = () => {
             Alert.alert("Error", "An error occurred while signing in");
         }
     };
-    
-    
 
     // Check if user is already signed in when screen loads
     useEffect(() => {

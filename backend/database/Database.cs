@@ -49,6 +49,15 @@ public class Database
         var nextId = int.Parse(response.Attributes["CurrentValue"].N);
         return nextId;
     }
+    public async Task SaveRefreshToken(UserRefreshToken token)
+    {
+        await _context.SaveAsync(token);
+    }
+    public async Task<UserRefreshToken> GetRefreshToken(string tokenId)
+    {
+        var token = await _context.LoadAsync<UserRefreshToken>(tokenId);
+        return token;
+    }
 
     public async Task<UserInfo> GetUserInfo(int userId)
     {

@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Amazon.Auth.AccessControlPolicy.ActionIdentifiers;
 using Amazon.DynamoDBv2.DataModel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Net.Http.Headers;
@@ -40,14 +41,14 @@ public class UserService
         };
     }
 
-    public async Task<UserInfo?> Login(LoginDTO request)
+    public async Task<UserInfo?> GetUserOnLogin(LoginDTO request)
     {
         var matchedUser = await _database.GetUserByUserName(request.UserName);
         if(matchedUser == null) return null;
         
         if (!_passwordService.Verify(matchedUser.HashedPassword, request.Password))
             throw new Exception("Invalid password.");
-        // matchedUser.Token = generateJWT();
+
         return matchedUser;
     }
 
