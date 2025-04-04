@@ -9,10 +9,10 @@ const Stack = createStackNavigator();
 
 const HomeScreen = ({ route }) => {
   const navigation = useNavigation(); // Use this to get the correct navigation object
-  const { username, userId, token } = route.params || {};
+  const { username, id, token } = route.params || {};
 
   useEffect(() => {
-    console.log(token);
+    console.log(route.params);
   }, []);
 
   return (
@@ -34,7 +34,7 @@ const HomeScreen = ({ route }) => {
           paddingTop: 0,
         }}
       >
-        Welcome {username}. Your ID is {userId}
+        Welcome {username || 'Guest'}. Your ID is {id || 'null'}
       </Text>
     </SafeAreaView>
   );
@@ -50,6 +50,3 @@ const HomeScreen = ({ route }) => {
 // }
 
 export default HomeScreen;
-
-
-//on sign in screen edit out the backdoor

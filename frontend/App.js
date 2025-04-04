@@ -22,13 +22,17 @@ const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 
 // Drawer Navigator
-const DrawerNavigator = () => {
+const DrawerNavigator = ({ route }) => {
     return (
         <Drawer.Navigator
             screenOptions={{ headerShown: false }}
             drawerContent={(props) => <HamburgerLogout {...props} />}
         >
-            <Drawer.Screen name="Home" component={HomeScreen} />
+            <Drawer.Screen 
+                name="Home" 
+                component={HomeScreen} 
+                initialParams={route?.params} // Pass params to HomeScreen
+            />
             <Drawer.Screen name="Calendar" component={CalendarScreen} />
             <Drawer.Screen name="Finances" component={FinancesSCreen} />
             <Drawer.Screen name="Tasks" component={TasksScreen} />
@@ -38,6 +42,7 @@ const DrawerNavigator = () => {
         </Drawer.Navigator>
     );
 };
+
 
 // Main Stack Navigator
 const App = () => {
