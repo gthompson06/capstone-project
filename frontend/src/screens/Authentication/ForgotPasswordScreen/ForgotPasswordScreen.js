@@ -2,7 +2,7 @@ import React, { Component, useState } from 'react'
 import { Text, View, SafeAreaView, StyleSheet, TouchableOpacity, Image, useWindowDimensions } from 'react-native'
 import CustomInput from '../../../components/CustomInput/CustomInput.js'
 import CustomButton from '../../../components/CustomButton/CustomButton.js'
-import { CreateAccountStyles } from "../../../styles/Styles.js" //left off here
+import { CreateAccountStyles } from "../../../styles/Styles.js"
 import { useNavigation } from "@react-navigation/native";
 import BackArrow from "../../../../assets/images/backArrow.png";
 import Logo from "../../../../assets/images/TestImg.png"
