@@ -23,6 +23,7 @@ const CreateAccountScreen = () => {
  const [password, setPassword] = useState("");
  const [confirmPassword, setConfirmPassword] = useState("");
  const [errorMessage, setErrorMessage] = useState("");
+
  const navigation = useNavigation();
 
  const register = async () => {
@@ -34,33 +35,12 @@ const CreateAccountScreen = () => {
    setErrorMessage("Passwords do not match");
    return;
   }
-  const url = "http://40.141.207.2/worthy/user/register";
-  try {
-   const response = await fetch(url, {
-    method: "POST",
-    headers: {
-     "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-     UserName: username,
-     Email: email,
-     Password: password,
-    }),
-   });
-   const data = await response.json();
-   if (response.ok) {
-    console.log("Account created successfully:", data);
-    navigation.navigate("SecurityQuestion");
-   } else {
-    console.log("Error creating account:", data);
-   }
-  } catch (error) {
-   console.log("Other error:", error);
-  }
- };
-
- const ResetPassword = () => {
-  navigation.navigate("ResetPassword");
+//   console.log(username, email, password);
+  navigation.navigate("SecurityQuestion", {
+   u: username,
+   e: email,
+   p: password,
+  });
  };
 
  const { height } = useWindowDimensions();
@@ -107,6 +87,7 @@ const CreateAccountScreen = () => {
     setValue={setConfirmPassword}
     secureTextEntry
    />
+
    <CustomButton
     text="Create Account"
     onPress={register}
@@ -116,6 +97,15 @@ const CreateAccountScreen = () => {
     <Text style={{ color: "red", marginBottom: 10 }}>{errorMessage}</Text>
    ) : null}
    {/* <CustomButton text="Reset Password" onPress={ResetPassword} /> */}
+
+   {/* <SecurityQuestionScreen
+    // username={this.username}
+    // email={this.email}
+    // password={this.password}
+    username={"username"}
+    email={"email"}
+    password={"password"}
+   /> */}
   </SafeAreaView>
  );
 };
