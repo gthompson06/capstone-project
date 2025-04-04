@@ -25,44 +25,6 @@ export const Authenticator = ({ children }) => {
         loadTokens();
     }, []);
 
-    const login = async (userId, password) => {
-        const res = await fetch('https://your-api.com/api/auth/login', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ userId, password }),
-        });
-
-        if (!res.ok) throw new Error('Login failed');
-        const data = await res.json();
-
-        await saveTokens(data.accessToken, data.refreshToken, userId);
-        setUserId(userId);
-        setAccessToken(data.accessToken);
-        setRefreshToken(data.refreshToken);
-    };
-
-    const logout = async () => {
-        await clearTokens();
-        setUserId(null);
-        setAccessToken(null);
-        setRefreshToken(null);
-    };
-
-    const refreshAccessToken = async () => {
-        const res = await fetch('https://your-api.com/api/auth/refresh-token', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ refreshToken, userId }),
-        });
-
-        if (!res.ok) return logout();
-        const data = await res.json();
-
-        await saveTokens(data.accessToken, data.refreshToken, userId);
-        setAccessToken(data.accessToken);
-        setRefreshToken(data.refreshToken);
-    };
-
     return (
         <AuthContext.Provider value={{
             userId,
