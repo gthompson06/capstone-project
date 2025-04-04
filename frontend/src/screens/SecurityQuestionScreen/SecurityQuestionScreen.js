@@ -42,7 +42,7 @@ const SecurityQuestionScreen = () => {
  ];
 
  const isOnlyLetters = (str) => {
-  const regex = /^[A-Za-z]+$/; // Only allows uppercase and lowercase letters
+  const regex = /^[A-Za-z]+$/;
   return regex.test(str);
  };
 
@@ -55,31 +55,34 @@ const SecurityQuestionScreen = () => {
    return;
   }
 
+  console.log(username, email, password, question, answer);
+  //   console.log(isOnlyLetters(answer));
+
   if (isOnlyLetters(answer)) {
    setErrorMessage(null);
-   console.log(username, email, password, question, answer);
-   const url = "http://40.141.207.2/worthy/user/register";
-   //   const response = await fetch(url, {
-   //    method: "POST",
-   //    headers: {
-   //     "Content-Type": "application/json",
-   //    },
-   //    body: JSON.stringify({
-   //     UserName: username,
-   //     Email: email,
-   //     Password: password,
-   //     SecurityQuestion: question,
-   //     SecurityAnswer: answer,
-   //    }),
-   //   });
-   //   console.log(response);
-   //   if (response.status == 401) {
-   //    console.log(response);
-   //    navigation.replace("SignIn");
-   //   }
-   //   if (!response.ok) {
-   //    throw new Error(response);
-   //   }
+   console.log("fetching now");
+   const url = "http://localhost:5161/worthy/user/register";
+   const response = await fetch(url, {
+    method: "POST",
+    headers: {
+     "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+     UserName: username,
+     Email: email,
+     Password: password,
+     SecurityQuestion: question,
+     SecurityAnswer: answer,
+    }),
+   });
+   console.log(response);
+   if (response.status == 401) {
+    console.log(response);
+    navigation.replace("SignIn");
+   }
+   if (!response.ok) {
+    throw new Error(response);
+   }
   } else {
    setErrorMessage(
     "Answer should only be letters, no spaces, numbers, or special characters!"

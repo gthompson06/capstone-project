@@ -35,7 +35,7 @@ const CreateAccountScreen = () => {
    setErrorMessage("Passwords do not match");
    return;
   }
-  console.log(username, email, password);
+  //   console.log(username, email, password);
   navigation.navigate("SecurityQuestion", {
    u: username,
    e: email,

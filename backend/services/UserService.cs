@@ -31,7 +31,9 @@ public class UserService
             UserId = await _database.GetNextUserId(),
             UserName = request.UserName,
             Email = request.Email,
-            HashedPassword = _passwordService.Hash(request.Password)
+            HashedPassword = _passwordService.Hash(request.Password),
+            SecurityQuestion = request.SecurityQuestion,
+            SecurityAnswer = _passwordService.Hash(request.SecurityAnswer)
         };
         await _database.PostUserInfo(user);
         return new ServiceResult
