@@ -16,7 +16,7 @@ import SchedulesScreen from "./src/screens/App/SchedulesScreen";
 import SettingsScreen from "./src/screens/App/SettingsScreen";
 import HamburgerLogout from "./src/components/HamburgerLogout/HamburgerLogout";
 import SecurityQuestionScreen from "./src/screens/Authentication/SecurityQuestionScreen";
-import { Authenticator } from "./src/contexts/Context";
+import { Authenticator } from "./src/contexts/context";
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
