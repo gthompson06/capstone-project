@@ -2,17 +2,29 @@ import React from "react";
 import { View, Text, Alert, TouchableOpacity } from "react-native";
 import { DrawerContentScrollView, DrawerItemList } from "@react-navigation/drawer";
 import { Ionicons } from "@expo/vector-icons";
+// import LogoutButton from "../../components/LogoutButton/LogoutButton"
 
 const HamburgerLogout = (props) => {
-  const handleLogout = () => {
+  const handleLogoutConfirmation = () => {
     Alert.alert(
-      "Logout",
-      "Are you sure you want to log out?",
-      [
+    "Logout",
+    "Are you sure you want to log out?",
+    [
         { text: "Cancel", style: "cancel" },
-        { text: "Logout", onPress: () => console.log("User logged out") }, // Replace with logout logic
-      ]
+        { text: "Logout", onPress: () => handleLogout() },
+    ]
     );
+  };
+
+  const handleLogout = async () => {
+    try {
+        await AsyncStorage.removeItem("userToken");
+        await AsyncStorage.removeItem("tokenExpiration");
+        navigation.navigate("SignInScreen");
+    } catch (error) {
+        console.error("Error logging out:", error);
+    }
+    return null;
   };
 
   return (
@@ -30,6 +42,7 @@ const HamburgerLogout = (props) => {
         >
           <Ionicons name="log-out-outline" size={24} color="red" />
           <Text style={{ marginLeft: 10, fontSize: 16, color: "red" }}>Logout</Text>
+          {/* <LogoutButton /> */}
         </TouchableOpacity>
       </View>
     </DrawerContentScrollView>

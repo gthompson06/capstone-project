@@ -15,11 +15,13 @@ public class UserController : ControllerBase
 {
     private readonly UserService _userService;
     private readonly IDynamoDBContext _dbContext;
+    private readonly TokenService _tokenService;
 
-    public UserController(UserService userService, IDynamoDBContext dbContext)
+    public UserController(UserService userService, IDynamoDBContext dbContext, TokenService tokenService)
     {
         _userService = userService;
         _dbContext = dbContext;
+        _tokenService = tokenService;
     }
     [HttpGet("")]
     public IActionResult Load()
@@ -56,12 +58,21 @@ public class UserController : ControllerBase
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginDTO request)
     {
-        var user = await _userService.Login(request);
-        if (user == null)
+        var user = await _userService.GetUserOnLogin(request);
+        if(user == null)
         {
             return Unauthorized(new { message = "Invalid username or password" });
         }
-        return Ok(new { message = "Login successful", user = user });
+
+        await _tokenService.GenerateRefreshTokenAsync(user.UserId);
+        var accessToken = _tokenService.GenerateAccessToken(user.UserName);
+        
+        return Ok(new 
+        { 
+            message = "Login successful", 
+            user = user,
+            token = accessToken
+        });
     }
 
     [HttpGet("{userId}")]

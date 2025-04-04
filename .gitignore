@@ -39,6 +39,7 @@ yarn-error.*
 # build outputs
 bin/
 obj/
+Properties/launchSettings.json
 
 # NuGet packages
 *.nupkg

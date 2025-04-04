@@ -1,11 +1,11 @@
 namespace DTOs.ExpenseDTO;
 public class ExpenseDTO
 {
-    public int UserId {set;get;}
-    public int ExpenseId {set;get;}
-    public string Title {set;get;}
-    public string Type {set;get;}
-    public string Frequency {set;get;}
-    public DateTime PayDate {set;get;}
-    public decimal Amount {set;get;}
+    public required int UserId {set;get;}
+    public required int ExpenseId {set;get;}
+    public required string Title {set;get;}
+    public required string Type {set;get;}
+    public required string Frequency {set;get;}
+    public required DateTime PayDate {set;get;}
+    public required decimal Amount {set;get;}
 }
