@@ -7,9 +7,6 @@ import { useNavigation } from "@react-navigation/native";
 import BackArrow from "../../../assets/images/backArrow.png";
 import Logo from "../../../assets/images/TestImg.png";
 
-
-
-
 const ForgotPasswordScreen = () => {
     const [email, setEmail] = useState("");
     const onEnterEmailPressed = () => {

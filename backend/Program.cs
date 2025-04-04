@@ -37,7 +37,7 @@ builder.Services.AddSingleton<IAmazonDynamoDB>(dynamoDbClient);
 
 // Higher-level database interaction object to app services
 builder.Services.AddSingleton<IDynamoDBContext>(new DynamoDBContext(dynamoDbClient));
-builder.Services.AddSingleton(new DynamoDBOperationConfig{ IndexName = "UserName-index" });
+builder.Services.AddSingleton(new DynamoDBOperationConfig { IndexName = "UserName-index" });
 
 // Add built-in services
 builder.Services.AddScoped<UserService>();
