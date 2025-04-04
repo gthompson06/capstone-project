@@ -13,8 +13,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 
 import Logo from "../../../assets/images/TestImg.png";
-import CustomInput from "../../components/CustomInput/CustomInput";
-import CustomButton from "../../components/CustomButton/CustomButton";
+import CustomInput from "../../../components/CustomInput/CustomInput";
+import CustomButton from "../../../components/CustomButton/CustomButton";
 
 const SignInScreen = () => {
     const [username, setUsername] = useState("");
@@ -25,7 +25,7 @@ const SignInScreen = () => {
     const storeUserToken = async (token) => {
         try {
             const token = this.token;
-            const expirationTime = Date.now() + 30 * 60 * 1000 // Expires in 30 minutes (minutes to seconds to milliseconds)
+            const expirationTime = Date.now() + 10 * 1000 // Expires in 30 minutes (minutes to seconds to milliseconds)
             await AsyncStorage.setItem("userToken", token);
             await AsyncStorage.setItem("tokenExpiration", expirationTime.toString());
         } catch (error) {
@@ -66,10 +66,7 @@ const SignInScreen = () => {
     // Handle sign-in button press
     const signInUser = async () => {
         try {
-            if (username == "" && password == "") {
-                navigation.replace("HomeScreen", { username });
-            }
-            const url = "http://10.0.0.210:5161/worthy/user/login";
+            const url = "http://localhost:5161/worthy/user/login";
             const response = await fetch(url, {
                 method: "POST",
                 headers: {
@@ -86,13 +83,17 @@ const SignInScreen = () => {
             }
 
             const data = await response.json();
-
             if (data.message === "Login successful" && data.user && data.token) {
                 await storeUserToken(data.token);
-                navigation.replace("HomeScreen", {
-                    username: username,
-                    userId: data.user.UserId
+                navigation.navigate("HomeScreen", {
+                    screen: "Home",
+                    params: {
+                        username: username,
+                        id: data.user.userId,
+                        token: data.token
+                    }
                 });
+                
             } else {
                 Alert.alert("Error", "Invalid username or password");
             }
