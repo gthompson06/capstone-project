@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import storage from "../storage/storage";
+import storage from "../storage/Storage";
 
 const AuthContext = createContext();
 

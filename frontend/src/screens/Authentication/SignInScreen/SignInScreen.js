@@ -12,7 +12,7 @@ import {
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 
-import Logo from "../../../assets/images/TestImg.png";
+import Logo from "../../../../assets/images/TestImg.png";
 import CustomInput from "../../../components/CustomInput/CustomInput";
 import CustomButton from "../../../components/CustomButton/CustomButton";
 

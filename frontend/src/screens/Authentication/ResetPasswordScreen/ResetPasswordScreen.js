@@ -6,10 +6,10 @@ import {
  useWindowDimensions,
 } from "react-native";
 import React, { useState } from "react";
-import Logo from "../../../assets/images/TestImg.png";
-import CustomInput from "../../components/CustomInput/CustomInput.js";
-import CustomButton from "../../components/CustomButton/CustomButton.js";
-import { ResetPasswordStyles } from "../../styles/Styles.js";
+import Logo from "../../../../assets/images/TestImg.png";
+import CustomInput from "../../../components/CustomInput/CustomInput.js";
+import CustomButton from "../../../components/CustomButton/CustomButton.js";
+import { ResetPasswordStyles } from "../../../styles/Styles.js";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const ResetPasswordScreen = () => {
