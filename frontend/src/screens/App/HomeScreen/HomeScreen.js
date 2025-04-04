@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { View, Text, SafeAreaView, TouchableOpacity } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { Ionicons } from "@expo/vector-icons";
-import CustomButton from '../../components/CustomButton/CustomButton';
+import CustomButton from '../../../components/CustomButton/CustomButton';
 import { useNavigation } from "@react-navigation/native";
 
 const Stack = createStackNavigator();
