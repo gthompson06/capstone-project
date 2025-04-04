@@ -6,7 +6,7 @@ import { StyleSheet } from "react-native";
 import SignInScreen from "./src/screens/Authentication/SignInScreen";
 import CreateAccountScreen from "./src/screens/Authentication/CreateAccountScreen/CreateAccountScreen";
 import HomeScreen from "./src/screens/App/HomeScreen";
-import ResetPasswordScreen from "./src/screens/ResetPasswordScreen";
+import ResetPasswordScreen from "./src/screens/Authentication/ResetPasswordScreen";
 import ForgotPasswordScreen from "./src/screens/Authentication/ForgotPasswordScreen/ForgotPasswordScreen";
 import ProfileScreen from "./src/screens/App/ProfileScreen";
 import CalendarScreen from "./src/screens/App/CalendarScreen";
@@ -15,8 +15,8 @@ import TasksScreen from "./src/screens/App/TasksScreen";
 import SchedulesScreen from "./src/screens/App/SchedulesScreen";
 import SettingsScreen from "./src/screens/App/SettingsScreen";
 import HamburgerLogout from "./src/components/HamburgerLogout/HamburgerLogout";
-import SecurityQuestionScreen from "./src/screens/SecurityQuestionScreen";
-import { Authenticator } from "./src/contexts/context";
+// import SecurityQuestionScreen from "./src/screens/Authenication/SecurityQuestionScreen/SecurityQuestionScreen";
+import { Authenticator } from "./src/contexts/Context";
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -56,7 +56,7 @@ const App = () => {
      <Stack.Screen name="SignIn" component={SignInScreen} />
      <Stack.Screen name="ResetPassword" component={ResetPasswordScreen} />
      <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
-     <Stack.Screen name="SecurityQuestion" component={SecurityQuestionScreen} />
+     {/* <Stack.Screen name="SecurityQuestion" component={SecurityQuestionScreen} /> */}
      <Stack.Screen name="HomeScreen" component={DrawerNavigator} />
     </Stack.Navigator>
    </NavigationContainer>
