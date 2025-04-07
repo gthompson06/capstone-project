@@ -43,10 +43,10 @@ const App = () => {
  return (
   <NavigationContainer>
    <Stack.Navigator
-    initialRouteName="SignIn"
+    initialRouteName="SignInScreen"
     screenOptions={{ headerShown: false }}
    >
-    <Stack.Screen name="SignIn" component={SignInScreen} />
+    <Stack.Screen name="SignInScreen" component={SignInScreen} />
     <Stack.Screen name="CreateAccount" component={CreateAccountScreen} />
     <Stack.Screen name="HomeScreen" component={DrawerNavigator} />
     <Stack.Screen name="ResetPassword" component={ResetPasswordScreen} />
