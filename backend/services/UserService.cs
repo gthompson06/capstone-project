@@ -68,6 +68,10 @@ public class UserService
         var userInfo = await _database.GetUserInfo(userId);
         return userInfo;
     }
+    // public async Task<string> GetUserEmail(string email)
+    // {
+
+    // }
     public async Task<List<UserInfo>> GetAllUsers()
     {
         return await _database.GetAllUsers();

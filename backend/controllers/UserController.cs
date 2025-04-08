@@ -96,6 +96,21 @@ public class UserController : ControllerBase
             return Ok(response);
         }
     }
+    // [HttpGet("{email}")]
+    // public async Task<IActionResult> GetUserEmail(string email)
+    // {
+    //     var response = await _userService.GetUserEmail(email);
+
+    //     if (response == null)
+    //     {
+    //         return NotFound(new { Message = "404: User not found" });
+    //     }
+    //     else
+    //     {
+    //         return Ok(response);
+    //     }
+
+    // }
 
     // [HttpPost("create")]
     // public async Task<IActionResult> CreateUser([FromBody] UserInfo request)
