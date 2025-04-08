@@ -46,12 +46,12 @@ public class UserController : ControllerBase
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegistrationDTO request)
     {
-        Console.WriteLine("Received registration request:");
-        Console.WriteLine($"Username: {request.UserName}");
-        Console.WriteLine($"Email: {request.Email}");
-        Console.WriteLine($"Password: {request.Password}");
-        Console.WriteLine($"Security Question: {request.SecurityQuestion}");
-        Console.WriteLine($"Security Answer: {request.SecurityAnswer}");
+        // Console.WriteLine("Received registration request:");
+        // Console.WriteLine($"Username: {request.UserName}");
+        // Console.WriteLine($"Email: {request.Email}");
+        // Console.WriteLine($"Password: {request.Password}");
+        // Console.WriteLine($"Security Question: {request.SecurityQuestion}");
+        // Console.WriteLine($"Security Answer: {request.SecurityAnswer}");
 
         var result = await _userService.Register(request);
         // var response = new { message = result.Message };
