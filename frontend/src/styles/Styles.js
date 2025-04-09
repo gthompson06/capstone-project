@@ -17,6 +17,14 @@ export const CreateAccountStyles = StyleSheet.create({
  },
 });
 
+export const SecurityQuestionStyles = StyleSheet.create({
+ questions: {
+  display: "flex",
+  width: "100%",
+  justifyContent: "center",
+ },
+});
+
 export const ResetPasswordStyles = StyleSheet.create({
  root: {
   alignItems: "center",

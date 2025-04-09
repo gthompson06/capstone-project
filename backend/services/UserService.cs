@@ -10,37 +10,9 @@ public class UserService
         _passwordService = passwordService;
     }
 
-    // public async Task<ServiceResult> Register(RegistrationDTO request)
-    // {
-    //     bool isUnique = await _database.IsUniqueUserName(request.UserName);
-    //     if (!isUnique)
-    //     {
-    //         return new ServiceResult
-    //         {
-    //             Success = false,
-    //             Message = "Username already exists."
-    //         };
-    //     }
-    //     var user = new UserInfo
-    //     {
-    //         UserId = await _database.GetNextUserId(),
-    //         UserName = request.UserName,
-    //         Email = request.Email,
-    //         HashedPassword = _passwordService.Hash(request.Password),
-    //         SecurityQuestion = request.SecurityQuestion,
-    //         SecurityAnswer = _passwordService.Hash(request.SecurityAnswer)
-    //     };
-    //     await _database.PostUserInfo(user);
-    //     return new ServiceResult
-    //     {
-    //         Success = true,
-    //         Message = "Registration successful."
-    //     };
-    // }
     public async Task<ServiceResult> Register(RegistrationDTO request)
     {
-        // Log the request to check incoming data
-        Console.WriteLine($"Received Register request: UserName = {request.UserName}, Email = {request.Email}, SecurityQuestion = {request.SecurityQuestion}");
+        // Console.WriteLine($"Received Register request: UserName = {request.UserName}, Email = {request.Email}, SecurityQuestion = {request.SecurityQuestion}");
 
         bool isUnique = await _database.IsUniqueUserName(request.UserName);
         if (!isUnique)
@@ -90,6 +62,10 @@ public class UserService
         var userInfo = await _database.GetUserInfo(userId);
         return userInfo;
     }
+    // public async Task<string> GetUserEmail(string email)
+    // {
+
+    // }
     public async Task<List<UserInfo>> GetAllUsers()
     {
         return await _database.GetAllUsers();

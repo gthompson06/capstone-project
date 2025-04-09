@@ -11,6 +11,7 @@ const CustomInput = ({ value, setValue, placeholder, secureTextEntry }) => {
     placeholder={placeholder}
     secureTextEntry={secureTextEntry}
     style={styles.input}
+    placeholderTextColor="#999"
    />
   </View>
  );

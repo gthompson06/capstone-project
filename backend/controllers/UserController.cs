@@ -40,12 +40,12 @@ public class UserController : ControllerBase
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegistrationDTO request)
     {
-        Console.WriteLine("Received registration request:");
-        Console.WriteLine($"Username: {request.UserName}");
-        Console.WriteLine($"Email: {request.Email}");
-        Console.WriteLine($"Password: {request.Password}");
-        Console.WriteLine($"Security Question: {request.SecurityQuestion}");
-        Console.WriteLine($"Security Answer: {request.SecurityAnswer}");
+        // Console.WriteLine("Received registration request:");
+        // Console.WriteLine($"Username: {request.UserName}");
+        // Console.WriteLine($"Email: {request.Email}");
+        // Console.WriteLine($"Password: {request.Password}");
+        // Console.WriteLine($"Security Question: {request.SecurityQuestion}");
+        // Console.WriteLine($"Security Answer: {request.SecurityAnswer}");
 
         var result = await _userService.Register(request);
         // var response = new { message = result.Message };
@@ -90,6 +90,21 @@ public class UserController : ControllerBase
             return Ok(response);
         }
     }
+    // [HttpGet("{email}")]
+    // public async Task<IActionResult> GetUserEmail(string email)
+    // {
+    //     var response = await _userService.GetUserEmail(email);
+
+    //     if (response == null)
+    //     {
+    //         return NotFound(new { Message = "404: User not found" });
+    //     }
+    //     else
+    //     {
+    //         return Ok(response);
+    //     }
+
+    // }
 
     // [HttpPost("create")]
     // public async Task<IActionResult> CreateUser([FromBody] UserInfo request)

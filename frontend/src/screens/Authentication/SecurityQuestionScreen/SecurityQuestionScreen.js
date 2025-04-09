@@ -13,7 +13,10 @@ import {
 import RNPickerSelect from "react-native-picker-select";
 import CustomInput from "../../../components/CustomInput/CustomInput.js";
 import CustomButton from "../../../components/CustomButton/CustomButton.js";
-import { CreateAccountStyles } from "../../../styles/Styles.js";
+import {
+ CreateAccountStyles,
+ SecurityQuestionStyles,
+} from "../../../styles/Styles.js";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import BackArrow from "../../../../assets/images/backArrow.png";
 import Logo from "../../../../assets/images/TestImg.png";
@@ -42,7 +45,7 @@ const SecurityQuestionScreen = () => {
  ];
 
  const isOnlyLetters = (str) => {
-  const regex = /^[A-Za-z]+$/; // Only allows uppercase and lowercase letters
+  const regex = /^[A-Za-z]+$/;
   return regex.test(str);
  };
 
@@ -58,7 +61,6 @@ const SecurityQuestionScreen = () => {
    setErrorMessage(null);
    console.log("fetching...\n", username, email, password, question, answer);
 
-   // 192.168.56.1
    const url = "http://localhost:5161/worthy/user/register";
 
    try {
@@ -89,9 +91,12 @@ const SecurityQuestionScreen = () => {
 
     const data = await response.json();
     console.log("Server response:", data);
+    navigation.replace("SignIn");
    } catch (error) {
-    console.error("Fetch error:", error);
-    setErrorMessage("Error connecting to the server.");
+    console.error("Fetch error:", error.message);
+    console.log("db message: ", error.message);
+    // setErrorMessage("Error connecting to the server.");
+    setErrorMessage(error.message);
    }
   } else {
    setErrorMessage(
@@ -126,13 +131,15 @@ const SecurityQuestionScreen = () => {
    <Text style={{ fontSize: 40, paddingBottom: 30 }}>Security Question</Text>
    {/* <CustomInput placeholder="Answer" value={answer} setValue={setAnswer} />
    <CustomButton text="Submit" onPress={onAnswer} /> */}
-   <RNPickerSelect
-    onValueChange={(value) => setQuestion(value)}
-    items={securityQuestions.map((q) => ({ label: q, value: q }))}
-    placeholder={{ label: "Select a question", value: null }}
-   />
+   <view style={SecurityQuestionStyles.questions}>
+    <RNPickerSelect
+     onValueChange={(value) => setQuestion(value)}
+     items={securityQuestions.map((q) => ({ label: q, value: q }))}
+     placeholder={{ label: "Select a question", value: null }}
+    />
+   </view>
    <CustomInput
-    placeholder="No Spaces, Numbers, or Special Characters"
+    placeholder="security answer"
     value={answer}
     setValue={setAnswer}
    />
