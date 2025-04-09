@@ -1,9 +1,3 @@
-using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
-using Amazon.Auth.AccessControlPolicy.ActionIdentifiers;
-using Amazon.DynamoDBv2.DataModel;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Net.Http.Headers;
 using requests.LoginDTO;
 using requests.RegistrationDTO;
 public class UserService
@@ -18,6 +12,8 @@ public class UserService
 
     public async Task<ServiceResult> Register(RegistrationDTO request)
     {
+        // Console.WriteLine($"Received Register request: UserName = {request.UserName}, Email = {request.Email}, SecurityQuestion = {request.SecurityQuestion}");
+
         bool isUnique = await _database.IsUniqueUserName(request.UserName);
         if (!isUnique)
         {
@@ -32,7 +28,9 @@ public class UserService
             UserId = await _database.GetNextUserId(),
             UserName = request.UserName,
             Email = request.Email,
-            HashedPassword = _passwordService.Hash(request.Password)
+            HashedPassword = _passwordService.Hash(request.Password),
+            SecurityQuestion = request.SecurityQuestion,
+            SecurityAnswer = _passwordService.Hash(request.SecurityAnswer)
         };
         await _database.PostUserInfo(user);
         return new ServiceResult
@@ -64,6 +62,10 @@ public class UserService
         var userInfo = await _database.GetUserInfo(userId);
         return userInfo;
     }
+    // public async Task<string> GetUserEmail(string email)
+    // {
+
+    // }
     public async Task<List<UserInfo>> GetAllUsers()
     {
         return await _database.GetAllUsers();

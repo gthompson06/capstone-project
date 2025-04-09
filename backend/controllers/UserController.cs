@@ -1,12 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using static UserService;
 using requests.RegistrationDTO;
-using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DataModel;
-using Amazon.DynamoDBv2.DocumentModel;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using requests.LoginDTO;
 
 [ApiController]
@@ -46,30 +40,38 @@ public class UserController : ControllerBase
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegistrationDTO request)
     {
+        // Console.WriteLine("Received registration request:");
+        // Console.WriteLine($"Username: {request.UserName}");
+        // Console.WriteLine($"Email: {request.Email}");
+        // Console.WriteLine($"Password: {request.Password}");
+        // Console.WriteLine($"Security Question: {request.SecurityQuestion}");
+        // Console.WriteLine($"Security Answer: {request.SecurityAnswer}");
+
         var result = await _userService.Register(request);
-        var response = new { message = result.Message };
-        if (result.Success)
-        {
-            return Ok(response);
-        }
-        return BadRequest(response);
+        // var response = new { message = result.Message };
+        // if (result.Success)
+        // {
+        //     return Ok(response);
+        // }
+        // return BadRequest(response);
+        return result.Success ? Ok(new { message = result.Message }) : BadRequest(new { message = result.Message });
     }
 
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginDTO request)
     {
         var user = await _userService.GetUserOnLogin(request);
-        if(user == null)
+        if (user == null)
         {
             return Unauthorized(new { message = "Invalid username or password" });
         }
 
         await _tokenService.GenerateRefreshTokenAsync(user.UserId);
         var accessToken = _tokenService.GenerateAccessToken(user.UserName);
-        
-        return Ok(new 
-        { 
-            message = "Login successful", 
+
+        return Ok(new
+        {
+            message = "Login successful",
             user = user,
             token = accessToken
         });
@@ -88,6 +90,21 @@ public class UserController : ControllerBase
             return Ok(response);
         }
     }
+    // [HttpGet("{email}")]
+    // public async Task<IActionResult> GetUserEmail(string email)
+    // {
+    //     var response = await _userService.GetUserEmail(email);
+
+    //     if (response == null)
+    //     {
+    //         return NotFound(new { Message = "404: User not found" });
+    //     }
+    //     else
+    //     {
+    //         return Ok(response);
+    //     }
+
+    // }
 
     // [HttpPost("create")]
     // public async Task<IActionResult> CreateUser([FromBody] UserInfo request)
