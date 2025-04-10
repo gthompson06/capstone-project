@@ -2,9 +2,11 @@ import React from "react";
 import { View, Text, Alert, TouchableOpacity } from "react-native";
 import { DrawerContentScrollView, DrawerItemList } from "@react-navigation/drawer";
 import { Ionicons } from "@expo/vector-icons";
+import { useAuth } from "../../contexts/AuthContext"
 // import LogoutButton from "../../components/LogoutButton/LogoutButton"
 
 const HamburgerLogout = (props) => {
+  const { logout } = useAuth();
   const handleLogoutConfirmation = () => {
     Alert.alert(
     "Logout",
@@ -20,7 +22,7 @@ const HamburgerLogout = (props) => {
     try {
         await AsyncStorage.removeItem("userToken");
         await AsyncStorage.removeItem("tokenExpiration");
-        navigation.navigate("SignInScreen");
+        navigation.navigate("SignIn");
     } catch (error) {
         console.error("Error logging out:", error);
     }
@@ -33,7 +35,7 @@ const HamburgerLogout = (props) => {
       
       <View style={{ flex: 1, justifyContent: "flex-end", padding: 20 }}>
         <TouchableOpacity
-          onPress={handleLogout}
+          onPress={() => logout()}
           style={{
             flexDirection: "row",
             alignItems: "center",

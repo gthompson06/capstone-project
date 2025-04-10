@@ -66,14 +66,15 @@ public class UserController : ControllerBase
             return Unauthorized(new { message = "Invalid username or password" });
         }
 
-        await _tokenService.GenerateRefreshTokenAsync(user.UserId);
-        var accessToken = _tokenService.GenerateAccessToken(user.UserName);
+        var refreshToken = await _tokenService.GenerateRefreshTokenAsync(user.UserId);
+        var accessToken = _tokenService.GenerateAccessToken();
 
         return Ok(new
         {
             message = "Login successful",
-            user = user,
-            token = accessToken
+            user,
+            refreshToken,
+            accessToken
         });
     }
 
