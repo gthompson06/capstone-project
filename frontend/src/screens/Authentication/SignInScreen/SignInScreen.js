@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
+import { useAuth } from "../../../contexts/AuthContext"
 
 import Logo from "../../../../assets/images/TestImg.png";
 import CustomInput from "../../../components/CustomInput/CustomInput";
@@ -21,17 +22,18 @@ const SignInScreen = () => {
  const [password, setPassword] = useState("");
  const navigation = useNavigation(); // Get navigation object
  const { height } = useWindowDimensions();
+ const { login } = useAuth();
 
- const storeUserToken = async (token) => {
-  try {
-   const token = this.token;
-   const expirationTime = Date.now() + 10 * 1000; // Expires in 30 minutes (minutes to seconds to milliseconds)
-   await AsyncStorage.setItem("userToken", token);
-   await AsyncStorage.setItem("tokenExpiration", expirationTime.toString());
-  } catch (error) {
-   console.error("Error saving token:", error);
-  }
- };
+//  const storeUserToken = async (token) => {
+//   try {
+//    const token = this.token;
+//    const expirationTime = Date.now() + 10 * 1000; // Expires in 30 minutes (minutes to seconds to milliseconds)
+//    await AsyncStorage.setItem("userToken", token);
+//    await AsyncStorage.setItem("tokenExpiration", expirationTime.toString());
+//   } catch (error) {
+//    console.error("Error saving token:", error);
+//   }
+//  };
 
  // Function to check login status
  const checkUserLogin = async () => {
@@ -56,12 +58,14 @@ const SignInScreen = () => {
   try {
    await AsyncStorage.removeItem("userToken");
    await AsyncStorage.removeItem("tokenExpiration");
-   navigation.navigate("SignInScreen");
+   navigation.navigate("SignIn");
   } catch (error) {
    console.error("Error logging out:", error);
   }
   return null;
  };
+
+
 
  // Handle sign-in button press
  const signInUser = async () => {
@@ -69,7 +73,7 @@ const SignInScreen = () => {
         navigation.navigate("HomeScreen")
     }
   try {
-   const url = "http://localhost:5161/worthy/user/login";
+   const url = "http://10.40.36.42:5161/worthy/user/login";
    const response = await fetch(url, {
     method: "POST",
     headers: {
@@ -106,19 +110,19 @@ const SignInScreen = () => {
  };
 
  // Check if user is already signed in when screen loads
- useEffect(() => {
-  const checkLoginStatus = async () => {
-   const token = await checkUserLogin();
-   if (token) {
-    navigation.replace("HomeScreen"); // Auto-navigate if still signed in
-   }
-  };
-  checkLoginStatus();
+//  useEffect(() => {
+//   const checkLoginStatus = async () => {
+//    const token = await checkUserLogin();
+//    if (token) {
+//     navigation.replace("HomeScreen"); // Auto-navigate if still signed in
+//    }
+//   };
+//   checkLoginStatus();
 
-  // Set up auto-logout every 5 seconds
-  const interval = setInterval(checkUserLogin, 5000);
-  return () => clearInterval(interval);
- }, []);
+//   // Set up auto-logout every 5 seconds
+//   const interval = setInterval(checkUserLogin, 5000);
+//   return () => clearInterval(interval);
+//  }, []);
 
  return (
   <SafeAreaView style={styles.root}>
@@ -149,7 +153,7 @@ const SignInScreen = () => {
       <Text style={styles.linkText}>FORGOT PASSWORD?</Text>
      </TouchableOpacity>
     </View>
-    <CustomButton text="Sign In" type="signIn" onPress={signInUser} />
+    <CustomButton text="Sign In" type="signIn" onPress={() => login(username, password)} />
    </View>
   </SafeAreaView>
  );
