@@ -65,6 +65,9 @@ const SignInScreen = () => {
 
  // Handle sign-in button press
  const signInUser = async () => {
+    if (username == "" && password == ""){
+        navigation.navigate("HomeScreen")
+    }
   try {
    const url = "http://localhost:5161/worthy/user/login";
    const response = await fetch(url, {
