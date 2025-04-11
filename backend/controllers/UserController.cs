@@ -46,20 +46,8 @@ public class UserController : ControllerBase
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegistrationDTO request)
     {
-        // Console.WriteLine("Received registration request:");
-        // Console.WriteLine($"Username: {request.UserName}");
-        // Console.WriteLine($"Email: {request.Email}");
-        // Console.WriteLine($"Password: {request.Password}");
-        // Console.WriteLine($"Security Question: {request.SecurityQuestion}");
-        // Console.WriteLine($"Security Answer: {request.SecurityAnswer}");
 
         var result = await _userService.Register(request);
-        // var response = new { message = result.Message };
-        // if (result.Success)
-        // {
-        //     return Ok(response);
-        // }
-        // return BadRequest(response);
         return result.Success ? Ok(new { message = result.Message }) : BadRequest(new { message = result.Message });
     }
 
@@ -96,11 +84,10 @@ public class UserController : ControllerBase
             return Ok(response);
         }
     }
-    // [HttpGet("{email}")]
-    // public async Task<IActionResult> GetUserEmail(string email)
+    // [HttpGet("{UserName}")]
+    // public async Task<IActionResult> GetUserByUserName(string username)
     // {
-    //     var response = await _userService.GetUserEmail(email);
-
+        // var response = await _userService.GetUserInfoByUsername(username);
     //     if (response == null)
     //     {
     //         return NotFound(new { Message = "404: User not found" });
@@ -109,72 +96,86 @@ public class UserController : ControllerBase
     //     {
     //         return Ok(response);
     //     }
-
     // }
+// [HttpGet("{email}")]
+// public async Task<IActionResult> GetUserEmail(string email)
+// {
+//     var response = await _userService.GetUserEmail(email);
 
-    // [HttpPost("create")]
-    // public async Task<IActionResult> CreateUser([FromBody] UserInfo request)
-    // {
-    //     try
-    //     {
-    //         var queryConfig = new DynamoDBOperationConfig
-    //         {
-    //             IndexName = "UserName-index"
-    //         };
+//     if (response == null)
+//     {
+//         return NotFound(new { Message = "404: User not found" });
+//     }
+//     else
+//     {
+//         return Ok(response);
+//     }
 
-    //         var users = await _dbContext.QueryAsync<UserInfo>(request.UserName, queryConfig).GetRemainingAsync();
+// }
 
-    //         var matchedUser = users.FirstOrDefault(user => user.Email == request.Email);
+// [HttpPost("create")]
+// public async Task<IActionResult> CreateUser([FromBody] UserInfo request)
+// {
+//     try
+//     {
+//         var queryConfig = new DynamoDBOperationConfig
+//         {
+//             IndexName = "UserName-index"
+//         };
 
-    //         if (matchedUser != null) {
-    //             return Unauthorized(new { message = "Username or Email already exists" });
-    //         }
+//         var users = await _dbContext.QueryAsync<UserInfo>(request.UserName, queryConfig).GetRemainingAsync();
 
-    //         await _userService.PostUserInfo(request);
-    //         return CreatedAtAction(nameof(GetUserInfo), new { userId = UserInfo.Username }, UserInfo);
-    //     }
-    //     catch (Exception ex)
-    //     {
-    //         return StatusCode(500, new { message = "Error creating account", error = ex.Message });
-    //     }
-    // }
+//         var matchedUser = users.FirstOrDefault(user => user.Email == request.Email);
 
-    [HttpPut("{userId}")]
-    public async Task<IActionResult> UpdateUser(int userId, [FromBody] UserInfo updatedUser)
+//         if (matchedUser != null) {
+//             return Unauthorized(new { message = "Username or Email already exists" });
+//         }
+
+//         await _userService.PostUserInfo(request);
+//         return CreatedAtAction(nameof(GetUserInfo), new { userId = UserInfo.Username }, UserInfo);
+//     }
+//     catch (Exception ex)
+//     {
+//         return StatusCode(500, new { message = "Error creating account", error = ex.Message });
+//     }
+// }
+
+[HttpPut("{userId}")]
+public async Task<IActionResult> UpdateUser(int userId, [FromBody] UserInfo updatedUser)
+{
+    var response = await _userService.GetUserInfo(userId);
+    if (response == null)
     {
-        var response = await _userService.GetUserInfo(userId);
-        if (response == null)
-        {
-            return NotFound(new { Message = "User not found" });
-        }
-
-        response.UserName = updatedUser.UserName ?? response.UserName;
-        response.Email = updatedUser.Email ?? response.Email;
-        response.FirstName = updatedUser.FirstName ?? response.FirstName;
-        response.LastName = updatedUser.LastName ?? response.LastName;
-        response.DateOfBirth = updatedUser.DateOfBirth ?? response.DateOfBirth;
-        response.City = updatedUser.City ?? response.City;
-        response.State = updatedUser.State ?? response.State;
-        response.School = updatedUser.School ?? response.School;
-        response.HashedPassword = updatedUser.HashedPassword ?? response.HashedPassword;
-
-        await _userService.UpdateUserInfo(response);
-        return Ok(response);
+        return NotFound(new { Message = "User not found" });
     }
 
-    [HttpDelete("{userId}")]
-    public async Task<IActionResult> DeleteUser(int userId)
-    {
-        var response = await _userService.GetUserInfo(userId);
-        if (response == null)
-        {
-            return NotFound(new { Message = "User not found" });
-        }
-        else
-        {
-            await _userService.DeleteUserInfo(userId);
-            return NoContent();
-        }
+    response.UserName = updatedUser.UserName ?? response.UserName;
+    response.Email = updatedUser.Email ?? response.Email;
+    response.FirstName = updatedUser.FirstName ?? response.FirstName;
+    response.LastName = updatedUser.LastName ?? response.LastName;
+    response.DateOfBirth = updatedUser.DateOfBirth ?? response.DateOfBirth;
+    response.City = updatedUser.City ?? response.City;
+    response.State = updatedUser.State ?? response.State;
+    response.School = updatedUser.School ?? response.School;
+    response.HashedPassword = updatedUser.HashedPassword ?? response.HashedPassword;
 
+    await _userService.UpdateUserInfo(response);
+    return Ok(response);
+}
+
+[HttpDelete("{userId}")]
+public async Task<IActionResult> DeleteUser(int userId)
+{
+    var response = await _userService.GetUserInfo(userId);
+    if (response == null)
+    {
+        return NotFound(new { Message = "User not found" });
     }
+    else
+    {
+        await _userService.DeleteUserInfo(userId);
+        return NoContent();
+    }
+
+}
 }

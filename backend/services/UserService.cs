@@ -18,8 +18,6 @@ public class UserService
 
     public async Task<ServiceResult> Register(RegistrationDTO request)
     {
-        // Console.WriteLine($"Received Register request: UserName = {request.UserName}, Email = {request.Email}, SecurityQuestion = {request.SecurityQuestion}");
-
         bool isUnique = await _database.IsUniqueUserName(request.UserName);
         if (!isUnique)
         {
@@ -56,6 +54,10 @@ public class UserService
 
         return matchedUser;
     }
+    // public async Task<UserInfo> GetUserInfoByUsername(string username)
+    // {
+
+    // }
 
     public async Task<string> GetFirstNameByUserName(int userId)
     {
@@ -68,10 +70,6 @@ public class UserService
         var userInfo = await _database.GetUserInfo(userId);
         return userInfo;
     }
-    // public async Task<string> GetUserEmail(string email)
-    // {
-
-    // }
     public async Task<List<UserInfo>> GetAllUsers()
     {
         return await _database.GetAllUsers();

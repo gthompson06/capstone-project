@@ -14,24 +14,46 @@ import { CreateAccountStyles } from "../../../styles/Styles.js";
 import { useNavigation } from "@react-navigation/native";
 import BackArrow from "../../../../assets/images/backArrow.png";
 import Logo from "../../../../assets/images/TestImg.png";
+import Context from "../../../contexts/Context.js";
 
 const ForgotPasswordScreen = () => {
- const [email, setEmail] = useState("");
+ const [username, setUsername] = useState("");
  const [errorMessage, setErrorMessage] = useState("");
 
  const navigation = useNavigation();
  const { height } = useWindowDimensions();
 
- const onEnterEmailPressed = () => {
-  if (!email) {
-   setErrorMessage("Email field cannot be blank");
+ const id = Context.userId;
+
+ const onEnterUsername = async () => {
+  if (!username) {
+   setErrorMessage("Username field cannot be blank");
    return;
   }
   setErrorMessage("");
 
-  navigation.navigate("ResetPassword", {
-   e: email,
-  });
+  const url = "http://localhost:5161/worthy/user/";
+
+  try {
+   console.log("Sending request...");
+
+   const response = await fetch(url, {
+    method: "GET",
+    headers: {
+     "Content-Type": "application/json",
+    },
+   });
+
+   console.log("Response received:", response);
+
+   navigation.navigate("ResetPassword", {
+    e: email,
+   });
+  } catch (error) {
+   console.error("Fetch error:", error.message);
+   console.log("db message: ", error.message);
+   setErrorMessage(error.message);
+  }
  };
 
  return (
@@ -58,8 +80,12 @@ const ForgotPasswordScreen = () => {
     resizeMode="contain"
    />
    <Text style={{ fontSize: 40, paddingBottom: 30 }}>FORGOT PASSWORD?</Text>
-   <CustomInput placeholder="enter email" value={email} setValue={setEmail} />
-   <CustomButton text="Submit" onPress={onEnterEmailPressed} />
+   <CustomInput
+    placeholder="enter username"
+    value={username}
+    setValue={setUsername}
+   />
+   <CustomButton text="Submit" onPress={onEnterUsername} />
 
    {errorMessage ? (
     <Text style={{ color: "red", marginBottom: 10 }}>{errorMessage}</Text>
