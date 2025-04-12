@@ -23,13 +23,15 @@ const ResetPasswordScreen = () => {
  const navigation = useNavigation();
  const route = useRoute();
 
- const { e } = route.params || {};
+ const { data } = route.params || {};
  const [newPassword, setNewPassword] = useState("");
  const [confirmPassword, setConfirmPassword] = useState("");
  const [showPassword, setShowPassword] = useState(false);
  const [securityAnswer, setSecurityAnswer] = useState("");
  const [errorMessage, setErrorMessage] = useState("");
- const [securityQuestion, setSecurityQuestion] = useState("");
+ const [securityQuestion, setSecurityQuestion] = useState(
+  data.securityQuestion
+ );
 
  const { height } = useWindowDimensions();
 
