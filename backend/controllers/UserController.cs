@@ -84,10 +84,24 @@ public class UserController : ControllerBase
             return Ok(response);
         }
     }
-    // [HttpGet("{UserName}")]
-    // public async Task<IActionResult> GetUserByUserName(string username)
+    [HttpGet("username/{username}")]
+    public async Task<IActionResult> GetUserByUserName(string username)
+    {
+        var response = await _userService.GetUserInfoByUsername(username);
+        if (response == null)
+        {
+            return NotFound(new { Message = "404: User not found" });
+        }
+        else
+        {
+            return Ok(response);
+        }
+    }
+    // [HttpGet("{email}")]
+    // public async Task<IActionResult> GetUserEmail(string email)
     // {
-        // var response = await _userService.GetUserInfoByUsername(username);
+    //     var response = await _userService.GetUserEmail(email);
+
     //     if (response == null)
     //     {
     //         return NotFound(new { Message = "404: User not found" });
@@ -96,86 +110,72 @@ public class UserController : ControllerBase
     //     {
     //         return Ok(response);
     //     }
+
     // }
-// [HttpGet("{email}")]
-// public async Task<IActionResult> GetUserEmail(string email)
-// {
-//     var response = await _userService.GetUserEmail(email);
 
-//     if (response == null)
-//     {
-//         return NotFound(new { Message = "404: User not found" });
-//     }
-//     else
-//     {
-//         return Ok(response);
-//     }
+    // [HttpPost("create")]
+    // public async Task<IActionResult> CreateUser([FromBody] UserInfo request)
+    // {
+    //     try
+    //     {
+    //         var queryConfig = new DynamoDBOperationConfig
+    //         {
+    //             IndexName = "UserName-index"
+    //         };
 
-// }
+    //         var users = await _dbContext.QueryAsync<UserInfo>(request.UserName, queryConfig).GetRemainingAsync();
 
-// [HttpPost("create")]
-// public async Task<IActionResult> CreateUser([FromBody] UserInfo request)
-// {
-//     try
-//     {
-//         var queryConfig = new DynamoDBOperationConfig
-//         {
-//             IndexName = "UserName-index"
-//         };
+    //         var matchedUser = users.FirstOrDefault(user => user.Email == request.Email);
 
-//         var users = await _dbContext.QueryAsync<UserInfo>(request.UserName, queryConfig).GetRemainingAsync();
+    //         if (matchedUser != null) {
+    //             return Unauthorized(new { message = "Username or Email already exists" });
+    //         }
 
-//         var matchedUser = users.FirstOrDefault(user => user.Email == request.Email);
+    //         await _userService.PostUserInfo(request);
+    //         return CreatedAtAction(nameof(GetUserInfo), new { userId = UserInfo.Username }, UserInfo);
+    //     }
+    //     catch (Exception ex)
+    //     {
+    //         return StatusCode(500, new { message = "Error creating account", error = ex.Message });
+    //     }
+    // }
 
-//         if (matchedUser != null) {
-//             return Unauthorized(new { message = "Username or Email already exists" });
-//         }
-
-//         await _userService.PostUserInfo(request);
-//         return CreatedAtAction(nameof(GetUserInfo), new { userId = UserInfo.Username }, UserInfo);
-//     }
-//     catch (Exception ex)
-//     {
-//         return StatusCode(500, new { message = "Error creating account", error = ex.Message });
-//     }
-// }
-
-[HttpPut("{userId}")]
-public async Task<IActionResult> UpdateUser(int userId, [FromBody] UserInfo updatedUser)
-{
-    var response = await _userService.GetUserInfo(userId);
-    if (response == null)
+    [HttpPut("{userId}")]
+    public async Task<IActionResult> UpdateUser(int userId, [FromBody] UserInfo updatedUser)
     {
-        return NotFound(new { Message = "User not found" });
+        var response = await _userService.GetUserInfo(userId);
+        if (response == null)
+        {
+            return NotFound(new { Message = "User not found" });
+        }
+
+        response.UserName = updatedUser.UserName ?? response.UserName;
+        response.Email = updatedUser.Email ?? response.Email;
+        response.FirstName = updatedUser.FirstName ?? response.FirstName;
+        response.LastName = updatedUser.LastName ?? response.LastName;
+        response.DateOfBirth = updatedUser.DateOfBirth ?? response.DateOfBirth;
+        response.City = updatedUser.City ?? response.City;
+        response.State = updatedUser.State ?? response.State;
+        response.School = updatedUser.School ?? response.School;
+        response.HashedPassword = updatedUser.HashedPassword ?? response.HashedPassword;
+
+        await _userService.UpdateUserInfo(response);
+        return Ok(response);
     }
 
-    response.UserName = updatedUser.UserName ?? response.UserName;
-    response.Email = updatedUser.Email ?? response.Email;
-    response.FirstName = updatedUser.FirstName ?? response.FirstName;
-    response.LastName = updatedUser.LastName ?? response.LastName;
-    response.DateOfBirth = updatedUser.DateOfBirth ?? response.DateOfBirth;
-    response.City = updatedUser.City ?? response.City;
-    response.State = updatedUser.State ?? response.State;
-    response.School = updatedUser.School ?? response.School;
-    response.HashedPassword = updatedUser.HashedPassword ?? response.HashedPassword;
-
-    await _userService.UpdateUserInfo(response);
-    return Ok(response);
-}
-
-[HttpDelete("{userId}")]
-public async Task<IActionResult> DeleteUser(int userId)
-{
-    var response = await _userService.GetUserInfo(userId);
-    if (response == null)
+    [HttpDelete("{userId}")]
+    public async Task<IActionResult> DeleteUser(int userId)
     {
-        return NotFound(new { Message = "User not found" });
-    }
-    else
-    {
-        await _userService.DeleteUserInfo(userId);
-        return NoContent();
-    }
+        var response = await _userService.GetUserInfo(userId);
+        if (response == null)
+        {
+            return NotFound(new { Message = "User not found" });
+        }
+        else
+        {
+            await _userService.DeleteUserInfo(userId);
+            return NoContent();
+        }
 
-}
+    }
 }

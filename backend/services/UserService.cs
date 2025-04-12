@@ -54,10 +54,14 @@ public class UserService
 
         return matchedUser;
     }
-    // public async Task<UserInfo> GetUserInfoByUsername(string username)
-    // {
+    public async Task<UserInfo> GetUserInfoByUsername(string UserName)
+    {
+        var matchedUser = await _database.GetUserByUserName(UserName);
+        if (matchedUser == null) return null;
 
-    // }
+        return matchedUser;
+
+    }
 
     public async Task<string> GetFirstNameByUserName(int userId)
     {

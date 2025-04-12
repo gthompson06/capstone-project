@@ -23,8 +23,6 @@ const ForgotPasswordScreen = () => {
  const navigation = useNavigation();
  const { height } = useWindowDimensions();
 
- const id = Context.userId;
-
  const onEnterUsername = async () => {
   if (!username) {
    setErrorMessage("Username field cannot be blank");
@@ -32,7 +30,7 @@ const ForgotPasswordScreen = () => {
   }
   setErrorMessage("");
 
-  const url = "http://localhost:5161/worthy/user/";
+  const url = `http://localhost:5161/worthy/user/username/${username}`;
 
   try {
    console.log("Sending request...");
@@ -44,10 +42,11 @@ const ForgotPasswordScreen = () => {
     },
    });
 
-   console.log("Response received:", response);
+   const data = await response.json();
+   console.log("Response received:", data);
 
    navigation.navigate("ResetPassword", {
-    e: email,
+    data: data,
    });
   } catch (error) {
    console.error("Fetch error:", error.message);
