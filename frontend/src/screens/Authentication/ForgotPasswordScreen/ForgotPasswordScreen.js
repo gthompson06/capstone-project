@@ -43,7 +43,7 @@ const ForgotPasswordScreen = () => {
    });
 
    const data = await response.json();
-   console.log("Response received:", data.message);
+   console.log("Response received:", data, data.message);
 
    if (data.message == "404: User not found") {
     setErrorMessage("Username does not exist");

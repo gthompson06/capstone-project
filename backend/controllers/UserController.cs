@@ -10,12 +10,14 @@ public class UserController : ControllerBase
     private readonly UserService _userService;
     private readonly IDynamoDBContext _dbContext;
     private readonly TokenService _tokenService;
+    private readonly PasswordService _passwordService;
 
-    public UserController(UserService userService, IDynamoDBContext dbContext, TokenService tokenService)
+    public UserController(UserService userService, IDynamoDBContext dbContext, TokenService tokenService, PasswordService passwordService)
     {
         _userService = userService;
         _dbContext = dbContext;
         _tokenService = tokenService;
+        _passwordService = passwordService;
     }
     [HttpGet("")]
     public IActionResult Load()
@@ -64,6 +66,31 @@ public class UserController : ControllerBase
             refreshToken,
             accessToken
         });
+    }
+
+    [HttpPut("reset-password")]
+    public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDTO request)
+    {
+        Console.WriteLine("UserName: " + request.UserName);
+        Console.WriteLine("Answer: " + request.SecurityAnswer);
+        Console.WriteLine("Password: " + request.NewPassword);
+        var user = await _userService.GetUserInfoByUsername(request.UserName);
+        if (user == null)
+        {
+            return NotFound(new { message = "User not found" });
+        }
+        Console.WriteLine("answer: " + user.SecurityAnswer);
+
+        var isCorrectAnswer = _passwordService.Verify(user.SecurityAnswer, request.SecurityAnswer);
+        if (!isCorrectAnswer)
+        {
+            return BadRequest(new { message = "Security answer is incorrect" });
+        }
+
+        user.HashedPassword = _passwordService.Hash(request.NewPassword);
+        await _userService.UpdateUserInfo(user);
+
+        return Ok(new { message = "Password successfully reset" });
     }
 
     [HttpGet("{userId}")]
