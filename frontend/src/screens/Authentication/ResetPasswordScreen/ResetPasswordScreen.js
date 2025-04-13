@@ -65,7 +65,9 @@ const ResetPasswordScreen = () => {
     resizeMode="contain"
    />
    <Text style={{ fontSize: 40, paddingBottom: 30 }}>RESET PASSWORD</Text>
-   <View>Here was your Security Question: {securityQuestion}</View>
+   <View style={{ fontSize: 20, maxWidth: "50%" }}>
+    Here was your Security Question: <b>{securityQuestion}</b>
+   </View>
    <CustomInput
     placeholder="Security Answer"
     value={securityAnswer}

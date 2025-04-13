@@ -43,11 +43,17 @@ const ForgotPasswordScreen = () => {
    });
 
    const data = await response.json();
-   console.log("Response received:", data);
+   console.log("Response received:", data.message);
 
-   navigation.navigate("ResetPassword", {
-    data: data,
-   });
+   if (data.message == "404: User not found") {
+    setErrorMessage("Username does not exist");
+    return;
+   } else {
+    setErrorMessage("");
+    navigation.navigate("ResetPassword", {
+     data: data,
+    });
+   }
   } catch (error) {
    console.error("Fetch error:", error.message);
    console.log("db message: ", error.message);
