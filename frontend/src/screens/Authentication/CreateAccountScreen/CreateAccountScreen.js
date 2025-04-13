@@ -17,6 +17,7 @@ import { CreateAccountStyles } from "../../../styles/Styles.js";
 import { useNavigation } from "@react-navigation/native";
 import BackArrow from "../../../../assets/images/backArrow.png";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import PasswordStrengthMeterBar from "react-native-password-strength-meter-bar";
 
 const CreateAccountScreen = () => {
  const [username, setUsername] = useState("");
