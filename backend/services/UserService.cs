@@ -1,9 +1,3 @@
-using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
-using Amazon.Auth.AccessControlPolicy.ActionIdentifiers;
-using Amazon.DynamoDBv2.DataModel;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Net.Http.Headers;
 using requests.LoginDTO;
 using requests.RegistrationDTO;
 public class UserService

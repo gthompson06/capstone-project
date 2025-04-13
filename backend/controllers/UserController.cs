@@ -1,12 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using static UserService;
 using requests.RegistrationDTO;
-using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DataModel;
-using Amazon.DynamoDBv2.DocumentModel;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using requests.LoginDTO;
 
 [ApiController]
@@ -60,14 +54,15 @@ public class UserController : ControllerBase
             return Unauthorized(new { message = "Invalid username or password" });
         }
 
-        await _tokenService.GenerateRefreshTokenAsync(user.UserId);
-        var accessToken = _tokenService.GenerateAccessToken(user.UserName);
+        var refreshToken = await _tokenService.GenerateRefreshTokenAsync(user.UserId);
+        var accessToken = _tokenService.GenerateAccessToken();
 
         return Ok(new
         {
             message = "Login successful",
-            user = user,
-            token = accessToken
+            user,
+            refreshToken,
+            accessToken
         });
     }
 

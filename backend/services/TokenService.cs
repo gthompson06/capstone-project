@@ -1,7 +1,6 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using DotNetEnv;
 using Microsoft.IdentityModel.Tokens;
 public class TokenService
 {
@@ -13,7 +12,7 @@ public class TokenService
         _tokenHandler = tokenHandler;
     }
 
-    public string GenerateAccessToken(string userName)
+    public string GenerateAccessToken()
     {
         var secret = Environment.GetEnvironmentVariable("JWT_KEY");
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret));
@@ -22,16 +21,9 @@ public class TokenService
         var expiration = DateTime.UtcNow.AddMinutes(double.Parse(Environment.GetEnvironmentVariable("JWT_ACCESS_DURATION_MINUTES")));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-        var claims = new[]
-        {
-            new Claim(JwtRegisteredClaimNames.Sub, userName),
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-        };
-
         var token = new JwtSecurityToken(
             issuer: issuer,
             audience: audience,
-            claims: claims,
             expires: expiration,
             signingCredentials: creds
         );
