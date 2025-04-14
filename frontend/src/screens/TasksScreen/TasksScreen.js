@@ -57,6 +57,8 @@ const TaskItem = ({ task }) => {
   );
 };
 
+const userId = 0;
+
 const Tasks = () => {
   const navigation = useNavigation();
 
