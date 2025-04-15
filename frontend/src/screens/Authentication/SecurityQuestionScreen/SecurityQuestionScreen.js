@@ -131,13 +131,13 @@ const SecurityQuestionScreen = () => {
    <Text style={{ fontSize: 40, paddingBottom: 30 }}>Security Question</Text>
    {/* <CustomInput placeholder="Answer" value={answer} setValue={setAnswer} />
    <CustomButton text="Submit" onPress={onAnswer} /> */}
-   <view style={SecurityQuestionStyles.questions}>
+   <View style={SecurityQuestionStyles.questions}>
     <RNPickerSelect
      onValueChange={(value) => setQuestion(value)}
      items={securityQuestions.map((q) => ({ label: q, value: q }))}
      placeholder={{ label: "Select a question", value: null }}
     />
-   </view>
+   </View>
    <CustomInput
     placeholder="security answer"
     value={answer}
