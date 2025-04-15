@@ -71,15 +71,15 @@ public class UserController : ControllerBase
     [HttpPut("reset-password")]
     public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDTO request)
     {
-        Console.WriteLine("UserName: " + request.UserName);
-        Console.WriteLine("Answer: " + request.SecurityAnswer);
-        Console.WriteLine("Password: " + request.NewPassword);
+        // Console.WriteLine("UserName: " + request.UserName);
+        // Console.WriteLine("Answer: " + request.SecurityAnswer);
+        // Console.WriteLine("Password: " + request.NewPassword);
         var user = await _userService.GetUserInfoByUsername(request.UserName);
         if (user == null)
         {
             return NotFound(new { message = "User not found" });
         }
-        Console.WriteLine("answer: " + user.SecurityAnswer);
+        // Console.WriteLine("hash answer: " + user.SecurityAnswer);
 
         var isCorrectAnswer = _passwordService.Verify(user.SecurityAnswer, request.SecurityAnswer);
         if (!isCorrectAnswer)
