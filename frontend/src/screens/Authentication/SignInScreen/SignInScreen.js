@@ -73,7 +73,7 @@ const SignInScreen = () => {
         navigation.navigate("HomeScreen")
     }
   try {
-   const url = "http://10.40.36.42:5161/worthy/user/login";
+   const url = "http://localhost:5161/worthy/user/login";
    const response = await fetch(url, {
     method: "POST",
     headers: {
