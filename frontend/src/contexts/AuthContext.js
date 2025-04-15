@@ -35,7 +35,7 @@ export const AuthContext = ({ children }) => {
      Password: password,
     }),
    });
-   console.log(response);
+//    console.log(response);
    if (!response.ok) {
     throw new Error("Invalid username or password");
    }
