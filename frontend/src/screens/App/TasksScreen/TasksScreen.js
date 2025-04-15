@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -8,9 +8,11 @@ import {
   LayoutAnimation,
   Platform,
   UIManager,
+  ActivityIndicator,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
+import {useAuth} from "../../../contexts/AuthContext"
 
 if (Platform.OS === "android") {
   UIManager.setLayoutAnimationEnabledExperimental &&
@@ -18,90 +20,78 @@ if (Platform.OS === "android") {
 }
 
 const TaskItem = ({ task }) => {
-  const [expanded, setExpanded] = useState(false); // Track whether the task is expanded or not
+  const [expanded, setExpanded] = useState(false);
 
-  // Function to toggle the expanded state with a smooth animation
   const toggleExpand = () => {
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut); // Animate the layout change
-    setExpanded(!expanded); // Toggle the expanded state
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+    setExpanded(!expanded);
   };
 
   return (
-    // Outer container for the task item
-    <View
-      style={{
-        marginHorizontal: 700,
-        marginBottom: 15,
-        padding: 15,
-        borderRadius: 12,
-        backgroundColor: "#fff",
-        shadowColor: "#000",
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 4,
-        elevation: 2,
-      }}
-    >
-      {/* Touchable header area that triggers expand/collapse */}
-      <TouchableOpacity
-        onPress={toggleExpand}
-        style={{ flexDirection: "row", justifyContent: "space-between" }}
+    <View style={{ alignItems: "center" }}>
+      <View
+        style={{
+          width: "90%",
+          maxWidth: 400,
+          marginBottom: 10,
+          padding: 12,
+          borderRadius: 10,
+          backgroundColor: "#fff",
+          shadowColor: "#000",
+          shadowOffset: { width: 0, height: 1 },
+          shadowOpacity: 0.1,
+          shadowRadius: 2,
+          elevation: 1,
+        }}
       >
-        {/* Display the task title and due date */}
-        <View>
-          <Text style={{ fontSize: 18, fontWeight: "600" }}>{task.title}</Text>
-          <Text style={{ color: "gray", marginTop: 2 }}>Due: {task.dueDate}</Text>
-        </View>
+        <TouchableOpacity
+          onPress={toggleExpand}
+          style={{ flexDirection: "row", justifyContent: "space-between" }}
+        >
+          <View style={{ flexShrink: 1, paddingRight: 10 }}>
+            <Text style={{ fontSize: 16, fontWeight: "600" }}>{task.title}</Text>
+            <Text style={{ color: "gray", marginTop: 2 }}>Due: {task.dueDate}</Text>
+          </View>
+          <Ionicons
+            name={expanded ? "chevron-up" : "chevron-down"}
+            size={22}
+            color="black"
+          />
+        </TouchableOpacity>
 
-        {/* Icon shows up or down based on expanded state */}
-        <Ionicons
-          name={expanded ? "chevron-up" : "chevron-down"}
-          size={24}
-          color="black"
-        />
-      </TouchableOpacity>
-
-      {/* Conditionally show the task description if expanded */}
-      {expanded && (
-        <View style={{ marginTop: 10 }}>
-          <Text style={{ color: "#444" }}>{task.description}</Text>
-        </View>
-      )}
+        {expanded && (
+          <View style={{ marginTop: 8 }}>
+            <Text style={{ color: "#444", lineHeight: 20 }}>{task.description}</Text>
+          </View>
+        )}
+      </View>
     </View>
   );
 };
 
-// Main Tasks screen component
+
+// const { userId } = useAuth;
+
 const Tasks = () => {
   const navigation = useNavigation();
+  const [tasks, setTasks] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  // Hardcoded array of example task data
-  const taskData = [
-    {
-      id: "1",
-      title: "Finish Project",
-      dueDate: "April 10, 2025",
-      description: "Complete all tasks and submit the final report.",
-    },
-    {
-      id: "2",
-      title: "Team Meeting",
-      dueDate: "April 8, 2025",
-      description: "Discuss deliverables and next sprint goals.",
-    },
-    {
-      id: "3",
-      title: "Submit Homework",
-      dueDate: "April 7, 2025",
-      description: "Complete and upload before 11:59 PM.",
-    },
-  ];
+  useEffect(() => {
+    fetch(`http://localhost:5161/tasks/${1007}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setTasks(data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Failed to fetch tasks:", err);
+        setLoading(false);
+      });
+  }, []);
 
   return (
-    // Top-level container that respects safe area
     <SafeAreaView style={{ flex: 1, backgroundColor: "#f5f5f5" }}>
-      
-      {/* Menu button to open navigation drawer */}
       <TouchableOpacity
         style={{ marginLeft: 15, marginTop: 10, padding: 10 }}
         onPress={() => navigation.openDrawer()}
@@ -109,19 +99,21 @@ const Tasks = () => {
         <Ionicons name="menu" size={30} color="black" />
       </TouchableOpacity>
 
-      {/* Screen title */}
       <Text style={{ textAlign: "center", fontSize: 25, paddingVertical: 20 }}>
         Tasks Screen
       </Text>
 
-      {/* Task list section */}
       <View style={{ flex: 1 }}>
-        <FlatList
-          data={taskData} // The array of tasks
-          keyExtractor={(item) => item.id} // Unique key for each item
-          renderItem={({ item }) => <TaskItem task={item} />} // Render each task using TaskItem
-          contentContainerStyle={{ paddingBottom: 20 }} // Padding at the bottom of the list
-        />
+        {loading ? (
+          <ActivityIndicator size="large" color="#000" />
+        ) : (
+          <FlatList
+            data={tasks}
+            keyExtractor={(item) => item.taskId.toString()}
+            renderItem={({ item }) => <TaskItem task={item} />}
+            contentContainerStyle={{ paddingBottom: 20 }}
+          />
+        )}
       </View>
     </SafeAreaView>
   );
