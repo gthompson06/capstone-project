@@ -12,6 +12,8 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
+import { useAuth } from "../../../contexts/AuthContext";
+
 
 if (Platform.OS === "android") {
   UIManager.setLayoutAnimationEnabledExperimental &&
@@ -20,7 +22,7 @@ if (Platform.OS === "android") {
 
 const ScheduleItem = ({ schedule }) => {
   const [expanded, setExpanded] = useState(false);
-
+  const { user } = useAuth();
   const toggleExpand = () => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     setExpanded(!expanded);
@@ -81,30 +83,36 @@ const ScheduleItem = ({ schedule }) => {
 
 const Schedules = () => {
   const navigation = useNavigation();
+  const { user } = useAuth(); 
   const [schedules, setSchedules] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
+  console.log("User in Schedules:", user); // <- add this
   useEffect(() => {
     const fetchSchedules = async () => {
-      try {
-        const response = await fetch("http://localhost:5161/schedules/1021");
+      if (user?.userId) {
+        console.log("Fetching schedules for userId:", user.userId); // <- add this
+        try {
+          const response = await fetch(`http://localhost:5161/schedules/${user.userId}`
 
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
+          );
+
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+
+          const data = await response.json();
+          setSchedules(data);
+        } catch (err) {
+          setError(err.message);
+        } finally {
+          setLoading(false);
         }
-
-        const data = await response.json();
-        setSchedules(data);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
       }
     };
 
     fetchSchedules();
-  }, []);
+  }, [user]);
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#f5f5f5" }}>
