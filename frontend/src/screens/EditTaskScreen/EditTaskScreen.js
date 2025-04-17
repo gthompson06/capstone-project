@@ -1,3 +1,4 @@
+// npm install @react-native-community/datetimepicker
 import React, { useState } from "react";
 import {
   View,
@@ -6,10 +7,12 @@ import {
   TouchableOpacity,
   Switch,
   ScrollView,
+  Platform,
 } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
+import DateTimePicker from "@react-native-community/datetimepicker";
 
 import CustomInput from "../../components/CustomInput"; // update path if needed
 
@@ -22,11 +25,16 @@ const EditTask = () => {
   const [description, setDescription] = useState("");
   const [type, setType] = useState("");
   const [order, setOrder] = useState("");
+
   const [hasDueDate, setHasDueDate] = useState(false);
   const [dueDate, setDueDate] = useState("");
+  const [showDueDatePicker, setShowDueDatePicker] = useState(false);
+
   const [hasStartEnd, setHasStartEnd] = useState(false);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  const [showStartDatePicker, setShowStartDatePicker] = useState(false);
+  const [showEndDatePicker, setShowEndDatePicker] = useState(false);
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -43,16 +51,9 @@ const EditTask = () => {
         </Text>
 
         <CustomInput value={title} setValue={setTitle} placeholder="Enter title" />
-
         <CustomInput value={description} setValue={setDescription} placeholder="Enter description" />
-
         <CustomInput value={type} setValue={setType} placeholder="Enter type" />
-
-        <CustomInput
-          value={order}
-          setValue={setOrder}
-          placeholder="Enter order (e.g. 1, 2, 3)"
-        />
+        <CustomInput value={order} setValue={setOrder} placeholder="Enter order (e.g. 1, 2, 3)" />
 
         <View style={styles.switchRow}>
           <Text style={styles.label}>Has Due Date</Text>
@@ -60,11 +61,27 @@ const EditTask = () => {
         </View>
         {hasDueDate && (
           <>
-            <CustomInput
-              value={dueDate}
-              setValue={setDueDate}
-              placeholder="Enter due date"
-            />
+            <TouchableOpacity
+              onPress={() => setShowDueDatePicker(true)}
+              style={styles.datePickerBox}
+            >
+              <Text>
+                {dueDate ? new Date(dueDate).toLocaleDateString() : "Select due date"}
+              </Text>
+            </TouchableOpacity>
+            {showDueDatePicker && (
+              <DateTimePicker
+                value={dueDate ? new Date(dueDate) : new Date()}
+                mode="date"
+                display={Platform.OS === "ios" ? "spinner" : "default"}
+                onChange={(event, selectedDate) => {
+                  setShowDueDatePicker(false);
+                  if (selectedDate) 
+                    console.log("selected due date: ", selectedDate.toISOString().slice(0,10))
+                    setDueDate(selectedDate.toISOString());
+                }}
+              />
+            )}
           </>
         )}
 
@@ -74,16 +91,49 @@ const EditTask = () => {
         </View>
         {hasStartEnd && (
           <>
-            <CustomInput
-              value={startDate}
-              setValue={setStartDate}
-              placeholder="Enter start date"
-            />
-            <CustomInput
-              value={endDate}
-              setValue={setEndDate}
-              placeholder="Enter end date"
-            />
+            <TouchableOpacity
+              onPress={() => setShowStartDatePicker(true)}
+              style={styles.datePickerBox}
+            >
+              <Text>
+                {startDate ? new Date(startDate).toLocaleDateString() : "Select start date"}
+              </Text>
+            </TouchableOpacity>
+            {showStartDatePicker && (
+              <DateTimePicker
+                value={startDate ? new Date(startDate) : new Date()}
+                mode="date"
+                display={Platform.OS === "ios" ? "spinner" : "default"}
+                onChange={(event, selectedDate) => {
+                  setShowStartDatePicker(false);
+                  if (selectedDate)
+                    console.log("selected start date: ", selectedDate.toISOString().slice(0,10))
+                    setStartDate(selectedDate.toISOString());
+                }}
+              />
+            )}
+
+            <TouchableOpacity
+              onPress={() => setShowEndDatePicker(true)}
+              style={styles.datePickerBox}
+            >
+              <Text>
+                {endDate ? new Date(endDate).toLocaleDateString() : "Select end date"}
+              </Text>
+            </TouchableOpacity>
+            {showEndDatePicker && (
+              <DateTimePicker
+                value={endDate ? new Date(endDate) : new Date()}
+                mode="date"
+                display={Platform.OS === "ios" ? "spinner" : "default"}
+                onChange={(event, selectedDate) => {
+                  setShowEndDatePicker(false);
+                  if (selectedDate)
+                    console.log("selected end date: ", selectedDate.toISOString().slice(0,10))
+                    setEndDate(selectedDate.toISOString());
+                }}
+              />
+            )}
           </>
         )}
       </ScrollView>
@@ -104,6 +154,14 @@ const styles = {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    marginVertical: 10,
+  },
+  datePickerBox: {
+    borderBottomWidth: 1,
+    borderColor: "#ccc",
+    paddingVertical: 10,
+    width: "75%",
+    maxWidth: 450,
     marginVertical: 10,
   },
 };
