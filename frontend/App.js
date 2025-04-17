@@ -16,6 +16,8 @@ import SchedulesScreen from "./src/screens/SchedulesScreen";
 import SettingsScreen from "./src/screens/SettingsScreen";
 import HamburgerLogout from "./src/components/HamburgerLogout/HamburgerLogout";
 import SecurityQuestionScreen from "./src/screens/SecurityQuestionScreen";
+import EditTask from "./src/screens/EditTaskScreen";
+
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -34,6 +36,7 @@ const DrawerNavigator = () => {
    <Drawer.Screen name="Schedules" component={SchedulesScreen} />
    <Drawer.Screen name="Profile" component={ProfileScreen} />
    <Drawer.Screen name="Settings" component={SettingsScreen} />
+   <Drawer.Screen name="EditTask" component={EditTask} />
   </Drawer.Navigator>
  );
 };
