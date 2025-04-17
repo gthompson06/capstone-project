@@ -70,7 +70,8 @@ const TaskItem = ({ task }) => {
 };
 
 
-// const { userId } = useAuth();
+const { user } = useAuth;
+console.log("this is the user: " + user);
 
 const Tasks = () => {
   const navigation = useNavigation();
