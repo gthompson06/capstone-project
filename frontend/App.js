@@ -17,6 +17,9 @@ import SchedulesScreen from "./src/screens/App/SchedulesScreen";
 import SettingsScreen from "./src/screens/App/SettingsScreen";
 import HamburgerLogout from "./src/components/HamburgerLogout/HamburgerLogout";
 import SecurityQuestionScreen from "./src/screens/Authentication/SecurityQuestionScreen";
+import AddTask from "./src/screens/App/AddTask";
+import EditTask from "./src/screens/App/EditTask";
+
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -58,6 +61,8 @@ const App = () => {
                     <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
                     <Stack.Screen name="SecurityQuestion" component={SecurityQuestionScreen} />
                     <Stack.Screen name="HomeScreen" component={DrawerNavigator} />
+                    <Stack.Screen name="AddTask" component={AddTask} />
+                    <Stack.Screen name="EditTask" component={EditTask} />
                 </Stack.Navigator>
             </AuthContext>
         </NavigationContainer>

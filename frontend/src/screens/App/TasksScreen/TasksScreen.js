@@ -12,7 +12,7 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import {useAuth} from "../../../contexts/AuthContext"
+import { useAuth } from "../../../contexts/AuthContext";
 
 if (Platform.OS === "android") {
   UIManager.setLayoutAnimationEnabledExperimental &&
@@ -21,6 +21,7 @@ if (Platform.OS === "android") {
 
 const TaskItem = ({ task }) => {
   const [expanded, setExpanded] = useState(false);
+  const navigation = useNavigation(); // Add this
 
   const toggleExpand = () => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
@@ -62,6 +63,12 @@ const TaskItem = ({ task }) => {
         {expanded && (
           <View style={{ marginTop: 8 }}>
             <Text style={{ color: "#444", lineHeight: 20 }}>{task.description}</Text>
+            <TouchableOpacity
+              onPress={() => navigation.navigate("EditTask", { task })}
+              style={{ marginTop: 10 }}
+            >
+              <Text style={{ color: "#007bff", fontWeight: "500" }}>Edit</Text>
+            </TouchableOpacity>
           </View>
         )}
       </View>
@@ -70,26 +77,33 @@ const TaskItem = ({ task }) => {
 };
 
 
-const { user } = useAuth;
-console.log("this is the user: " + user);
-
 const Tasks = () => {
   const navigation = useNavigation();
+  const { user } = useAuth();
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`http://localhost:5161/tasks/1021`)
-      .then((res) => res.json())
-      .then((data) => {
-        setTasks(data);
+    const fetchTasks = async () => {
+      if (user?.userId) {
+        console.log("Fetching tasks for userId:", user.userId);
+        try {
+          const response = await fetch(`http://localhost:5161/tasks/${user.userId}`);
+          const data = await response.json();
+          setTasks(data);
+        } catch (err) {
+          console.error("Failed to fetch tasks:", err);
+        } finally {
+          setLoading(false);
+        }
+      } else {
+        console.warn("No userId found");
         setLoading(false);
-      })
-      .catch((err) => {
-        console.error("Failed to fetch tasks:", err);
-        setLoading(false);
-      });
-  }, []);
+      }
+    };
+
+    fetchTasks();
+  }, [user]);
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#f5f5f5" }}>
@@ -100,9 +114,22 @@ const Tasks = () => {
         <Ionicons name="menu" size={30} color="black" />
       </TouchableOpacity>
 
-      <Text style={{ textAlign: "center", fontSize: 25, paddingVertical: 20 }}>
-        Tasks Screen
-      </Text>
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "center",
+          alignItems: "center",
+          paddingVertical: 20,
+        }}
+      >
+        <Text style={{ fontSize: 25, fontWeight: "bold", marginRight: 10 }}>
+          Tasks Screen
+        </Text>
+
+        <TouchableOpacity onPress={() => navigation.navigate("AddTask")}>
+          <Ionicons name="add" size={30} color="black" />
+        </TouchableOpacity>
+      </View>
 
       <View style={{ flex: 1 }}>
         {loading ? (

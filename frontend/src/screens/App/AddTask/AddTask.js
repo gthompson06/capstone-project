@@ -6,7 +6,7 @@ import { Ionicons } from "@expo/vector-icons";
 
 const Stack = createStackNavigator();
 
-const Profile = ({ route }) => {
+const AddTask = ({ route }) => {
   const navigation = useNavigation();
 
   return (
@@ -26,7 +26,7 @@ const Profile = ({ route }) => {
           paddingTop: 0,
         }}
       >
-        Profile Screen
+        AddTask Screen
       </Text>
     </SafeAreaView>
   );
@@ -35,7 +35,7 @@ const Profile = ({ route }) => {
 export default function HomeStack() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="Profile" component={Profile} />
+      <Stack.Screen name="AddTask" component={AddTask} />
     </Stack.Navigator>
   );
 }
