@@ -1,67 +1,66 @@
 import React from "react";
-import { View, Text, TouchableOpacity, SafeAreaView } from "react-native";
-import dayjs from "dayjs";
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 
-const MiniWeekCalendar = ({
- selectedDate,
- setSelectedDate,
- currentWeekStart,
- setCurrentWeekStart,
-}) => {
- const weekDays = Array.from({ length: 7 }, (_, i) =>
-  currentWeekStart.add(i, "day")
- );
+const MiniWeekCalendar = ({ selectedDate, setSelectedDate }) => {
+ const today = new Date();
+ const startOfWeek = new Date(selectedDate);
+ startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay());
 
- const goToNextWeek = () => {
-  setCurrentWeekStart(currentWeekStart.add(1, "week"));
- };
+ const weekDates = Array.from({ length: 7 }, (_, i) => {
+  const date = new Date(startOfWeek);
+  date.setDate(date.getDate() + i);
+  return date;
+ });
 
- const goToPrevWeek = () => {
-  setCurrentWeekStart(currentWeekStart.subtract(1, "week"));
- };
+ const isSameDay = (date1, date2) =>
+  date1.getDate() === date2.getDate() &&
+  date1.getMonth() === date2.getMonth() &&
+  date1.getFullYear() === date2.getFullYear();
 
  return (
-  <SafeAreaView style={{ alignItems: "center", marginBottom: 10 }}>
-   <View
-    style={{ flexDirection: "row", alignItems: "center", marginBottom: 6 }}
-   >
-    <TouchableOpacity onPress={goToPrevWeek} style={{ marginHorizontal: 10 }}>
-     <Text style={{ fontSize: 18 }}>{`<`}</Text>
+  <View style={styles.container}>
+   {weekDates.map((date, index) => (
+    <TouchableOpacity
+     key={index}
+     onPress={() => setSelectedDate(date)}
+     style={[
+      styles.dateContainer,
+      isSameDay(date, selectedDate) && styles.selectedDate,
+     ]}
+    >
+     <Text style={styles.day}>
+      {date.toLocaleDateString("en-US", { weekday: "short" })}
+     </Text>
+     <Text style={styles.date}>{date.getDate()}</Text>
     </TouchableOpacity>
-    <Text style={{ fontWeight: "bold", fontSize: 16 }}>
-     {currentWeekStart.format("MMMM YYYY")}
-    </Text>
-    <TouchableOpacity onPress={goToNextWeek} style={{ marginHorizontal: 10 }}>
-     <Text style={{ fontSize: 18 }}>{`>`}</Text>
-    </TouchableOpacity>
-   </View>
-
-   <View style={{ flexDirection: "row", justifyContent: "center" }}>
-    {weekDays.map((day, index) => {
-     const isSelected = selectedDate.isSame(day, "day");
-     return (
-      <TouchableOpacity
-       key={index}
-       onPress={() => setSelectedDate(day)}
-       style={{
-        padding: 6,
-        borderRadius: 8,
-        backgroundColor: isSelected ? "#2196F3" : "#eee",
-        marginHorizontal: 3,
-        alignItems: "center",
-        width: 40,
-       }}
-      >
-       <Text style={{ fontSize: 12 }}>{day.format("dd")}</Text>
-       <Text style={{ fontSize: 14, fontWeight: "bold" }}>
-        {day.format("D")}
-       </Text>
-      </TouchableOpacity>
-     );
-    })}
-   </View>
-  </SafeAreaView>
+   ))}
+  </View>
  );
 };
+
+const styles = StyleSheet.create({
+ container: {
+  flexDirection: "row",
+  justifyContent: "space-around",
+  marginVertical: 10,
+ },
+ dateContainer: {
+  alignItems: "center",
+  padding: 10,
+  borderRadius: 10,
+ },
+ selectedDate: {
+  backgroundColor: "#007bff",
+ },
+ day: {
+  fontSize: 12,
+  color: "#333",
+ },
+ date: {
+  fontSize: 16,
+  fontWeight: "bold",
+  color: "#333",
+ },
+});
 
 export default MiniWeekCalendar;

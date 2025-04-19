@@ -1,27 +1,79 @@
 import React from "react";
-import { View, Text, SafeAreaView } from "react-native";
+import { View, Text, StyleSheet, ScrollView } from "react-native";
 
-const DayDetails = ({ selectedDate }) => {
- const formattedDate = selectedDate.format("dddd, MMMM D");
+const DayDetails = ({ selectedDate, tasks, expenses, schedules }) => {
+ const isSameDay = (date1, date2) =>
+  new Date(date1).toDateString() === new Date(date2).toDateString();
 
- // add fetch for tasks, schedule, expense here
+ const filteredTasks = tasks.filter((task) =>
+  isSameDay(task.date, selectedDate)
+ );
+ const filteredExpenses = expenses.filter((expense) =>
+  isSameDay(expense.date, selectedDate)
+ );
+ const filteredSchedules = schedules.filter((schedule) =>
+  isSameDay(schedule.date, selectedDate)
+ );
 
  return (
-  <SafeAreaView style={{ marginTop: 20 }}>
-   <Text style={{ fontSize: 18, fontWeight: "bold" }}>{formattedDate}</Text>
+  <ScrollView style={styles.container}>
+   <Text style={styles.header}>Tasks</Text>
+   {filteredTasks.length > 0 ? (
+    filteredTasks.map((task, index) => (
+     <Text key={index} style={styles.item}>
+      {task.title}
+     </Text>
+    ))
+   ) : (
+    <Text style={styles.empty}>No tasks</Text>
+   )}
 
-   <Text style={{ marginTop: 10 }}>On your schedule:</Text>
-   <Text>10:00 AM - 11:45 AM: Biology</Text>
-   <Text>4:00 PM - 10:00 PM: Work</Text>
+   <Text style={styles.header}>Expenses</Text>
+   {filteredExpenses.length > 0 ? (
+    filteredExpenses.map((expense, index) => (
+     <Text key={index} style={styles.item}>
+      ${expense.amount} - {expense.description}
+     </Text>
+    ))
+   ) : (
+    <Text style={styles.empty}>No expenses</Text>
+   )}
 
-   <Text style={{ marginTop: 10 }}>Tasks:</Text>
-   <Text>Due 11:59 PM: English Essay</Text>
-   <Text>Gym</Text>
-
-   <Text style={{ marginTop: 10 }}>Recurring expenses:</Text>
-   <Text>$7.99: Amazon Prime Subscription</Text>
-  </SafeAreaView>
+   <Text style={styles.header}>Schedules</Text>
+   {filteredSchedules.length > 0 ? (
+    filteredSchedules.map((schedule, index) => (
+     <Text key={index} style={styles.item}>
+      {schedule.title} at {schedule.time}
+     </Text>
+    ))
+   ) : (
+    <Text style={styles.empty}>No schedules</Text>
+   )}
+  </ScrollView>
  );
 };
+
+const styles = StyleSheet.create({
+ container: {
+  padding: 20,
+ },
+ header: {
+  fontSize: 18,
+  fontWeight: "bold",
+  marginTop: 15,
+  marginBottom: 5,
+ },
+ item: {
+  fontSize: 16,
+  marginLeft: 10,
+  marginBottom: 5,
+ },
+ empty: {
+  fontSize: 14,
+  fontStyle: "italic",
+  color: "#999",
+  marginLeft: 10,
+ },
+});
 
 export default DayDetails;
