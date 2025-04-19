@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { View, Text, SafeAreaView, TouchableOpacity } from "react-native";
+import { View, Text, SafeAreaView, TouchableOpacity, Alert } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { Ionicons } from "@expo/vector-icons";
 import CustomButton from '../../../components/CustomButton/CustomButton';

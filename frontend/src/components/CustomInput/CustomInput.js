@@ -3,41 +3,28 @@ import React from "react";
 import { StyleSheet } from "react-native";
 
 const CustomInput = ({ value, setValue, placeholder, secureTextEntry }) => {
- return (
-  <View style={styles.container}>
-   <TextInput
-    value={value}
-    onChangeText={setValue}
-    placeholder={placeholder}
-    secureTextEntry={secureTextEntry}
-    style={styles.input}
-    placeholderTextColor="#999"
-   />
-  </View>
- );
+    return (
+        <TextInput
+            value={value}
+            onChangeText={setValue}
+            placeholder={placeholder}
+            secureTextEntry={secureTextEntry}
+            style={styles.input}
+            placeholderTextColor="#999"
+        />
+    );
 };
 
 const styles = StyleSheet.create({
- container: {
-  width: "75%",
-  minHeight: 50,
-
-  borderColor: "black",
-  borderWidth: 2,
-  borderRadius: 5,
-
-  paddingHorizontal: 5,
-  marginVertical: 10,
-
-  maxWidth: 450,
-  justifyContent: "center",
- },
- input: {
-  fontSize: 25,
-  height: 40,
-  textAlignVertical: "center",
-  textAlign: "left",
- },
+    input: {
+        marginBottom: "4%",
+        width: '100%',
+        padding: 16,
+        fontSize: 16,
+        borderWidth: 1,
+        borderColor: '#ccc',
+        borderRadius: 8,
+    },
 });
 
 export default CustomInput;

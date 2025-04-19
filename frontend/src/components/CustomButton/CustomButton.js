@@ -5,20 +5,32 @@ const CustomButton = ({ onPress, text, type = "primary" }) => {
  return (
   <Pressable
    onPress={onPress}
-   style={[styles.container, styles[`container_${type}`]]}
+   style={[styles.button, styles[`container_${type}`]]}
   >
-   <Text style={[styles.text, styles[`text_${type}`]]}>{text}</Text>
+   <Text style={[styles.buttonText, styles[`text_${type}`]]}>{text}</Text>
   </Pressable>
  );
 };
 
 const styles = StyleSheet.create({
+    button: {
+        width: "100%",
+        backgroundColor: '#1762a7',
+        padding: 16,
+        borderRadius: 8,
+        alignItems: 'center',
+    },
+    buttonText: {
+        color: 'white',
+        fontSize: 16,
+        fontWeight: 'bold',
+    },
  container: {
-  minHeight: 50,
+  minHeight: "10%",
 
-  borderColor: "white",
-  borderWidth: 2,
-  borderRadius: 5,
+  borderWidth: "4px",
+  borderColor: "black",
+  borderRadius: "6px",
 
   marginVertical: 10,
 
@@ -51,8 +63,8 @@ const styles = StyleSheet.create({
   alignItems: "center",
  },
  container_signIn: {
-  width: "50%",
-  backgroundColor: "lightblue",
+//   width: "80%",
+//   backgroundColor: "blue",
  },
  text: {
   fontSize: 25,

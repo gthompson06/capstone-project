@@ -10,13 +10,14 @@ import HomeScreen from "./src/screens/App/HomeScreen";
 import ResetPasswordScreen from "./src/screens/Authentication/ResetPasswordScreen";
 import ForgotPasswordScreen from "./src/screens/Authentication/ForgotPasswordScreen/ForgotPasswordScreen";
 import ProfileScreen from "./src/screens/App/ProfileScreen";
-import CalendarScreen from "./src/screens/App/CalendarScreen";
 import FinancesSCreen from "./src/screens/App/FinancesScreen";
 import TasksScreen from "./src/screens/App/TasksScreen";
 import SchedulesScreen from "./src/screens/App/SchedulesScreen";
 import SettingsScreen from "./src/screens/App/SettingsScreen";
 import HamburgerLogout from "./src/components/HamburgerLogout/HamburgerLogout";
 import SecurityQuestionScreen from "./src/screens/Authentication/SecurityQuestionScreen";
+import AddTask from "./src/screens/App/AddTask";
+
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -25,7 +26,8 @@ const Drawer = createDrawerNavigator();
 const DrawerNavigator = ({ route }) => {
     return (
         <Drawer.Navigator
-            screenOptions={{ headerShown: false }}
+            screenOptions={{ 
+                headerShown: false }}
             drawerContent={(props) => <HamburgerLogout {...props} />}
         >
             <Drawer.Screen
@@ -58,6 +60,7 @@ const App = () => {
                     <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
                     <Stack.Screen name="SecurityQuestion" component={SecurityQuestionScreen} />
                     <Stack.Screen name="HomeScreen" component={DrawerNavigator} />
+                    <Stack.Screen name="AddTask" component={AddTask} />
                 </Stack.Navigator>
             </AuthContext>
         </NavigationContainer>

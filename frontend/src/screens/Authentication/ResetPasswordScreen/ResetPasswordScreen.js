@@ -17,6 +17,7 @@ import {
 } from "../../../styles/Styles.js";
 import { SafeAreaView } from "react-native-safe-area-context";
 import BackArrow from "../../../../assets/images/backArrow.png";
+// import PasswordStrengthMeterBar from "react-native-password-strength-meter-bar";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 const ResetPasswordScreen = () => {
