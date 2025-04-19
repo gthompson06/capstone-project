@@ -2,93 +2,102 @@ import React, { useEffect, useState } from "react";
 import {
  View,
  Text,
- ScrollView,
+ SafeAreaView,
  TouchableOpacity,
+ ScrollView,
  ActivityIndicator,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import axios from "axios";
-import MiniWeekCalendar from "../../../components/MiniWeekCalendar/MiniWeekCalendar";
-import DayDetails from "../../../components/DayDetails/DayDetails";
+import { useNavigation } from "@react-navigation/native";
 import { useAuth } from "../../../contexts/AuthContext";
+import dayjs from "dayjs";
+import MiniWeekCalendar from "../../../components/MiniWeekCalendar";
+import DayDetails from "../../../components/DayDetails";
+import axios from "axios";
 
-const HomeScreen = ({ navigation }) => {
- const [selectedDate, setSelectedDate] = useState(new Date());
+const HomeScreen = () => {
+ const navigation = useNavigation();
  const { user } = useAuth();
+ const [selectedDate, setSelectedDate] = useState(dayjs());
+ const [currentWeekStart, setCurrentWeekStart] = useState(
+  dayjs().startOf("week")
+ );
  const [tasks, setTasks] = useState([]);
  const [expenses, setExpenses] = useState([]);
  const [schedules, setSchedules] = useState([]);
  const [loading, setLoading] = useState(true);
 
- const fetchData = async () => {
-  if (!user?.userId) return;
-
-  try {
-   const [tasksRes, expensesRes, schedulesRes] = await Promise.all([
-    axios.get(`https://worthy-api.link/api/Task/user/${user.userId}`),
-    axios.get(`https://worthy-api.link/api/Expense/user/${user.userId}`),
-    axios.get(`https://worthy-api.link/api/Schedule/user/${user.userId}`),
-   ]);
-
-   setTasks(tasksRes.data || []);
-   setExpenses(expensesRes.data || []);
-   setSchedules(schedulesRes.data || []);
-  } catch (err) {
-   console.error("Error fetching data:", err);
-  } finally {
-   setLoading(false);
-  }
- };
-
  useEffect(() => {
+  const fetchData = async () => {
+   if (!user?.userId) return;
+
+   try {
+    const [tasksRes, expensesRes, schedulesRes] = await Promise.all([
+     axios.get(`http://localhost:5161/tasks/${user.userId}`),
+     axios.get(`http://localhost:5161/expenses/${user.userId}`),
+     axios.get(`http://localhost:5161/schedules/${user.userId}`),
+    ]);
+
+    setTasks(tasksRes.data || []);
+    setExpenses(expensesRes.data || []);
+    setSchedules(schedulesRes.data || []);
+   } catch (error) {
+    console.error("Error fetching user data:", error);
+   } finally {
+    setLoading(false);
+   }
+  };
+
   fetchData();
  }, [user]);
 
  return (
-  <ScrollView
-   contentContainerStyle={{
-    padding: 20,
-    alignItems: "center",
-    justifyContent: "flex-start",
-   }}
-  >
+  <SafeAreaView style={{ flex: 1, padding: 16, alignItems: "center" }}>
    <TouchableOpacity
     onPress={() => navigation.openDrawer()}
-    style={{ alignSelf: "flex-start", padding: 10 }}
+    style={{ padding: 10, alignSelf: "flex-start" }}
    >
     <Ionicons name="menu" size={30} color="black" />
    </TouchableOpacity>
 
    <Text
     style={{
+     fontSize: 25,
+     fontWeight: "bold",
      textAlign: "center",
-     fontSize: 22,
-     marginBottom: 10,
+     marginBottom: "20px",
     }}
    >
-    Welcome {user?.userName || "Guest"} (ID: {user?.userId || "null"})
+    {/* Welcome {user?.userName || "Guest"} (ID: {user?.userId || "null"}) */}
+    Welcome {user?.userName || "Guest"}!
    </Text>
 
-   <View style={{ marginVertical: 10, width: "100%" }}>
-    <MiniWeekCalendar
-     selectedDate={selectedDate}
-     setSelectedDate={setSelectedDate}
-    />
-   </View>
+   <MiniWeekCalendar
+    selectedDate={selectedDate}
+    setSelectedDate={setSelectedDate}
+    currentWeekStart={currentWeekStart}
+    setCurrentWeekStart={setCurrentWeekStart}
+   />
 
-   {loading ? (
-    <ActivityIndicator size="large" color="#007bff" style={{ marginTop: 20 }} />
-   ) : (
-    <View style={{ width: "100%", marginTop: 10 }}>
+   <ScrollView
+    contentContainerStyle={{ alignItems: "center", paddingBottom: 20 }}
+   >
+    {loading ? (
+     <ActivityIndicator
+      size="large"
+      color="#007bff"
+      style={{ marginTop: 20 }}
+     />
+    ) : (
      <DayDetails
       selectedDate={selectedDate}
       tasks={tasks}
       expenses={expenses}
       schedules={schedules}
      />
-    </View>
-   )}
-  </ScrollView>
+    )}
+   </ScrollView>
+  </SafeAreaView>
  );
 };
 

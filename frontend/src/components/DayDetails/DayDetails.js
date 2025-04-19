@@ -1,78 +1,133 @@
 import React from "react";
-import { View, Text, StyleSheet, ScrollView } from "react-native";
+import { View, Text, SafeAreaView, StyleSheet } from "react-native";
+import dayjs from "dayjs";
 
-const DayDetails = ({ selectedDate, tasks, expenses, schedules }) => {
- const isSameDay = (date1, date2) =>
-  new Date(date1).toDateString() === new Date(date2).toDateString();
+const DayDetails = ({
+ selectedDate,
+ tasks = [],
+ schedules = [],
+ expenses = [],
+}) => {
+ const formattedDate = selectedDate.format("dddd, MMMM D");
+ const dayName = selectedDate.format("dddd");
 
- const filteredTasks = tasks.filter((task) =>
-  isSameDay(task.date, selectedDate)
- );
- const filteredExpenses = expenses.filter((expense) =>
-  isSameDay(expense.date, selectedDate)
- );
- const filteredSchedules = schedules.filter((schedule) =>
-  isSameDay(schedule.date, selectedDate)
- );
+ const filteredSchedules = schedules.filter((s) => s.days.includes(dayName));
+
+ const allTasks = tasks.map((task) => {
+  let isOverdue = false;
+
+  if (task.hasDueDate && task.dueDate) {
+   const dueDate = dayjs(task.dueDate);
+   isOverdue = dueDate.isBefore(selectedDate, "day");
+  }
+
+  return {
+   ...task,
+   isOverdue,
+  };
+ });
+
+ const filteredExpenses = expenses.filter((expense) => {
+  const payDate = dayjs(expense.payDate);
+  return selectedDate.isSame(payDate, "day");
+ });
 
  return (
-  <ScrollView style={styles.container}>
-   <Text style={styles.header}>Tasks</Text>
-   {filteredTasks.length > 0 ? (
-    filteredTasks.map((task, index) => (
-     <Text key={index} style={styles.item}>
-      {task.title}
-     </Text>
-    ))
-   ) : (
-    <Text style={styles.empty}>No tasks</Text>
-   )}
+  <SafeAreaView style={{ marginTop: 20, width: "100%", paddingHorizontal: 20 }}>
+   <Text style={{ fontSize: 18, fontWeight: "bold", textAlign: "center" }}>
+    {formattedDate}
+   </Text>
 
-   <Text style={styles.header}>Expenses</Text>
-   {filteredExpenses.length > 0 ? (
-    filteredExpenses.map((expense, index) => (
-     <Text key={index} style={styles.item}>
-      ${expense.amount} - {expense.description}
+   <View style={styles.sectionContainer}>
+    <Text style={styles.sectionHeader}>Your Schedule</Text>
+    {filteredSchedules.length > 0 ? (
+     filteredSchedules.map((item, idx) => (
+      <View key={idx} style={styles.scheduleItem}>
+       <Text style={styles.scheduleTitle}>{item.title}</Text>
+       <Text style={styles.scheduleTime}>
+        {item.startTime} - {item.endTime}
+       </Text>
+      </View>
+     ))
+    ) : (
+     <Text style={{ textAlign: "Center", color: "green" }}>
+      Nothing on the Schedule Today!
      </Text>
-    ))
-   ) : (
-    <Text style={styles.empty}>No expenses</Text>
-   )}
+    )}
+   </View>
 
-   <Text style={styles.header}>Schedules</Text>
-   {filteredSchedules.length > 0 ? (
-    filteredSchedules.map((schedule, index) => (
-     <Text key={index} style={styles.item}>
-      {schedule.title} at {schedule.time}
+   <View style={styles.sectionContainer}>
+    <Text style={styles.sectionHeader}>Tasks</Text>
+    {allTasks.length > 0 ? (
+     allTasks.map((item, idx) => (
+      <Text
+       key={idx}
+       style={[
+        styles.taskText,
+        item.isOverdue ? { color: "red" } : { color: "black" },
+       ]}
+      >
+       • {item.title}
+       {item.isOverdue && item.dueDate ? ` (Due: ${item.dueDate})` : ""}
+      </Text>
+     ))
+    ) : (
+     <Text style={{ textAlign: "center", color: "green" }}>No tasks!</Text>
+    )}
+   </View>
+
+   <View style={styles.sectionContainer}>
+    <Text style={styles.sectionHeader}>Expenses Due</Text>
+    {filteredExpenses.length > 0 ? (
+     filteredExpenses.map((item, idx) => (
+      <Text key={idx} style={styles.expenseText}>
+       {item.title}: ${item.amount}
+      </Text>
+     ))
+    ) : (
+     <Text style={{ textAlign: "Center", color: "green" }}>
+      No Expenses Due Today!
      </Text>
-    ))
-   ) : (
-    <Text style={styles.empty}>No schedules</Text>
-   )}
-  </ScrollView>
+    )}
+   </View>
+  </SafeAreaView>
  );
 };
 
 const styles = StyleSheet.create({
- container: {
-  padding: 20,
+ sectionContainer: {
+  backgroundColor: "white",
+  borderRadius: 10,
+  padding: 15,
+  marginVertical: 10,
+  shadowColor: "#000",
+  shadowOffset: { width: 0, height: 1 },
+  shadowOpacity: 0.1,
+  shadowRadius: 2,
+  elevation: 1,
  },
- header: {
-  fontSize: 18,
-  fontWeight: "bold",
-  marginTop: 15,
-  marginBottom: 5,
- },
- item: {
+ sectionHeader: {
   fontSize: 16,
-  marginLeft: 10,
-  marginBottom: 5,
+  fontWeight: "600",
+  marginBottom: 8,
+  textAlign: "Center",
  },
- empty: {
-  fontSize: 14,
-  fontStyle: "italic",
-  color: "#999",
-  marginLeft: 10,
+ scheduleItem: {
+  marginBottom: 6,
+ },
+ scheduleTitle: {
+  fontWeight: "500",
+  textAlign: "Center",
+ },
+ scheduleTime: {
+  color: "green",
+  textAlign: "Center",
+ },
+ taskText: {
+  marginBottom: 6,
+ },
+ expenseText: {
+  marginBottom: 6,
  },
 });
 
