@@ -39,7 +39,7 @@ const DayDetails = ({
    </Text>
 
    <View style={styles.sectionContainer}>
-    <Text style={styles.sectionHeader}>Your Schedule</Text>
+    <Text style={styles.sectionHeader}>On Your Schedule</Text>
     {filteredSchedules.length > 0 ? (
      filteredSchedules.map((item, idx) => (
       <View key={idx} style={styles.scheduleItem}>
@@ -60,24 +60,25 @@ const DayDetails = ({
     <Text style={styles.sectionHeader}>Tasks</Text>
     {allTasks.length > 0 ? (
      allTasks.map((item, idx) => (
-      <Text
-       key={idx}
-       style={[
-        styles.taskText,
-        item.isOverdue ? { color: "red" } : { color: "black" },
-       ]}
-      >
-       • {item.title}
-       {item.isOverdue && item.dueDate ? ` (Due: ${item.dueDate})` : ""}
-      </Text>
+      <View key={idx} style={styles.taskContainer}>
+       <Text
+        style={[
+         styles.taskText,
+         item.isOverdue ? { color: "red" } : { color: "black" },
+        ]}
+       >
+        {item.title}
+        {item.isOverdue && item.dueDate ? ` (Due: ${item.dueDate})` : ""}
+       </Text>
+      </View>
      ))
     ) : (
-     <Text style={{ textAlign: "center", color: "green" }}>No tasks!</Text>
+     <Text style={styles.emptyText}>No tasks!</Text>
     )}
    </View>
 
    <View style={styles.sectionContainer}>
-    <Text style={styles.sectionHeader}>Expenses Due</Text>
+    <Text style={styles.sectionHeader}>Expenses Due Today</Text>
     {filteredExpenses.length > 0 ? (
      filteredExpenses.map((item, idx) => (
       <Text key={idx} style={styles.expenseText}>
@@ -120,14 +121,25 @@ const styles = StyleSheet.create({
   textAlign: "Center",
  },
  scheduleTime: {
-  color: "green",
+  color: "#2196F3",
   textAlign: "Center",
  },
  taskText: {
-  marginBottom: 6,
+  textAlign: "Center",
+  marginBottom: 10,
+  padding: 12,
+  borderRadius: 10,
+  backgroundColor: "#e5e7e7",
+  shadowColor: "#000",
+  shadowOffset: { width: 0, height: 1 },
+  shadowOpacity: 0.1,
+  shadowRadius: 2,
+  elevation: 1,
  },
  expenseText: {
   marginBottom: 6,
+  textAlign: "Center",
+  color: "red",
  },
 });
 
