@@ -36,7 +36,6 @@ const DrawerNavigator = ({ route }) => {
                 component={HomeScreen}
                 initialParams={route?.params} // Pass params to HomeScreen
             />
-            <Drawer.Screen name="Calendar" component={CalendarScreen} />
             <Drawer.Screen name="Finances" component={FinancesSCreen} />
             <Drawer.Screen name="Tasks" component={TasksScreen} />
             <Drawer.Screen name="Schedules" component={SchedulesScreen} />

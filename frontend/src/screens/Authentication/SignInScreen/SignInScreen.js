@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
-import { useAuth } from "../../../contexts/AuthContext"
+import { useAuth } from "../../../contexts/AuthContext";
 
 import Logo from "../../../../assets/images/TestImg.png";
 import CustomInput from "../../../components/CustomInput/CustomInput";
