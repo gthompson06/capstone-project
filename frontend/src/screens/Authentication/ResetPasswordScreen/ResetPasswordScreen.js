@@ -1,4 +1,4 @@
-import React, { Component, useState } from "react";
+import React, { useState } from "react";
 import {
  View,
  Text,
@@ -17,8 +17,8 @@ import {
 } from "../../../styles/Styles.js";
 import { SafeAreaView } from "react-native-safe-area-context";
 import BackArrow from "../../../../assets/images/backArrow.png";
-import PasswordStrengthMeterBar from "react-native-password-strength-meter-bar";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import PasswordStrengthMeterBar from "react-native-password-strength-meter-bar";
 
 const ResetPasswordScreen = () => {
  const navigation = useNavigation();
@@ -36,7 +36,7 @@ const ResetPasswordScreen = () => {
 
  const { height } = useWindowDimensions();
 
- const ResetPassword = () => {
+ const handleResetPassword = async () => {
   if (!newPassword || !confirmPassword || !securityAnswer) {
    setErrorMessage("No fields can be empty");
    return;
@@ -45,7 +45,34 @@ const ResetPasswordScreen = () => {
    setErrorMessage("Passwords do not match");
    return;
   }
-  setErrorMessage("");
+
+  const url = "http://localhost:5161/worthy/user/reset-password";
+
+  try {
+   const response = await fetch(url, {
+    method: "PUT",
+    headers: {
+     "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+     UserName: data.userName,
+     SecurityAnswer: securityAnswer,
+     NewPassword: newPassword,
+    }),
+   });
+
+   const result = await response.json();
+   console.log("Raw response:", result);
+
+   if (!response.ok) {
+    setErrorMessage(result.message || "Reset failed");
+   } else {
+    navigation.navigate("SignIn");
+   }
+  } catch (error) {
+   console.error("Reset error:", error);
+   setErrorMessage("An error occurred. Try again later.");
+  }
  };
 
  return (
@@ -59,13 +86,22 @@ const ResetPasswordScreen = () => {
      />
     </TouchableOpacity>
    </View>
+
    <Image
     source={Logo}
     style={[CreateAccountStyles.logo, { height: height * 0.2 }]}
     resizeMode="contain"
    />
+
    <Text style={{ fontSize: 40, paddingBottom: 30 }}>RESET PASSWORD</Text>
-   <View>Here was your Security Question: {securityQuestion}</View>
+
+   <View style={{ maxWidth: "80%", marginBottom: 10 }}>
+    <Text style={{ fontSize: 16 }}>
+     Here was your Security Question:{" "}
+     <Text style={{ fontWeight: "bold" }}>{securityQuestion}</Text>
+    </Text>
+   </View>
+
    <CustomInput
     placeholder="Security Answer"
     value={securityAnswer}
@@ -85,12 +121,13 @@ const ResetPasswordScreen = () => {
    <PasswordStrengthMeterBar password={newPassword} />
 
    <CustomInput
-    placeholder="confirm password"
+    placeholder="Confirm Password"
     value={confirmPassword}
     setValue={setConfirmPassword}
     secureTextEntry
    />
-   <CustomButton text="reset password" onPress={ResetPassword} />
+
+   <CustomButton text="Reset Password" onPress={handleResetPassword} />
 
    {errorMessage ? (
     <Text style={{ color: "red", marginBottom: 10 }}>{errorMessage}</Text>

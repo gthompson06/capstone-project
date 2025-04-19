@@ -24,16 +24,16 @@ const SignInScreen = () => {
  const { height } = useWindowDimensions();
  const { login } = useAuth();
 
-//  const storeUserToken = async (token) => {
-//   try {
-//    const token = this.token;
-//    const expirationTime = Date.now() + 10 * 1000; // Expires in 30 minutes (minutes to seconds to milliseconds)
-//    await AsyncStorage.setItem("userToken", token);
-//    await AsyncStorage.setItem("tokenExpiration", expirationTime.toString());
-//   } catch (error) {
-//    console.error("Error saving token:", error);
-//   }
-//  };
+ //  const storeUserToken = async (token) => {
+ //   try {
+ //    const token = this.token;
+ //    const expirationTime = Date.now() + 10 * 1000; // Expires in 30 minutes (minutes to seconds to milliseconds)
+ //    await AsyncStorage.setItem("userToken", token);
+ //    await AsyncStorage.setItem("tokenExpiration", expirationTime.toString());
+ //   } catch (error) {
+ //    console.error("Error saving token:", error);
+ //   }
+ //  };
 
  // Function to check login status
  const checkUserLogin = async () => {
@@ -42,7 +42,6 @@ const SignInScreen = () => {
    const expiration = await AsyncStorage.getItem("tokenExpiration");
 
    if (!token || !expiration || Date.now() > parseInt(expiration)) {
-    console.log("Token expired or not found. Logging out...");
     await handleLogout();
     return null;
    }
@@ -65,13 +64,11 @@ const SignInScreen = () => {
   return null;
  };
 
-
-
  // Handle sign-in button press
  const signInUser = async () => {
-    if (username == "" && password == ""){
-        navigation.navigate("HomeScreen")
-    }
+  if (username == "" && password == "") {
+   navigation.navigate("HomeScreen");
+  }
   try {
    const url = "http://localhost:5161/worthy/user/login";
    const response = await fetch(url, {
@@ -84,7 +81,7 @@ const SignInScreen = () => {
      Password: password,
     }),
    });
-   console.log(response);
+  //  console.log("response: " + response);
    if (!response.ok) {
     throw new Error("Invalid username or password");
    }
@@ -110,19 +107,19 @@ const SignInScreen = () => {
  };
 
  // Check if user is already signed in when screen loads
-//  useEffect(() => {
-//   const checkLoginStatus = async () => {
-//    const token = await checkUserLogin();
-//    if (token) {
-//     navigation.replace("HomeScreen"); // Auto-navigate if still signed in
-//    }
-//   };
-//   checkLoginStatus();
+ //  useEffect(() => {
+ //   const checkLoginStatus = async () => {
+ //    const token = await checkUserLogin();
+ //    if (token) {
+ //     navigation.replace("HomeScreen"); // Auto-navigate if still signed in
+ //    }
+ //   };
+ //   checkLoginStatus();
 
-//   // Set up auto-logout every 5 seconds
-//   const interval = setInterval(checkUserLogin, 5000);
-//   return () => clearInterval(interval);
-//  }, []);
+ //   // Set up auto-logout every 5 seconds
+ //   const interval = setInterval(checkUserLogin, 5000);
+ //   return () => clearInterval(interval);
+ //  }, []);
 
  return (
   <SafeAreaView style={styles.root}>
@@ -153,7 +150,11 @@ const SignInScreen = () => {
       <Text style={styles.linkText}>FORGOT PASSWORD?</Text>
      </TouchableOpacity>
     </View>
-    <CustomButton text="Sign In" type="signIn" onPress={() => login(username, password)} />
+    <CustomButton
+     text="Sign In"
+     type="signIn"
+     onPress={() => login(username, password)}
+    />
    </View>
   </SafeAreaView>
  );

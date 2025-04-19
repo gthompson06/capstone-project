@@ -1,1 +1,1 @@
-export { default } from './MiniWeekCalendar.js';
+export { default } from "./MiniWeekCalendar.js";

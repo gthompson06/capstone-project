@@ -1,85 +1,51 @@
-import React, { useEffect } from "react";
-import { View, Text, SafeAreaView, TouchableOpacity } from "react-native";
-import { createStackNavigator } from "@react-navigation/stack";
+import React, { useState } from "react";
+import {
+ View,
+ Text,
+ SafeAreaView,
+ TouchableOpacity,
+ ScrollView,
+} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import CustomButton from "../../../components/CustomButton/CustomButton";
 import { useNavigation } from "@react-navigation/native";
 import { useAuth } from "../../../contexts/AuthContext";
+import dayjs from "dayjs";
+import MiniWeekCalendar from "../../../components/MiniWeekCalendar";
+import DayDetails from "../../../components/DayDetails";
 
-
-const Stack = createStackNavigator();
-
-const HomeScreen = ({ route }) => {
- const navigation = useNavigation(); // Use this to get the correct navigation object
- //  const { username, id, token } = route.params || {};
+const HomeScreen = () => {
+ const navigation = useNavigation();
  const { user } = useAuth();
-
- useEffect(async () => {
-  if (user) {
-   console.log(user.userName, user.userId);
-   try {
-    const url = `http://localhost:5161/worthy/user/${user.userId}`;
-    const response = await fetch(url, {
-     method: "GET",
-     headers: {
-      "Content-Type": "application/json",
-     },
-     body: JSON.stringify({
-      UserName: username,
-      Password: password,
-     }),
-    });
-    console.log(response);
-    if (!response.ok) {
-     throw new Error("Invalid username or password");
-    }
-
-    const data = await response.json();
-    if (data.message === "Login successful" && data.user && data.token) {
-     await storeUserToken(data.token);
-     navigation.navigate("HomeScreen", {
-      screen: "Home",
-      params: {
-       username: username,
-       id: data.user.userId,
-       token: data.token,
-      },
-     });
-    } else {
-     Alert.alert("Error", "Invalid username or password");
-    }
-   } catch (error) {
-    console.error("Error logging in:", error);
-    Alert.alert("Error", "An error occurred while signing in");
-   }
-  } else {
-   console.log("User is null or not loaded yet.");
-  }
- }, [user]);
+ const [selectedDate, setSelectedDate] = useState(dayjs());
+ const [currentWeekStart, setCurrentWeekStart] = useState(
+  dayjs().startOf("week")
+ );
 
  return (
-  <SafeAreaView style={{ flex: 1 }}>
-   {/* Custom Hamburger Menu Button */}
+  <SafeAreaView style={{ flex: 1, padding: 16 }}>
    <TouchableOpacity
-    style={{ marginLeft: 15, marginTop: 10, padding: 10 }}
-    onPress={() => navigation.openDrawer()} // Now this works
+    onPress={() => navigation.openDrawer()}
+    style={{ padding: 10 }}
    >
     <Ionicons name="menu" size={30} color="black" />
    </TouchableOpacity>
 
-   {/* Welcome Text */}
-   <Text
-    style={{
-     textAlign: "center",
-     fontSize: 25,
-     paddingBottom: 30,
-     paddingTop: 0,
-    }}
-   >
-    <Text>
-     Welcome {user.userName || "Guest"}. Your ID is {user.userId || "null"}
-    </Text>
+   <Text style={{ textAlign: "center", fontSize: 22, marginBottom: 10 }}>
+    Welcome {user?.userName || "Guest"} (ID: {user?.userId || "null"})
    </Text>
+
+   <MiniWeekCalendar
+    selectedDate={selectedDate}
+    setSelectedDate={setSelectedDate}
+    currentWeekStart={currentWeekStart}
+    setCurrentWeekStart={setCurrentWeekStart}
+   />
+
+   <ScrollView
+    contentContainerStyle={{ alignItems: "center", paddingBottom: 20 }}
+   >
+    <DayDetails selectedDate={selectedDate} />
+   </ScrollView>
   </SafeAreaView>
  );
 };
