@@ -1,13 +1,32 @@
-import React from "react";
-import { View, Text, SafeAreaView, TouchableOpacity } from "react-native";
-import { createStackNavigator } from "@react-navigation/stack";
-import { useNavigation } from "@react-navigation/native"; // Import this hook
+import React, { useState, useEffect } from "react";
+import {
+  View,
+  Text,
+  SafeAreaView,
+  TouchableOpacity,
+  FlatList,
+  LayoutAnimation,
+  Platform,
+  UIManager,
+  ActivityIndicator,
+} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
+import { useAuth } from "../../../contexts/AuthContext";
 
-const Stack = createStackNavigator();
 
-const Schedules = ({ route }) => {
-  const navigation = useNavigation(); // Use this to get the correct navigation object
+if (Platform.OS === "android") {
+  UIManager.setLayoutAnimationEnabledExperimental &&
+    UIManager.setLayoutAnimationEnabledExperimental(true);
+}
+
+const ScheduleItem = ({ schedule }) => {
+  const [expanded, setExpanded] = useState(false);
+  const { user } = useAuth();
+  const toggleExpand = () => {
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+    setExpanded(!expanded);
+  };
 
   return (
     <View style={{ alignItems: "center" }}>
@@ -124,6 +143,7 @@ export default function HomeStack() {
       <TouchableOpacity
         style={{ marginLeft: 15, marginTop: 10, padding: 10 }}
         onPress={() => navigation.openDrawer()}
+        onPress={() => navigation.openDrawer()}
       >
         <Ionicons name="menu" size={30} color="black" />
       </TouchableOpacity>
@@ -148,4 +168,4 @@ export default function HomeStack() {
       </View>
     </SafeAreaView>
   );
-}
+};

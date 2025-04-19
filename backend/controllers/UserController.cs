@@ -40,20 +40,8 @@ public class UserController : ControllerBase
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegistrationDTO request)
     {
-        // Console.WriteLine("Received registration request:");
-        // Console.WriteLine($"Username: {request.UserName}");
-        // Console.WriteLine($"Email: {request.Email}");
-        // Console.WriteLine($"Password: {request.Password}");
-        // Console.WriteLine($"Security Question: {request.SecurityQuestion}");
-        // Console.WriteLine($"Security Answer: {request.SecurityAnswer}");
 
         var result = await _userService.Register(request);
-        // var response = new { message = result.Message };
-        // if (result.Success)
-        // {
-        //     return Ok(response);
-        // }
-        // return BadRequest(response);
         return result.Success ? Ok(new { message = result.Message }) : BadRequest(new { message = result.Message });
     }
 
@@ -82,6 +70,19 @@ public class UserController : ControllerBase
     public async Task<IActionResult> GetUserInfo(int userId)
     {
         var response = await _userService.GetUserInfo(userId);
+        if (response == null)
+        {
+            return NotFound(new { Message = "404: User not found" });
+        }
+        else
+        {
+            return Ok(response);
+        }
+    }
+    [HttpGet("username/{username}")]
+    public async Task<IActionResult> GetUserByUserName(string username)
+    {
+        var response = await _userService.GetUserInfoByUsername(username);
         if (response == null)
         {
             return NotFound(new { Message = "404: User not found" });

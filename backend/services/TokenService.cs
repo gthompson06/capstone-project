@@ -18,7 +18,7 @@ public class TokenService
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret));
         var issuer = Environment.GetEnvironmentVariable("JWT_ISSUER");
         var audience = Environment.GetEnvironmentVariable("JWT_AUDIENCE");
-        var expiration = DateTime.UtcNow.AddMinutes(double.Parse(Environment.GetEnvironmentVariable("JWT_ACCESS_DURATION_MINUTES")));
+        var expiration = DateTime.UtcNow.AddMinutes(int.Parse(Environment.GetEnvironmentVariable("JWT_ACCESS_DURATION_MINUTES")));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
         var token = new JwtSecurityToken(
