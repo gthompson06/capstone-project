@@ -81,68 +81,67 @@ const ScheduleItem = ({ schedule }) => {
   );
 };
 
-// const Schedules = () => {
-//   const navigation = useNavigation();
-//   const { user } = useAuth(); 
-//   const [schedules, setSchedules] = useState([]);
-//   const [loading, setLoading] = useState(true);
-//   const [error, setError] = useState(null);
-//   console.log("User in Schedules:", user); // <- add this
-//   useEffect(() => {
-//     const fetchSchedules = async () => {
-//       if (user?.userId) {
-//         console.log("Fetching schedules for userId:", user.userId); // <- add this
-//         try {
-//           const response = await fetch(`http://localhost:5162/schedules/${user.userId}`
+const Schedules = () => {
+  const navigation = useNavigation();
+  const { user } = useAuth(); 
+  const [schedules, setSchedules] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  console.log("User in Schedules:", user); // <- add this
+  useEffect(() => {
+    const fetchSchedules = async () => {
+      if (user?.userId) {
+        console.log("Fetching schedules for userId:", user.userId); // <- add this
+        try {
+          const response = await fetch(`http://localhost:5162/schedules/${user.userId}`
 
-//           );
+          );
 
-//           if (!response.ok) {
-//             throw new Error("Network response was not ok");
-//           }
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
 
-//           const data = await response.json();
-//           setSchedules(data);
-//         } catch (err) {
-//           setError(err.message);
-//         } finally {
-//           setLoading(false);
-//         }
-//       }
-//     };
+          const data = await response.json();
+          setSchedules(data);
+        } catch (err) {
+          setError(err.message);
+        } finally {
+          setLoading(false);
+        }
+      }
+    };
 
-//     fetchSchedules();
-//   }, [user]);
+    fetchSchedules();
+  }, [user]);
 
-//   return (
-//     <SafeAreaView style={{ flex: 1, backgroundColor: "#f5f5f5" }}>
-//       <TouchableOpacity
-//         style={{ marginLeft: 15, marginTop: 10, padding: 10 }}
-//         onPress={() => navigation.openDrawer()} // Now this works
-//       >
-//         <Ionicons name="menu" size={30} color="black" />
-//       </TouchableOpacity>
+  return (
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#f5f5f5" }}>
+      <TouchableOpacity
+        style={{ marginLeft: 15, marginTop: 10, padding: 10 }}
+        onPress={() => navigation.openDrawer()} // Now this works
+      >
+        <Ionicons name="menu" size={30} color="black" />
+      </TouchableOpacity>
 
-//       <Text
-//         style={{
-//           textAlign: "center",
-//           fontSize: 25,
-//           paddingBottom: 30,
-//           paddingTop: 0,
-//         }}
-//       >
-//         Schedules Screen
-//       </Text>
-//     </SafeAreaView>
-//   );
-// };
+      <Text
+        style={{
+          textAlign: "center",
+          fontSize: 25,
+          paddingBottom: 30,
+          paddingTop: 0,
+        }}
+      >
+        Schedules Screen
+      </Text>
+    </SafeAreaView>
+  );
+};
 
 export default function HomeStack() {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#f5f5f5" }}>
       <TouchableOpacity
         style={{ marginLeft: 15, marginTop: 10, padding: 10 }}
-        onPress={() => navigation.openDrawer()}
         onPress={() => navigation.openDrawer()}
       >
         <Ionicons name="menu" size={30} color="black" />
