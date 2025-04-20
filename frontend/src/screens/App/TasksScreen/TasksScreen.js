@@ -9,6 +9,7 @@ import {
   Platform,
   UIManager,
   ActivityIndicator,
+  Alert,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
@@ -19,13 +20,24 @@ if (Platform.OS === "android") {
     UIManager.setLayoutAnimationEnabledExperimental(true);
 }
 
-const TaskItem = ({ task }) => {
+const TaskItem = ({ task, onDelete }) => {
   const [expanded, setExpanded] = useState(false);
-  const navigation = useNavigation(); 
+  const navigation = useNavigation();
 
   const toggleExpand = () => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     setExpanded(!expanded);
+  };
+
+  const confirmDelete = () => {
+    Alert.alert(
+      "Delete Task",
+      "Are you sure you want to delete this task?",
+      [
+        { text: "Cancel", style: "cancel" },
+        { text: "Delete", onPress: () => onDelete(task.taskId), style: "destructive" },
+      ]
+    );
   };
 
   return (
@@ -63,19 +75,24 @@ const TaskItem = ({ task }) => {
         {expanded && (
           <View style={{ marginTop: 8 }}>
             <Text style={{ color: "#444", lineHeight: 20 }}>{task.description}</Text>
-            <TouchableOpacity
-              onPress={() => navigation.navigate("EditTask", { task })}
-              style={{ marginTop: 10 }}
-            >
-              <Text style={{ color: "#007bff", fontWeight: "500" }}>Edit</Text>
-            </TouchableOpacity>
+            <View style={{ flexDirection: "row", marginTop: 10 }}>
+              <TouchableOpacity
+                onPress={() => navigation.navigate("EditTask", { task })}
+                style={{ marginRight: 20 }}
+              >
+                <Text style={{ color: "#007bff", fontWeight: "500" }}>Edit</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity onPress={confirmDelete}>
+                <Text style={{ color: "red", fontWeight: "500" }}>Delete</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         )}
       </View>
     </View>
   );
 };
-
 
 const Tasks = () => {
   const navigation = useNavigation();
@@ -104,6 +121,17 @@ const Tasks = () => {
 
     fetchTasks();
   }, [user]);
+
+  const handleDelete = async (taskId) => {
+    try {
+      await fetch(`http://localhost:5161/tasks/${user.userId}/${taskId}`, {
+        method: "DELETE",
+      });
+      setTasks((prevTasks) => prevTasks.filter((task) => task.taskId !== taskId));
+    } catch (error) {
+      console.error("Failed to delete task:", error);
+    }
+  };
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#f5f5f5" }}>
@@ -138,7 +166,9 @@ const Tasks = () => {
           <FlatList
             data={tasks}
             keyExtractor={(item) => item.taskId.toString()}
-            renderItem={({ item }) => <TaskItem task={item} />}
+            renderItem={({ item }) => (
+              <TaskItem task={item} onDelete={handleDelete} />
+            )}
             contentContainerStyle={{ paddingBottom: 20 }}
           />
         )}
