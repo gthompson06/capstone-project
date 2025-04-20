@@ -12,13 +12,10 @@ const MiniWeekCalendar = ({
   currentWeekStart.add(i, "day")
  );
 
- const goToNextWeek = () => {
+ const goToNextWeek = () =>
   setCurrentWeekStart(currentWeekStart.add(1, "week"));
- };
-
- const goToPrevWeek = () => {
+ const goToPrevWeek = () =>
   setCurrentWeekStart(currentWeekStart.subtract(1, "week"));
- };
 
  return (
   <SafeAreaView style={{ alignItems: "center", marginBottom: 10 }}>
