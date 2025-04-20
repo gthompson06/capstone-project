@@ -14,7 +14,6 @@ import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { useAuth } from "../../../contexts/AuthContext";
 
-
 if (Platform.OS === "android") {
   UIManager.setLayoutAnimationEnabledExperimental &&
     UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -22,6 +21,8 @@ if (Platform.OS === "android") {
 
 const ScheduleItem = ({ schedule }) => {
   const [expanded, setExpanded] = useState(false);
+  const navigation = useNavigation();
+
   const toggleExpand = () => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     setExpanded(!expanded);
@@ -61,18 +62,16 @@ const ScheduleItem = ({ schedule }) => {
 
         {expanded && (
           <View style={{ marginTop: 8 }}>
-            <Text style={{ color: "#444", lineHeight: 20 }}>
-              {schedule.description}
-            </Text>
-            <Text style={{ color: "#444", marginTop: 4 }}>
-              Frequency: {schedule.frequency}
-            </Text>
-            <Text style={{ color: "#444" }}>
-              Time: {schedule.startTime} - {schedule.endTime}
-            </Text>
-            <Text style={{ color: "#444" }}>
-              Days: {schedule.days.join(", ")}
-            </Text>
+            <Text style={{ color: "#444", lineHeight: 20 }}>{schedule.description}</Text>
+            <Text style={{ color: "#444", marginTop: 4 }}>Frequency: {schedule.frequency}</Text>
+            <Text style={{ color: "#444" }}>Time: {schedule.startTime} - {schedule.endTime}</Text>
+            <Text style={{ color: "#444" }}>Days: {schedule.days.join(", ")}</Text>
+            <TouchableOpacity
+              onPress={() => navigation.navigate("EditSchedule", { schedule })}
+              style={{ marginTop: 10 }}
+            >
+              <Text style={{ color: "#007bff", fontWeight: "500" }}>Edit</Text>
+            </TouchableOpacity>
           </View>
         )}
       </View>
@@ -82,28 +81,30 @@ const ScheduleItem = ({ schedule }) => {
 
 const Schedules = () => {
   const navigation = useNavigation();
-  const { user } = useAuth(); 
+  const { user } = useAuth();
   const [schedules, setSchedules] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
   useEffect(() => {
     const fetchSchedules = async () => {
       if (user?.userId) {
+        console.log("Fetching schedules for userId:", user.userId);
         try {
-          const response = await fetch(`http://localhost:5161/schedules/${user.userId}`
-          );
-
-          if (!response.ok) {
-            throw new Error("Network response was not ok");
-          }
+          const response = await fetch(`http://localhost:5161/schedules/${user.userId}`);
+          if (!response.ok) throw new Error("Network response was not ok");
 
           const data = await response.json();
           setSchedules(data);
         } catch (err) {
+          console.error("Failed to fetch schedules:", err);
           setError(err.message);
         } finally {
           setLoading(false);
         }
+      } else {
+        console.warn("No userId found");
+        setLoading(false);
       }
     };
 
@@ -119,9 +120,21 @@ const Schedules = () => {
         <Ionicons name="menu" size={30} color="black" />
       </TouchableOpacity>
 
-      <Text style={{ textAlign: "center", fontSize: 25, paddingVertical: 20 }}>
-        Schedules Screen
-      </Text>
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "center",
+          alignItems: "center",
+          paddingVertical: 20,
+        }}
+      >
+        <Text style={{ fontSize: 25, fontWeight: "bold", marginRight: 10 }}>
+          Schedules Screen
+        </Text>
+        <TouchableOpacity onPress={() => navigation.navigate("AddSchedule")}>
+          <Ionicons name="add" size={30} color="black" />
+        </TouchableOpacity>
+      </View>
 
       <View style={{ flex: 1 }}>
         {loading ? (

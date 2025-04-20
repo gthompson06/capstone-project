@@ -19,6 +19,8 @@ import HamburgerLogout from "./src/components/HamburgerLogout/HamburgerLogout";
 import SecurityQuestionScreen from "./src/screens/Authentication/SecurityQuestionScreen";
 import AddTask from "./src/screens/App/AddTask";
 import EditTask from "./src/screens/App/EditTask";
+import EditSchedule from "./src/screens/App/EditSchedule/EditSchedule";
+import AddSchedule from "./src/screens/App/AddSchedule/AddSchedule";
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -61,6 +63,8 @@ const App = () => {
      <Stack.Screen name="HomeScreen" component={DrawerNavigator} />
      <Stack.Screen name="AddTask" component={AddTask} />
      <Stack.Screen name="EditTask" component={EditTask} />
+     <Stack.Screen name="AddSchedule" component={AddSchedule} />
+     <Stack.Screen name="EditSchedule" component={EditSchedule} />
     </Stack.Navigator>
    </AuthContext>
   </NavigationContainer>

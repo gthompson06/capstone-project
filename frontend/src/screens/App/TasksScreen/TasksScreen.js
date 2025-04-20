@@ -21,7 +21,7 @@ if (Platform.OS === "android") {
 
 const TaskItem = ({ task }) => {
   const [expanded, setExpanded] = useState(false);
-  const navigation = useNavigation(); // Add this
+  const navigation = useNavigation(); 
 
   const toggleExpand = () => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
