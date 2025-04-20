@@ -22,7 +22,6 @@ if (Platform.OS === "android") {
 
 const ScheduleItem = ({ schedule }) => {
   const [expanded, setExpanded] = useState(false);
-  const { user } = useAuth();
   const toggleExpand = () => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     setExpanded(!expanded);
@@ -87,14 +86,11 @@ const Schedules = () => {
   const [schedules, setSchedules] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  console.log("User in Schedules:", user); // <- add this
   useEffect(() => {
     const fetchSchedules = async () => {
       if (user?.userId) {
-        console.log("Fetching schedules for userId:", user.userId); // <- add this
         try {
           const response = await fetch(`http://localhost:5161/schedules/${user.userId}`
-
           );
 
           if (!response.ok) {
