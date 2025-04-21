@@ -1,4 +1,3 @@
-// npm install @react-native-community/datetimepicker
 import React, { useState } from "react";
 import {
   View,
@@ -9,16 +8,15 @@ import {
   ScrollView,
   Platform,
 } from "react-native";
-import { createStackNavigator } from "@react-navigation/stack";
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import { useAuth } from "../../../contexts/AuthContext";
 
 import CustomInput from "../../../components/CustomInput";
 
-const Stack = createStackNavigator();
-
 const AddTask = () => {
+  const { user } = useAuth();
   const navigation = useNavigation();
 
   const [title, setTitle] = useState("");
@@ -35,6 +33,48 @@ const AddTask = () => {
   const [endDate, setEndDate] = useState("");
   const [showStartDatePicker, setShowStartDatePicker] = useState(false);
   const [showEndDatePicker, setShowEndDatePicker] = useState(false);
+
+  const handleSubmit = async () => {
+    const taskData = {
+      userId: user.userId,
+      taskId: 0,
+      title,
+      description,
+      type,
+      hasDueDate: hasDueDate && !!dueDate,
+      dueDate: hasDueDate && dueDate ? new Date(dueDate).toISOString() : new Date(0).toISOString(),
+  
+      hasStartAndEnd: hasStartEnd && !!startDate && !!endDate,
+      startDate: hasStartEnd && startDate ? new Date(startDate).toISOString() : new Date(0).toISOString(),
+      endDate: hasStartEnd && endDate ? new Date(endDate).toISOString() : new Date(0).toISOString(),
+  
+      isCompleted: false,
+      order: parseInt(order, 10) || 0,
+    };
+  
+    try {
+      const response = await fetch(`http://localhost:5161/tasks`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(taskData),
+      });
+  
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Task created:', data);
+        navigation.goBack();
+      } else {
+        const errorText = await response.text();
+        console.error('Error creating task:', errorText);
+      }
+    } catch (error) {
+      console.error('Error creating task:', error);
+    }
+  };
+  
+  
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -76,9 +116,10 @@ const AddTask = () => {
                 display={Platform.OS === "ios" ? "spinner" : "default"}
                 onChange={(event, selectedDate) => {
                   setShowDueDatePicker(false);
-                  if (selectedDate) 
-                    console.log("selected due date: ", selectedDate.toISOString().slice(0,10))
+                  if (selectedDate) {
+                    console.log("selected due date:", selectedDate.toISOString().slice(0, 10));
                     setDueDate(selectedDate.toISOString());
+                  }
                 }}
               />
             )}
@@ -106,9 +147,10 @@ const AddTask = () => {
                 display={Platform.OS === "ios" ? "spinner" : "default"}
                 onChange={(event, selectedDate) => {
                   setShowStartDatePicker(false);
-                  if (selectedDate)
-                    console.log("selected start date: ", selectedDate.toISOString().slice(0,10))
+                  if (selectedDate) {
+                    console.log("selected start date:", selectedDate.toISOString().slice(0, 10));
                     setStartDate(selectedDate.toISOString());
+                  }
                 }}
               />
             )}
@@ -128,14 +170,32 @@ const AddTask = () => {
                 display={Platform.OS === "ios" ? "spinner" : "default"}
                 onChange={(event, selectedDate) => {
                   setShowEndDatePicker(false);
-                  if (selectedDate)
-                    console.log("selected end date: ", selectedDate.toISOString().slice(0,10))
+                  if (selectedDate) {
+                    console.log("selected end date:", selectedDate.toISOString().slice(0, 10));
                     setEndDate(selectedDate.toISOString());
+                  }
                 }}
               />
             )}
           </>
         )}
+
+        {/* Submit Button */}
+        <TouchableOpacity
+          style={{
+            backgroundColor: "#007bff",
+            paddingVertical: 12,
+            paddingHorizontal: 20,
+            borderRadius: 8,
+            marginTop: 20,
+            width: "75%",
+            maxWidth: 450,
+            alignItems: "center",
+          }}
+          onPress={handleSubmit}
+        >
+          <Text style={{ color: "white", fontSize: 16 }}>Submit</Text>
+        </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>
   );

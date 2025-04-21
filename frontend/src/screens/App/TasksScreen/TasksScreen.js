@@ -30,15 +30,33 @@ const TaskItem = ({ task, onDelete }) => {
   };
 
   const confirmDelete = () => {
-    Alert.alert(
-      "Delete Task",
-      "Are you sure you want to delete this task?",
-      [
-        { text: "Cancel", style: "cancel" },
-        { text: "Delete", onPress: () => onDelete(task.taskId), style: "destructive" },
-      ]
-    );
+    if (Platform.OS === "web") {
+      const confirmed = window.confirm("Are you sure you want to delete this task?");
+      if (confirmed) {
+        console.log("Confirmed delete for taskId:", task.taskId);
+        onDelete(task.taskId);
+      }
+    } else {
+      Alert.alert(
+        "Delete Task",
+        "Are you sure you want to delete this task?",
+        [
+          { text: "Cancel", style: "cancel" },
+          {
+            text: "Delete",
+            onPress: () => {
+              console.log("Confirmed delete for taskId:", task.taskId);
+              onDelete(task.taskId);
+            },
+            style: "destructive",
+          },
+        ]
+      );
+    }
   };
+  
+    
+  
 
   return (
     <View style={{ alignItems: "center" }}>
