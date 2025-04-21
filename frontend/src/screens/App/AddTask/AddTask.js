@@ -14,6 +14,7 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import { useAuth } from "../../../contexts/AuthContext";
 
 import CustomInput from "../../../components/CustomInput";
+import { useRoute } from "@react-navigation/native";
 
 const AddTask = () => {
   const { user } = useAuth();
@@ -34,19 +35,23 @@ const AddTask = () => {
   const [showStartDatePicker, setShowStartDatePicker] = useState(false);
   const [showEndDatePicker, setShowEndDatePicker] = useState(false);
 
+  const route = useRoute();
+  const { taskCount } = route.params || {};
+
   const handleSubmit = async () => {
     const taskData = {
       userId: user.userId,
+      taskId: taskCount + 1,
       title,
       description,
       type,
       hasDueDate: hasDueDate && !!dueDate,
-      dueDate: hasDueDate && dueDate ? new Date(dueDate).toISOString() : new Date(0).toISOString(),
-  
+      dueDate: hasDueDate && dueDate ? new Date(dueDate).toISOString() : null,
+    
       hasStartAndEnd: hasStartEnd && !!startDate && !!endDate,
-      startDate: hasStartEnd && startDate ? new Date(startDate).toISOString() : new Date(0).toISOString(),
-      endDate: hasStartEnd && endDate ? new Date(endDate).toISOString() : new Date(0).toISOString(),
-  
+      startDate: hasStartEnd && startDate ? new Date(startDate).toISOString() : null,
+      endDate: hasStartEnd && endDate ? new Date(endDate).toISOString() : null,
+    
       isCompleted: false,
       order: parseInt(order, 10) || 0,
     };
@@ -72,6 +77,7 @@ const AddTask = () => {
       console.error('Error creating task:', error);
     }
   };
+  
   
   
 

@@ -117,6 +117,7 @@ const Tasks = () => {
   const { user } = useAuth();
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
+  const taskCount = tasks.length;
 
   useEffect(() => {
     const fetchTasks = async () => {
@@ -172,7 +173,7 @@ const Tasks = () => {
           Tasks Screen
         </Text>
 
-        <TouchableOpacity onPress={() => navigation.navigate("AddTask")}>
+        <TouchableOpacity onPress={() => navigation.navigate("AddTask", {taskCount})}>
           <Ionicons name="add" size={30} color="black" />
         </TouchableOpacity>
       </View>
