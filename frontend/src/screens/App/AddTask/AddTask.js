@@ -13,13 +13,12 @@ import { Ionicons } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useAuth } from "../../../contexts/AuthContext";
 
-import CustomInput from "../../../components/CustomInput"; // Assuming CustomInput is your custom input component
+import CustomInput from "../../../components/CustomInput";
 
 const AddTask = () => {
     const { user } = useAuth();
   const navigation = useNavigation();
 
-  // State variables for each form field
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [type, setType] = useState("");
@@ -35,7 +34,6 @@ const AddTask = () => {
   const [showStartDatePicker, setShowStartDatePicker] = useState(false);
   const [showEndDatePicker, setShowEndDatePicker] = useState(false);
 
-  // Handle Submit button press
   const handleSubmit = async () => {
     const taskData = {
       title,
@@ -186,7 +184,7 @@ const AddTask = () => {
             maxWidth: 450,
             alignItems: "center",
           }}
-          onPress={handleSubmit} // Submit button triggers the handleSubmit function
+          onPress={handleSubmit}
         >
           <Text style={{ color: "white", fontSize: 16 }}>Submit</Text>
         </TouchableOpacity>
