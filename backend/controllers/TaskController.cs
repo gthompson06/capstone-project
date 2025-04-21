@@ -28,7 +28,7 @@ public class TaskController : ControllerBase
             return Ok(response);
         }
     }
-    [HttpPost]
+    [HttpPost("{userId}")]
     public async Task<IActionResult> CreateTask([FromBody] UserTask newTask)
     {
         await _taskService.PostTaskInfo(newTask);

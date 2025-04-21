@@ -1,4 +1,3 @@
-// npm install @react-native-community/datetimepicker
 import React, { useState } from "react";
 import {
   View,
@@ -9,18 +8,18 @@ import {
   ScrollView,
   Platform,
 } from "react-native";
-import { createStackNavigator } from "@react-navigation/stack";
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import { useAuth } from "../../../contexts/AuthContext";
 
-import CustomInput from "../../../components/CustomInput";
-
-const Stack = createStackNavigator();
+import CustomInput from "../../../components/CustomInput"; // Assuming CustomInput is your custom input component
 
 const AddTask = () => {
+    const { user } = useAuth();
   const navigation = useNavigation();
 
+  // State variables for each form field
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [type, setType] = useState("");
@@ -35,6 +34,41 @@ const AddTask = () => {
   const [endDate, setEndDate] = useState("");
   const [showStartDatePicker, setShowStartDatePicker] = useState(false);
   const [showEndDatePicker, setShowEndDatePicker] = useState(false);
+
+  // Handle Submit button press
+  const handleSubmit = async () => {
+    const taskData = {
+      title,
+      description,
+      type,
+      order,
+      hasDueDate,
+      dueDate,
+      hasStartEnd,
+      startDate,
+      endDate,
+    };
+
+    try {
+      const response = await fetch(`http://localhost:5161/tasks/${user.userId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(taskData),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Task created:', data);
+        navigation.goBack
+      } else {
+        console.error('Error creating task:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error creating task:', error);
+    }
+  };
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -76,9 +110,10 @@ const AddTask = () => {
                 display={Platform.OS === "ios" ? "spinner" : "default"}
                 onChange={(event, selectedDate) => {
                   setShowDueDatePicker(false);
-                  if (selectedDate) 
-                    console.log("selected due date: ", selectedDate.toISOString().slice(0,10))
+                  if (selectedDate) {
+                    console.log("selected due date:", selectedDate.toISOString().slice(0, 10));
                     setDueDate(selectedDate.toISOString());
+                  }
                 }}
               />
             )}
@@ -106,9 +141,10 @@ const AddTask = () => {
                 display={Platform.OS === "ios" ? "spinner" : "default"}
                 onChange={(event, selectedDate) => {
                   setShowStartDatePicker(false);
-                  if (selectedDate)
-                    console.log("selected start date: ", selectedDate.toISOString().slice(0,10))
+                  if (selectedDate) {
+                    console.log("selected start date:", selectedDate.toISOString().slice(0, 10));
                     setStartDate(selectedDate.toISOString());
+                  }
                 }}
               />
             )}
@@ -128,14 +164,32 @@ const AddTask = () => {
                 display={Platform.OS === "ios" ? "spinner" : "default"}
                 onChange={(event, selectedDate) => {
                   setShowEndDatePicker(false);
-                  if (selectedDate)
-                    console.log("selected end date: ", selectedDate.toISOString().slice(0,10))
+                  if (selectedDate) {
+                    console.log("selected end date:", selectedDate.toISOString().slice(0, 10));
                     setEndDate(selectedDate.toISOString());
+                  }
                 }}
               />
             )}
           </>
         )}
+
+        {/* Submit Button */}
+        <TouchableOpacity
+          style={{
+            backgroundColor: "#007bff",
+            paddingVertical: 12,
+            paddingHorizontal: 20,
+            borderRadius: 8,
+            marginTop: 20,
+            width: "75%",
+            maxWidth: 450,
+            alignItems: "center",
+          }}
+          onPress={handleSubmit} // Submit button triggers the handleSubmit function
+        >
+          <Text style={{ color: "white", fontSize: 16 }}>Submit</Text>
+        </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>
   );
