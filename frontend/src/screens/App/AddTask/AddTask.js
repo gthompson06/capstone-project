@@ -11,8 +11,8 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { useAuth } from "../../../contexts/AuthContext";
 
+import { useAuth } from "../../../contexts/AuthContext";
 import CustomInput from "../../../components/CustomInput";
 import { useRoute } from "@react-navigation/native";
 
@@ -26,17 +26,29 @@ const AddTask = () => {
   const [order, setOrder] = useState("");
 
   const [hasDueDate, setHasDueDate] = useState(false);
-  const [dueDate, setDueDate] = useState("");
-  const [showDueDatePicker, setShowDueDatePicker] = useState(false);
-
+  const [dueDate, setDueDate] = useState(null);
   const [hasStartEnd, setHasStartEnd] = useState(false);
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
+  const [showDueDatePicker, setShowDueDatePicker] = useState(false);
   const [showStartDatePicker, setShowStartDatePicker] = useState(false);
   const [showEndDatePicker, setShowEndDatePicker] = useState(false);
 
   const route = useRoute();
   const { taskCount } = route.params || {};
+
+  const handleDateChange = (event, selectedDate, dateType) => {
+    if (dateType === "dueDate") {
+      setShowDueDatePicker(false);
+      if (selectedDate) setDueDate(selectedDate.toISOString());
+    } else if (dateType === "startDate") {
+      setShowStartDatePicker(false);
+      if (selectedDate) setStartDate(selectedDate.toISOString());
+    } else if (dateType === "endDate") {
+      setShowEndDatePicker(false);
+      if (selectedDate) setEndDate(selectedDate.toISOString());
+    }
+  };
 
   const handleSubmit = async () => {
     const taskData = {
@@ -47,39 +59,34 @@ const AddTask = () => {
       type,
       hasDueDate: hasDueDate && !!dueDate,
       dueDate: hasDueDate && dueDate ? new Date(dueDate).toISOString() : null,
-    
       hasStartAndEnd: hasStartEnd && !!startDate && !!endDate,
       startDate: hasStartEnd && startDate ? new Date(startDate).toISOString() : null,
       endDate: hasStartEnd && endDate ? new Date(endDate).toISOString() : null,
-    
       isCompleted: false,
       order: parseInt(order, 10) || 0,
     };
-  
+
     try {
       const response = await fetch(`http://localhost:5161/tasks`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(taskData),
       });
-  
+
       if (response.ok) {
         const data = await response.json();
-        console.log('Task created:', data);
+        console.log("Task created:", data);
         navigation.goBack();
       } else {
         const errorText = await response.text();
-        console.error('Error creating task:', errorText);
+        console.error("Error creating task:", errorText);
       }
     } catch (error) {
-      console.error('Error creating task:', error);
+      console.error("Error creating task:", error);
     }
   };
-  
-  
-  
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -104,28 +111,35 @@ const AddTask = () => {
           <Text style={styles.label}>Has Due Date</Text>
           <Switch value={hasDueDate} onValueChange={setHasDueDate} />
         </View>
+
         {hasDueDate && (
           <>
-            <TouchableOpacity
-              onPress={() => setShowDueDatePicker(true)}
-              style={styles.datePickerBox}
-            >
-              <Text>
-                {dueDate ? new Date(dueDate).toLocaleDateString() : "Select due date"}
-              </Text>
-            </TouchableOpacity>
-            {showDueDatePicker && (
+            {Platform.OS === "web" ? (
+              <View style={styles.datePickerBox}>
+                <input
+                  type="date"
+                  value={dueDate ? new Date(dueDate).toISOString().slice(0, 10) : ""}
+                  onChange={(e) => setDueDate(e.target.value)}
+                  style={{ padding: 10, width: "100%" }}
+                />
+              </View>
+            ) : (
+              <TouchableOpacity
+                onPress={() => setShowDueDatePicker(true)}
+                style={styles.datePickerBox}
+              >
+                <Text>
+                  {dueDate ? new Date(dueDate).toLocaleDateString() : "Select due date"}
+                </Text>
+              </TouchableOpacity>
+            )}
+
+            {showDueDatePicker && Platform.OS !== "web" && (
               <DateTimePicker
                 value={dueDate ? new Date(dueDate) : new Date()}
                 mode="date"
                 display={Platform.OS === "ios" ? "spinner" : "default"}
-                onChange={(event, selectedDate) => {
-                  setShowDueDatePicker(false);
-                  if (selectedDate) {
-                    console.log("selected due date:", selectedDate.toISOString().slice(0, 10));
-                    setDueDate(selectedDate.toISOString());
-                  }
-                }}
+                onChange={(event, selectedDate) => handleDateChange(event, selectedDate, "dueDate")}
               />
             )}
           </>
@@ -135,52 +149,66 @@ const AddTask = () => {
           <Text style={styles.label}>Has Start and End</Text>
           <Switch value={hasStartEnd} onValueChange={setHasStartEnd} />
         </View>
+
         {hasStartEnd && (
           <>
-            <TouchableOpacity
-              onPress={() => setShowStartDatePicker(true)}
-              style={styles.datePickerBox}
-            >
-              <Text>
-                {startDate ? new Date(startDate).toLocaleDateString() : "Select start date"}
-              </Text>
-            </TouchableOpacity>
-            {showStartDatePicker && (
-              <DateTimePicker
-                value={startDate ? new Date(startDate) : new Date()}
-                mode="date"
-                display={Platform.OS === "ios" ? "spinner" : "default"}
-                onChange={(event, selectedDate) => {
-                  setShowStartDatePicker(false);
-                  if (selectedDate) {
-                    console.log("selected start date:", selectedDate.toISOString().slice(0, 10));
-                    setStartDate(selectedDate.toISOString());
-                  }
-                }}
-              />
-            )}
+            {Platform.OS === "web" ? (
+              <>
+                <View style={styles.datePickerBox}>
+                  <input
+                    type="date"
+                    value={startDate ? new Date(startDate).toISOString().slice(0, 10) : ""}
+                    onChange={(e) => setStartDate(e.target.value)}
+                    style={{ padding: 10, width: "100%" }}
+                  />
+                </View>
+                <View style={styles.datePickerBox}>
+                  <input
+                    type="date"
+                    value={endDate ? new Date(endDate).toISOString().slice(0, 10) : ""}
+                    onChange={(e) => setEndDate(e.target.value)}
+                    style={{ padding: 10, width: "100%" }}
+                  />
+                </View>
+              </>
+            ) : (
+              <>
+                <TouchableOpacity
+                  onPress={() => setShowStartDatePicker(true)}
+                  style={styles.datePickerBox}
+                >
+                  <Text>
+                    {startDate ? new Date(startDate).toLocaleDateString() : "Select start date"}
+                  </Text>
+                </TouchableOpacity>
 
-            <TouchableOpacity
-              onPress={() => setShowEndDatePicker(true)}
-              style={styles.datePickerBox}
-            >
-              <Text>
-                {endDate ? new Date(endDate).toLocaleDateString() : "Select end date"}
-              </Text>
-            </TouchableOpacity>
-            {showEndDatePicker && (
-              <DateTimePicker
-                value={endDate ? new Date(endDate) : new Date()}
-                mode="date"
-                display={Platform.OS === "ios" ? "spinner" : "default"}
-                onChange={(event, selectedDate) => {
-                  setShowEndDatePicker(false);
-                  if (selectedDate) {
-                    console.log("selected end date:", selectedDate.toISOString().slice(0, 10));
-                    setEndDate(selectedDate.toISOString());
-                  }
-                }}
-              />
+                {showStartDatePicker && Platform.OS !== "web" && (
+                  <DateTimePicker
+                    value={startDate ? new Date(startDate) : new Date()}
+                    mode="date"
+                    display={Platform.OS === "ios" ? "spinner" : "default"}
+                    onChange={(event, selectedDate) => handleDateChange(event, selectedDate, "startDate")}
+                  />
+                )}
+
+                <TouchableOpacity
+                  onPress={() => setShowEndDatePicker(true)}
+                  style={styles.datePickerBox}
+                >
+                  <Text>
+                    {endDate ? new Date(endDate).toLocaleDateString() : "Select end date"}
+                  </Text>
+                </TouchableOpacity>
+
+                {showEndDatePicker && Platform.OS !== "web" && (
+                  <DateTimePicker
+                    value={endDate ? new Date(endDate) : new Date()}
+                    mode="date"
+                    display={Platform.OS === "ios" ? "spinner" : "default"}
+                    onChange={(event, selectedDate) => handleDateChange(event, selectedDate, "endDate")}
+                  />
+                )}
+              </>
             )}
           </>
         )}
