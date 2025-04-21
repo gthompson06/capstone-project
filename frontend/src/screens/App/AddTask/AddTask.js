@@ -51,6 +51,12 @@ const AddTask = () => {
   };
 
   const handleSubmit = async () => {
+    const formatDate = (date) => {
+      if (!date) return null;
+      const dateObj = new Date(date);
+      return dateObj.toISOString().split('T')[0];
+    };
+  
     const taskData = {
       userId: user.userId,
       taskId: taskCount + 1,
@@ -58,14 +64,14 @@ const AddTask = () => {
       description,
       type,
       hasDueDate: hasDueDate && !!dueDate,
-      dueDate: hasDueDate && dueDate ? new Date(dueDate).toISOString() : null,
+      dueDate: hasDueDate && dueDate ? formatDate(dueDate) : null,
       hasStartAndEnd: hasStartEnd && !!startDate && !!endDate,
-      startDate: hasStartEnd && startDate ? new Date(startDate).toISOString() : null,
-      endDate: hasStartEnd && endDate ? new Date(endDate).toISOString() : null,
+      startDate: hasStartEnd && startDate ? formatDate(startDate) : null,
+      endDate: hasStartEnd && endDate ? formatDate(endDate) : null,
       isCompleted: false,
       order: parseInt(order, 10) || 0,
     };
-
+  
     try {
       const response = await fetch(`http://localhost:5161/tasks`, {
         method: "POST",
@@ -74,7 +80,7 @@ const AddTask = () => {
         },
         body: JSON.stringify(taskData),
       });
-
+  
       if (response.ok) {
         const data = await response.json();
         console.log("Task created:", data);
@@ -86,6 +92,15 @@ const AddTask = () => {
     } catch (error) {
       console.error("Error creating task:", error);
     }
+  };
+  
+
+  const formatDate = (date) => {
+    if (!date) return "";
+    const dateObj = new Date(date);
+    return Platform.OS === "web"
+      ? dateObj.toISOString().slice(0, 10)
+      : dateObj.toLocaleDateString();
   };
 
   return (
@@ -128,9 +143,7 @@ const AddTask = () => {
                 onPress={() => setShowDueDatePicker(true)}
                 style={styles.datePickerBox}
               >
-                <Text>
-                  {dueDate ? new Date(dueDate).toLocaleDateString() : "Select due date"}
-                </Text>
+                <Text>{formatDate(dueDate) || "Select due date"}</Text>
               </TouchableOpacity>
             )}
 
@@ -177,9 +190,7 @@ const AddTask = () => {
                   onPress={() => setShowStartDatePicker(true)}
                   style={styles.datePickerBox}
                 >
-                  <Text>
-                    {startDate ? new Date(startDate).toLocaleDateString() : "Select start date"}
-                  </Text>
+                  <Text>{formatDate(startDate) || "Select start date"}</Text>
                 </TouchableOpacity>
 
                 {showStartDatePicker && Platform.OS !== "web" && (
@@ -195,9 +206,7 @@ const AddTask = () => {
                   onPress={() => setShowEndDatePicker(true)}
                   style={styles.datePickerBox}
                 >
-                  <Text>
-                    {endDate ? new Date(endDate).toLocaleDateString() : "Select end date"}
-                  </Text>
+                  <Text>{formatDate(endDate) || "Select end date"}</Text>
                 </TouchableOpacity>
 
                 {showEndDatePicker && Platform.OS !== "web" && (
