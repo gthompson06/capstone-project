@@ -1,85 +1,102 @@
-import React, { useEffect } from "react";
-import { View, Text, SafeAreaView, TouchableOpacity } from "react-native";
-import { createStackNavigator } from "@react-navigation/stack";
+import React, { useEffect, useState } from "react";
+import {
+ View,
+ Text,
+ SafeAreaView,
+ TouchableOpacity,
+ ScrollView,
+ ActivityIndicator,
+} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import CustomButton from "../../../components/CustomButton/CustomButton";
 import { useNavigation } from "@react-navigation/native";
 import { useAuth } from "../../../contexts/AuthContext";
+import dayjs from "dayjs";
+import MiniWeekCalendar from "../../../components/MiniWeekCalendar";
+import DayDetails from "../../../components/DayDetails";
+import axios from "axios";
 
-
-const Stack = createStackNavigator();
-
-const HomeScreen = ({ route }) => {
- const navigation = useNavigation(); // Use this to get the correct navigation object
- //  const { username, id, token } = route.params || {};
+const HomeScreen = () => {
+ const navigation = useNavigation();
  const { user } = useAuth();
+ const [selectedDate, setSelectedDate] = useState(dayjs());
+ const [currentWeekStart, setCurrentWeekStart] = useState(
+  dayjs().startOf("week")
+ );
+ const [tasks, setTasks] = useState([]);
+ const [expenses, setExpenses] = useState([]);
+ const [schedules, setSchedules] = useState([]);
+ const [loading, setLoading] = useState(true);
 
- useEffect(async () => {
-  if (user) {
-   console.log(user.userName, user.userId);
+ useEffect(() => {
+  const fetchData = async () => {
+   if (!user?.userId) return;
+
    try {
-    const url = `http://localhost:5161/worthy/user/${user.userId}`;
-    const response = await fetch(url, {
-     method: "GET",
-     headers: {
-      "Content-Type": "application/json",
-     },
-     body: JSON.stringify({
-      UserName: username,
-      Password: password,
-     }),
-    });
-    console.log(response);
-    if (!response.ok) {
-     throw new Error("Invalid username or password");
-    }
+    const [tasksRes, expensesRes, schedulesRes] = await Promise.all([
+     axios.get(`http://localhost:5161/tasks/${user.userId}`),
+     axios.get(`http://localhost:5161/expenses/${user.userId}`),
+     axios.get(`http://localhost:5161/schedules/${user.userId}`),
+    ]);
 
-    const data = await response.json();
-    if (data.message === "Login successful" && data.user && data.token) {
-     await storeUserToken(data.token);
-     navigation.navigate("HomeScreen", {
-      screen: "Home",
-      params: {
-       username: username,
-       id: data.user.userId,
-       token: data.token,
-      },
-     });
-    } else {
-     Alert.alert("Error", "Invalid username or password");
-    }
+    setTasks(tasksRes.data || []);
+    setExpenses(expensesRes.data || []);
+    setSchedules(schedulesRes.data || []);
    } catch (error) {
-    console.error("Error logging in:", error);
-    Alert.alert("Error", "An error occurred while signing in");
+    console.error("Error fetching user data:", error);
+   } finally {
+    setLoading(false);
    }
-  } else {
-   console.log("User is null or not loaded yet.");
-  }
+  };
+
+  fetchData();
  }, [user]);
 
  return (
-  <SafeAreaView style={{ flex: 1 }}>
-   {/* Custom Hamburger Menu Button */}
+  <SafeAreaView style={{ flex: 1, padding: 16, alignItems: "center" }}>
    <TouchableOpacity
-    style={{ marginLeft: 15, marginTop: 10, padding: 10 }}
-    onPress={() => navigation.openDrawer()} // Now this works
+    onPress={() => navigation.openDrawer()}
+    style={{ padding: 10, alignSelf: "flex-start" }}
    >
     <Ionicons name="menu" size={30} color="black" />
    </TouchableOpacity>
 
-   {/* Welcome Text */}
    <Text
     style={{
-     textAlign: "center",
      fontSize: 25,
-     paddingBottom: 30,
-     paddingTop: 0,
+     fontWeight: "bold",
+     textAlign: "center",
+     marginBottom: "20px",
     }}
    >
-    <Text>
-     Welcome {user.userName || "Guest"}. Your ID is {user.userId || "null"}
-    </Text>
+    {/* Welcome {user?.userName || "Guest"} (ID: {user?.userId || "null"}) */}
+    Welcome {user?.userName || "Guest"}!
    </Text>
+
+   <MiniWeekCalendar
+    selectedDate={selectedDate}
+    setSelectedDate={setSelectedDate}
+    currentWeekStart={currentWeekStart}
+    setCurrentWeekStart={setCurrentWeekStart}
+   />
+
+   <ScrollView
+    contentContainerStyle={{ alignItems: "center", paddingBottom: 20 }}
+   >
+    {loading ? (
+     <ActivityIndicator
+      size="large"
+      color="#007bff"
+      style={{ marginTop: 20 }}
+     />
+    ) : (
+     <DayDetails
+      selectedDate={selectedDate}
+      tasks={tasks}
+      expenses={expenses}
+      schedules={schedules}
+     />
+    )}
+   </ScrollView>
   </SafeAreaView>
  );
 };

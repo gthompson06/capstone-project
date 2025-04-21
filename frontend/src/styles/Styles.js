@@ -20,7 +20,7 @@ export const CreateAccountStyles = StyleSheet.create({
 export const SecurityQuestionStyles = StyleSheet.create({
  questions: {
   display: "flex",
-  width: "100%",
+  width: "29%",
   justifyContent: "center",
  },
 });
