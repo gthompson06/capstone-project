@@ -18,12 +18,15 @@ import {
  SecurityQuestionStyles,
 } from "../../../styles/Styles.js";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import BackArrow from "../../../../assets/images/backArrow.png";
-import Logo from "../../../../assets/images/TestImg.png";
+import BackArrow from "../../../../assets/images/back-arrow.png";
+import Logo from "../../../../assets/images/logo.png";
+import { FormStyles } from "../../../styles/FormStyles.js";
+import AuthHeader from "../../../components/AuthHeader"
 
 const SecurityQuestionScreen = () => {
  const navigation = useNavigation();
  const route = useRoute();
+ const styles = FormStyles;
 
  const { height } = useWindowDimensions();
 
@@ -106,47 +109,63 @@ const SecurityQuestionScreen = () => {
  };
 
  return (
-  <SafeAreaView style={CreateAccountStyles.root}>
+  <SafeAreaView style={styles.root}>
    <View
-    style={{
-     display: "flex",
-     width: "100%",
-     justifyContent: "flex-start",
-     marginLeft: "20%",
-    }}
+    style={styles.container}
    >
-    <TouchableOpacity onPress={() => navigation.goBack()}>
-     <Image
-      source={BackArrow}
-      style={{ width: 40, height: 40 }}
-      resizeMode="contain"
-     />
-    </TouchableOpacity>
-   </View>
+    <AuthHeader></AuthHeader>
+   
    <Image
     source={Logo}
-    style={[CreateAccountStyles.logo, { height: height * 0.2 }]}
+    style={[styles.logo, { height: height * 0.3 }]}
     resizeMode="contain"
    />
-   <Text style={{ fontSize: 40, paddingBottom: 30 }}>Security Question</Text>
+   <Text style={styles.title}>In case you forget your password, select a security question.</Text>
    {/* <CustomInput placeholder="Answer" value={answer} setValue={setAnswer} />
    <CustomButton text="Submit" onPress={onAnswer} /> */}
-   <View style={SecurityQuestionStyles.questions}>
+   <View style={styles.input}>
     <RNPickerSelect
      onValueChange={(value) => setQuestion(value)}
      items={securityQuestions.map((q) => ({ label: q, value: q }))}
-     placeholder={{ label: "Select a question", value: null }}
+     placeholder={{ label: "Select a question...", value: null }}
+     style={{
+        inputIOS: {
+          marginBottom: '4%',
+          width: '90%',
+          padding: 16,
+          fontSize: 16,
+          borderWidth: 1,
+          borderColor: '#ccc',
+          borderRadius: 8,
+          color: 'black',
+          alignSelf: 'center',
+        },
+        inputAndroid: {
+          marginBottom: '4%',
+          width: '90%',
+          padding: 16,
+          fontSize: 16,
+          borderWidth: 1,
+          borderColor: '#ccc',
+          borderRadius: 8,
+          color: 'black',
+          alignSelf: 'center',
+        },
+        placeholder: {
+          color: '#999',
+        }}}
     />
    </View>
    <CustomInput
-    placeholder="security answer"
+    placeholder="Enter your security answer..."
     value={answer}
     setValue={setAnswer}
    />
    <CustomButton text="Submit Answer" onPress={onAnswer} />
    {errorMessage ? (
-    <Text style={{ color: "red", marginBottom: 10 }}>{errorMessage}</Text>
+    <Text style={styles.error}>{errorMessage}</Text>
    ) : null}
+   </View>
   </SafeAreaView>
  );
 };

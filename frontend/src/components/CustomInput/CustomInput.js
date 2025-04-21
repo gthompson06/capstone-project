@@ -4,7 +4,6 @@ import { StyleSheet } from "react-native";
 
 const CustomInput = ({ value, setValue, placeholder, secureTextEntry }) => {
  return (
-  <View style={styles.container}>
    <TextInput
     value={value}
     onChangeText={setValue}
@@ -13,30 +12,18 @@ const CustomInput = ({ value, setValue, placeholder, secureTextEntry }) => {
     style={styles.input}
     placeholderTextColor="#999"
    />
-  </View>
  );
 };
 
 const styles = StyleSheet.create({
- container: {
-  width: "75%",
-  minHeight: 50,
-
-  borderColor: "black",
-  borderWidth: 2,
-  borderRadius: 5,
-
-  paddingHorizontal: 5,
-  marginVertical: 10,
-
-  maxWidth: 450,
-  justifyContent: "center",
- },
  input: {
-  fontSize: 25,
-  height: 40,
-  textAlignVertical: "center",
-  textAlign: "left",
+    marginBottom: "4%",
+    width: '90%',
+    padding: 16,
+    fontSize: 16,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 8,
  },
 });
 

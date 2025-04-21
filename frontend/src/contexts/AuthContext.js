@@ -53,7 +53,6 @@ export const AuthContext = ({ children }) => {
     setUser(data.user);
     setUserId(data.user.userId);
     console.log(data.user);
-    navigation.navigate("HomeScreen");
    } else {
     Alert.alert("Error", "Invalid username or password");
    }
