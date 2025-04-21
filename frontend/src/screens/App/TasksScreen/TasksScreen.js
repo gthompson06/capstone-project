@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   View,
   Text,
@@ -14,6 +14,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { useAuth } from "../../../contexts/AuthContext";
+import { useFocusEffect } from '@react-navigation/native'; // Import the hook
 
 if (Platform.OS === "android") {
   UIManager.setLayoutAnimationEnabledExperimental &&
@@ -54,9 +55,6 @@ const TaskItem = ({ task, onDelete }) => {
       );
     }
   };
-  
-    
-  
 
   return (
     <View style={{ alignItems: "center" }}>
@@ -119,27 +117,31 @@ const Tasks = () => {
   const [loading, setLoading] = useState(true);
   const taskCount = tasks.length;
 
-  useEffect(() => {
-    const fetchTasks = async () => {
-      if (user?.userId) {
-        console.log("Fetching tasks for userId:", user.userId);
-        try {
-          const response = await fetch(`http://localhost:5161/tasks/${user.userId}`);
-          const data = await response.json();
-          setTasks(data);
-        } catch (err) {
-          console.error("Failed to fetch tasks:", err);
-        } finally {
-          setLoading(false);
-        }
-      } else {
-        console.warn("No userId found");
+  // Fetch tasks function
+  const fetchTasks = async () => {
+    if (user?.userId) {
+      console.log("Fetching tasks for userId:", user.userId);
+      try {
+        const response = await fetch(`http://localhost:5161/tasks/${user.userId}`);
+        const data = await response.json();
+        setTasks(data);
+      } catch (err) {
+        console.error("Failed to fetch tasks:", err);
+      } finally {
         setLoading(false);
       }
-    };
+    } else {
+      console.warn("No userId found");
+      setLoading(false);
+    }
+  };
 
-    fetchTasks();
-  }, [user]);
+  // Call fetchTasks whenever the screen is focused
+  useFocusEffect(
+    useCallback(() => {
+      fetchTasks();
+    }, [])
+  );
 
   const handleDelete = async (taskId) => {
     try {
@@ -173,7 +175,7 @@ const Tasks = () => {
           Tasks Screen
         </Text>
 
-        <TouchableOpacity onPress={() => navigation.navigate("AddTask", {taskCount})}>
+        <TouchableOpacity onPress={() => navigation.navigate("AddTask", { taskCount })}>
           <Ionicons name="add" size={30} color="black" />
         </TouchableOpacity>
       </View>
