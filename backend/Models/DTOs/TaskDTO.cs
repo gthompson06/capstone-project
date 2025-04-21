@@ -1,4 +1,4 @@
-namespace DTOs.TaskDTO;
+namespace DTOs.TaskDTO; 
 public class TaskDTO
 {
     public required int UserId {set;get;}

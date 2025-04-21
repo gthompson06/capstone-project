@@ -37,7 +37,6 @@ const AddTask = () => {
   const handleSubmit = async () => {
     const taskData = {
       userId: user.userId,
-      taskId: 0,
       title,
       description,
       type,
