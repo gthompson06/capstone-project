@@ -53,8 +53,10 @@ export const AuthContext = ({ children }) => {
     setUser(data.user);
     setUserId(data.user.userId);
     console.log(data.user);
+    return true;
    } else {
     Alert.alert("Error", "Invalid username or password");
+    return false;
    }
    setLoading(false);
   } catch (error) {
