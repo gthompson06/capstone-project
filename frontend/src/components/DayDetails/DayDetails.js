@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
  View,
  Text,
@@ -7,45 +7,62 @@ import {
  TouchableOpacity,
  Button,
 } from "react-native";
+import axios from "axios";
 import dayjs from "dayjs";
+import { useAuth } from "../../contexts/AuthContext";
 
-const DayDetails = ({
- selectedDate,
- tasks = [],
- schedules = [],
- expenses = [],
-}) => {
+const DayDetails = ({ selectedDate, schedules = [], expenses = [] }) => {
+ const [taskList, setTaskList] = useState([]);
  const [selectedTaskId, setSelectedTaskId] = useState(null);
  const formattedDate = selectedDate.format("dddd, MMMM D");
  const dayName = selectedDate.format("dddd");
+ const { user } = useAuth();
 
  const filteredSchedules = schedules.filter((s) => s.days.includes(dayName));
-
- const allTasks = tasks.map((task) => {
-  let isOverdue = false;
-  if (task.hasDueDate && task.dueDate) {
-   const dueDate = dayjs(task.dueDate);
-   isOverdue = dueDate.isBefore(selectedDate, "day");
-  }
-  return {
-   ...task,
-   isOverdue,
-  };
- });
 
  const filteredExpenses = expenses.filter((expense) => {
   const payDate = dayjs(expense.payDate);
   return selectedDate.isSame(payDate, "day");
  });
 
+ const fetchTasks = async () => {
+  try {
+   const res = await axios.get(`http://localhost:5161/tasks/${user.userId}`);
+   const fetched = res.data.map((task) => {
+    let isOverdue = false;
+    if (task.hasDueDate && task.dueDate) {
+     const dueDate = dayjs(task.dueDate);
+     isOverdue = dueDate.isBefore(selectedDate, "day");
+    }
+    return {
+     ...task,
+     isOverdue,
+    };
+   });
+   setTaskList(fetched);
+  } catch (error) {
+   console.error("Error fetching tasks:", error);
+  }
+ };
+
+ useEffect(() => {
+  if (user?.userId) {
+   fetchTasks();
+  }
+ }, [selectedDate, user?.userId]);
+
  const handleTaskPress = (taskId) => {
   setSelectedTaskId((prev) => (prev === taskId ? null : taskId));
  };
 
- const handleSetComplete = (taskId) => {
-  // fetch the api to delete a task
-  console.log(`Marked task ${taskId} as complete`);
-  setSelectedTaskId(null);
+ const handleSetComplete = async (taskId) => {
+  try {
+   await axios.put(`http://localhost:5161/tasks/complete/${taskId}`);
+   fetchTasks(); // Refresh tasks
+   setSelectedTaskId(null);
+  } catch (error) {
+   console.error("Error marking task complete:", error);
+  }
  };
 
  return (
@@ -88,8 +105,8 @@ const DayDetails = ({
    {/* Tasks */}
    <View style={styles.sectionContainer}>
     <Text style={styles.sectionHeader}>Tasks</Text>
-    {allTasks.length > 0 ? (
-     allTasks.map((item) => {
+    {taskList.length > 0 ? (
+     taskList.map((item) => {
       const isSelected = selectedTaskId === item.taskId;
       return (
        <View key={item.taskId} style={{ marginBottom: 10 }}>
