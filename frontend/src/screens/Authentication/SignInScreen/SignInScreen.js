@@ -28,9 +28,7 @@ const SignInScreen = () => {
 
   const handleLogin = () => {
     try {
-      if(login(username, password)){
-        navigation.navigate("HomeScreen");
-      }
+      login(username, password);
     } catch {
       throw new Error("Error logging in.");
     }
