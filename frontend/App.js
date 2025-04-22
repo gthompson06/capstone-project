@@ -21,6 +21,8 @@ import AddTask from "./src/screens/App/AddTask";
 import EditTask from "./src/screens/App/EditTask";
 import EditSchedule from "./src/screens/App/EditSchedule/EditSchedule";
 import AddSchedule from "./src/screens/App/AddSchedule/AddSchedule";
+import AddBankAccount from "./src/screens/App/AddBankAccount/AddBankAccount";
+import EditBankAccount from "./src/screens/App/EditBankAccount/EditBankAccount";
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -65,6 +67,8 @@ const App = () => {
      <Stack.Screen name="EditTask" component={EditTask} />
      <Stack.Screen name="AddSchedule" component={AddSchedule} />
      <Stack.Screen name="EditSchedule" component={EditSchedule} />
+     <Stack.Screen name="AddBankAccount" component={AddBankAccount} />
+     <Stack.Screen name="EditBankAccount" component={EditBankAccount} />
     </Stack.Navigator>
    </AuthContext>
   </NavigationContainer>
