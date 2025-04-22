@@ -14,7 +14,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { useAuth } from "../../../contexts/AuthContext";
-import { useFocusEffect } from '@react-navigation/native'; // Import the hook
+import { useFocusEffect } from '@react-navigation/native';
 
 if (Platform.OS === "android") {
   UIManager.setLayoutAnimationEnabledExperimental &&
@@ -24,6 +24,7 @@ if (Platform.OS === "android") {
 const TaskItem = ({ task, onDelete }) => {
   const [expanded, setExpanded] = useState(false);
   const navigation = useNavigation();
+  const { user } = useAuth(); // Get the current user (including userId)
 
   const toggleExpand = () => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
@@ -93,7 +94,7 @@ const TaskItem = ({ task, onDelete }) => {
             <Text style={{ color: "#444", lineHeight: 20 }}>{task.description}</Text>
             <View style={{ flexDirection: "row", marginTop: 10 }}>
               <TouchableOpacity
-                onPress={() => navigation.navigate("EditTask", { task })}
+                onPress={() => navigation.navigate("EditTask", { taskId: task.taskId, userId: user.userId })}
                 style={{ marginRight: 20 }}
               >
                 <Text style={{ color: "#007bff", fontWeight: "500" }}>Edit</Text>
@@ -109,6 +110,7 @@ const TaskItem = ({ task, onDelete }) => {
     </View>
   );
 };
+
 
 const Tasks = () => {
   const navigation = useNavigation();
