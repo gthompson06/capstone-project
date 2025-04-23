@@ -29,10 +29,10 @@ public class ScheduleController : ControllerBase
         }
     }
     [HttpPost]
-    public async Task<IActionResult> CreateSchedule([FromBody] UserSchedule newSchedule)
+    public async Task<IActionResult> CreateSchedule([FromBody] UserSchedule schedule)
     {
-        await _scheduleService.PostScheduleInfo(newSchedule);
-        return CreatedAtAction(nameof(GetUserSchedules), new { userId = newSchedule.UserId }, newSchedule);
+        await _scheduleService.PostScheduleInfo(schedule);
+        return CreatedAtAction(nameof(GetUserSchedules), new { userId = schedule.UserId }, schedule);
     }
     [HttpPut("{userId}/{scheduleId}")]
     public async Task<IActionResult> UpdateSchedule(int userId, int scheduleId, [FromBody] UserSchedule updatedSchedule)
@@ -46,7 +46,6 @@ public class ScheduleController : ControllerBase
         userSchedule.Title = updatedSchedule.Title;
         userSchedule.Description = updatedSchedule.Description;
         userSchedule.Type = updatedSchedule.Type;
-        userSchedule.Frequency = updatedSchedule.Frequency;
         userSchedule.StartTime = updatedSchedule.StartTime;
         userSchedule.EndTime = updatedSchedule.EndTime;
         userSchedule.Days = updatedSchedule.Days;

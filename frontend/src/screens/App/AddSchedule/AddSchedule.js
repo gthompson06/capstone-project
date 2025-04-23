@@ -5,16 +5,20 @@ import {
   SafeAreaView,
   TouchableOpacity,
   ScrollView,
-  Platform,
+  Alert,
 } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
-import DateTimePicker from "@react-native-community/datetimepicker";
 
 import CustomInput from "../../../components/CustomInput";
 import { useAuth } from "../../../contexts/AuthContext";
 
 const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+
+const isValidTime = (time) => {
+  const timeRegex = /^(0[1-9]|1[0-2]):[0-5][0-9]\s?(AM|PM)$/i;
+  return timeRegex.test(time.trim());
+};
 
 const AddSchedule = () => {
   const navigation = useNavigation();
@@ -25,47 +29,31 @@ const AddSchedule = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [type, setType] = useState("");
-  const [frequency, setFrequency] = useState("");
-
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
-  const [showStartTimePicker, setShowStartTimePicker] = useState(false);
-  const [showEndTimePicker, setShowEndTimePicker] = useState(false);
-
-  const [selectedDays, setSelectedDays] = useState([]);
+  const [days, setDays] = useState([]);
 
   const toggleDay = (day) => {
-    setSelectedDays((prevDays) =>
-      prevDays.includes(day)
-        ? prevDays.filter((d) => d !== day)
-        : [...prevDays, day]
+    setDays((prevDays) =>
+      prevDays.includes(day) ? prevDays.filter((d) => d !== day) : [...prevDays, day]
     );
   };
 
-  const formatTime = (time) => {
-    if (!time) return "";
-    const dateObj = new Date(time);
-    return Platform.OS === "web"
-      ? dateObj.toISOString().substring(11, 16)
-      : dateObj.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-  };
-
   const handleSubmit = async () => {
-    const formatToISOTime = (time) => {
-      if (!time) return null;
-      return new Date(time).toISOString();
-    };
+    if (!isValidTime(startTime) || !isValidTime(endTime)) {
+      Alert.alert("Invalid Time", "Please enter valid times in hh:mm AM/PM format.");
+      return;
+    }
 
     const scheduleData = {
+      scheduleId: (Number(scheduleCount) || 0) + 1,
       userId: user.userId,
-      scheduleId: scheduleCount + 1,
       title,
       description,
       type,
-      frequency,
-      startTime: formatToISOTime(startTime),
-      endTime: formatToISOTime(endTime),
-      selectedDays,
+      startTime: startTime.trim(),
+      endTime: endTime.trim(),
+      days,
     };
 
     try {
@@ -74,7 +62,7 @@ const AddSchedule = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(scheduleData),
+        body: JSON.stringify(scheduleData), 
       });
 
       if (response.ok) {
@@ -100,56 +88,40 @@ const AddSchedule = () => {
       </TouchableOpacity>
 
       <ScrollView contentContainerStyle={{ padding: 20, alignItems: "center" }}>
-        <Text style={{ fontSize: 24, textAlign: "center", marginBottom: 20 }}>
-          Add Schedule
-        </Text>
+        {/* Submit Button */}
+        <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
+          <Text style={{ color: "white", fontSize: 16 }}>Create Schedule</Text>
+        </TouchableOpacity>
 
         <CustomInput value={title} setValue={setTitle} placeholder="Enter title" />
         <CustomInput value={description} setValue={setDescription} placeholder="Enter description" />
         <CustomInput value={type} setValue={setType} placeholder="Enter type" />
-        <CustomInput value={frequency} setValue={setFrequency} placeholder="Enter frequency (e.g. M/W/F)" />
 
-        {/* Start Time Picker */}
+        {/* Start Time Input */}
         <View style={styles.inputWrapper}>
-          <Text style={styles.label}>Start Time</Text>
-          <TouchableOpacity
-            onPress={() => setShowStartTimePicker(true)}
-            style={styles.datePickerBox}
-          >
-            <Text>{formatTime(startTime) || "Select start time"}</Text>
-          </TouchableOpacity>
-          {showStartTimePicker && (
-            <DateTimePicker
-              value={startTime ? new Date(startTime) : new Date()}
-              mode="time"
-              display={Platform.OS === "ios" ? "spinner" : "default"}
-              onChange={(event, selectedTime) => {
-                setShowStartTimePicker(false);
-                if (selectedTime) setStartTime(selectedTime.toISOString());
-              }}
-            />
+          <Text style={styles.label}>Start Time (hh:mm AM/PM)</Text>
+          <CustomInput
+            value={startTime}
+            setValue={setStartTime}
+            placeholder="e.g. 09:25 AM"
+            keyboardType="default"
+          />
+          {!isValidTime(startTime) && startTime.length > 0 && (
+            <Text style={{ color: "red", marginTop: 4 }}>Invalid time format</Text>
           )}
         </View>
 
-        {/* End Time Picker */}
+        {/* End Time Input */}
         <View style={styles.inputWrapper}>
-          <Text style={styles.label}>End Time</Text>
-          <TouchableOpacity
-            onPress={() => setShowEndTimePicker(true)}
-            style={styles.datePickerBox}
-          >
-            <Text>{formatTime(endTime) || "Select end time"}</Text>
-          </TouchableOpacity>
-          {showEndTimePicker && (
-            <DateTimePicker
-              value={endTime ? new Date(endTime) : new Date()}
-              mode="time"
-              display={Platform.OS === "ios" ? "spinner" : "default"}
-              onChange={(event, selectedTime) => {
-                setShowEndTimePicker(false);
-                if (selectedTime) setEndTime(selectedTime.toISOString());
-              }}
-            />
+          <Text style={styles.label}>End Time (hh:mm AM/PM)</Text>
+          <CustomInput
+            value={endTime}
+            setValue={setEndTime}
+            placeholder="e.g. 05:45 PM"
+            keyboardType="default"
+          />
+          {!isValidTime(endTime) && endTime.length > 0 && (
+            <Text style={{ color: "red", marginTop: 4 }}>Invalid time format</Text>
           )}
         </View>
 
@@ -160,39 +132,21 @@ const AddSchedule = () => {
             {daysOfWeek.map((day) => (
               <TouchableOpacity
                 key={day}
-                style={[
-                  styles.dayButton,
-                  selectedDays.includes(day) && styles.dayButtonSelected,
-                ]}
+                style={[styles.dayButton, days.includes(day) && styles.dayButtonSelected]}
                 onPress={() => toggleDay(day)}
               >
-                <Text style={{
-                  color: selectedDays.includes(day) ? "#fff" : "#000",
-                  fontWeight: "500",
-                }}>
+                <Text
+                  style={{
+                    color: days.includes(day) ? "#fff" : "#000",
+                    fontWeight: "500",
+                  }}
+                >
                   {day.slice(0, 3)}
                 </Text>
               </TouchableOpacity>
             ))}
           </View>
         </View>
-
-        {/* Submit Button */}
-        <TouchableOpacity
-          style={{
-            backgroundColor: "#007bff",
-            paddingVertical: 12,
-            paddingHorizontal: 20,
-            borderRadius: 8,
-            marginTop: 20,
-            width: "75%",
-            maxWidth: 450,
-            alignItems: "center",
-          }}
-          onPress={handleSubmit}
-        >
-          <Text style={{ color: "white", fontSize: 16 }}>Submit</Text>
-        </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>
   );
@@ -204,14 +158,6 @@ const styles = {
     fontSize: 18,
     marginTop: 10,
     marginLeft: "12.5%",
-  },
-  datePickerBox: {
-    borderBottomWidth: 1,
-    borderColor: "#ccc",
-    paddingVertical: 10,
-    width: "75%",
-    maxWidth: 450,
-    marginVertical: 10,
   },
   inputWrapper: {
     width: "75%",
@@ -238,6 +184,16 @@ const styles = {
   dayButtonSelected: {
     backgroundColor: "#007bff",
     borderColor: "#007bff",
+  },
+  submitButton: {
+    backgroundColor: "#007bff",
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+    marginBottom: 20,
+    width: "75%",
+    maxWidth: 450,
+    alignItems: "center",
   },
 };
 

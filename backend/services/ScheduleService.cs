@@ -13,7 +13,6 @@ public class ScheduleService
     }
     public async Task PostScheduleInfo(UserSchedule schedule)
     {
-        // Might need to validate if user exists already
 
         await _database.PostUserScheduleInfo(schedule);
     }

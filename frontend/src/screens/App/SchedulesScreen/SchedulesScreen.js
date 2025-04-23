@@ -14,7 +14,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { useAuth } from "../../../contexts/AuthContext";
-import { useFocusEffect } from '@react-navigation/native';
+import { useFocusEffect } from "@react-navigation/native";
 
 if (Platform.OS === "android") {
   UIManager.setLayoutAnimationEnabledExperimental &&
@@ -34,25 +34,17 @@ const ScheduleItem = ({ schedule, onDelete }) => {
     if (Platform.OS === "web") {
       const confirmed = window.confirm("Are you sure you want to delete this schedule?");
       if (confirmed) {
-        console.log("Confirmed delete for scheduleId:", schedule.scheduleId);
         onDelete(schedule.scheduleId);
       }
     } else {
-      Alert.alert(
-        "Delete Schedule",
-        "Are you sure you want to delete this schedule?",
-        [
-          { text: "Cancel", style: "cancel" },
-          {
-            text: "Delete",
-            onPress: () => {
-              console.log("Confirmed delete for scheduleId:", schedule.scheduleId);
-              onDelete(schedule.scheduleId);
-            },
-            style: "destructive",
-          },
-        ]
-      );
+      Alert.alert("Delete Schedule", "Are you sure you want to delete this schedule?", [
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "Delete",
+          onPress: () => onDelete(schedule.scheduleId),
+          style: "destructive",
+        },
+      ]);
     }
   };
 
@@ -81,18 +73,15 @@ const ScheduleItem = ({ schedule, onDelete }) => {
             <Text style={{ fontSize: 16, fontWeight: "600" }}>{schedule.title}</Text>
             <Text style={{ color: "gray", marginTop: 2 }}>Type: {schedule.type}</Text>
           </View>
-          <Ionicons
-            name={expanded ? "chevron-up" : "chevron-down"}
-            size={22}
-            color="black"
-          />
+          <Ionicons name={expanded ? "chevron-up" : "chevron-down"} size={22} color="black" />
         </TouchableOpacity>
 
         {expanded && (
           <View style={{ marginTop: 8 }}>
             <Text style={{ color: "#444", lineHeight: 20 }}>{schedule.description}</Text>
-            <Text style={{ color: "#444", marginTop: 4 }}>Frequency: {schedule.frequency}</Text>
-            <Text style={{ color: "#444" }}>Time: {schedule.startTime} - {schedule.endTime}</Text>
+            <Text style={{ color: "#444" }}>
+              Time: {schedule.startTime} - {schedule.endTime}
+            </Text>
             <Text style={{ color: "#444" }}>Days: {schedule.days.join(", ")}</Text>
             <View style={{ flexDirection: "row", marginTop: 10 }}>
               <TouchableOpacity
@@ -101,7 +90,6 @@ const ScheduleItem = ({ schedule, onDelete }) => {
               >
                 <Text style={{ color: "#007bff", fontWeight: "500" }}>Edit</Text>
               </TouchableOpacity>
-
               <TouchableOpacity onPress={confirmDelete}>
                 <Text style={{ color: "red", fontWeight: "500" }}>Delete</Text>
               </TouchableOpacity>
@@ -122,11 +110,9 @@ const Schedules = () => {
 
   const fetchSchedules = async () => {
     if (user?.userId) {
-      console.log("Fetching schedules for userId:", user.userId);
       try {
         const response = await fetch(`http://localhost:5161/schedules/${user.userId}`);
         if (!response.ok) throw new Error("Network response was not ok");
-
         const data = await response.json();
         setSchedules(data);
       } catch (err) {
@@ -152,13 +138,13 @@ const Schedules = () => {
       await fetch(`http://localhost:5161/schedules/${user.userId}/${scheduleId}`, {
         method: "DELETE",
       });
-      setSchedules((prevSchedules) =>
-        prevSchedules.filter((schedule) => schedule.scheduleId !== scheduleId)
-      );
+      setSchedules((prev) => prev.filter((s) => s.scheduleId !== scheduleId));
     } catch (error) {
       console.error("Failed to delete schedule:", error);
     }
   };
+
+  const scheduleCount = schedules.length; 
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#f5f5f5" }}>
@@ -177,10 +163,9 @@ const Schedules = () => {
           paddingVertical: 20,
         }}
       >
-        <Text style={{ fontSize: 25, fontWeight: "bold", marginRight: 10 }}>
-          Schedules Screen
-        </Text>
-        <TouchableOpacity onPress={() => navigation.navigate("AddSchedule")}>
+        <Text style={{ fontSize: 25, fontWeight: "bold", marginRight: 10 }}>Schedules Screen</Text>
+
+        <TouchableOpacity onPress={() => navigation.navigate("AddSchedule", { scheduleCount })}>
           <Ionicons name="add" size={30} color="black" />
         </TouchableOpacity>
       </View>
