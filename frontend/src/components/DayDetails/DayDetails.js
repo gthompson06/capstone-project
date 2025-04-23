@@ -12,11 +12,14 @@ import dayjs from "dayjs";
 import { useAuth } from "../../contexts/AuthContext";
 
 const DayDetails = ({ selectedDate, schedules = [], expenses = [] }) => {
+ const { user } = useAuth();
+
  const [taskList, setTaskList] = useState([]);
- const [selectedTaskId, setSelectedTaskId] = useState(null);
+ const [selectedTaskIds, setSelectedTaskIds] = useState(new Set());
+ const [paidExpenseIds, setPaidExpenseIds] = useState(new Set());
+
  const formattedDate = selectedDate.format("dddd, MMMM D");
  const dayName = selectedDate.format("dddd");
- const { user } = useAuth();
 
  const filteredSchedules = schedules.filter((s) => s.days.includes(dayName));
 
@@ -52,13 +55,33 @@ const DayDetails = ({ selectedDate, schedules = [], expenses = [] }) => {
  }, [selectedDate, user?.userId]);
 
  const handleTaskPress = (taskId) => {
-  setSelectedTaskId((prev) => (prev === taskId ? null : taskId));
+  setSelectedTaskIds((prev) => {
+   const updated = new Set(prev);
+   if (updated.has(taskId)) {
+    updated.delete(taskId);
+   } else {
+    updated.add(taskId);
+   }
+   return updated;
+  });
+ };
+
+ const handleExpensePress = (expenseId) => {
+  setPaidExpenseIds((prev) => {
+   const updated = new Set(prev);
+   if (updated.has(expenseId)) {
+    updated.delete(expenseId);
+   } else {
+    updated.add(expenseId);
+   }
+   return updated;
+  });
  };
 
  const handleSetComplete = async (taskId) => {
   try {
    await axios.put(`http://localhost:5161/tasks/complete/${taskId}`);
-   fetchTasks(); // Refresh tasks
+   fetchTasks();
    setSelectedTaskId(null);
   } catch (error) {
    console.error("Error marking task complete:", error);
@@ -92,10 +115,25 @@ const DayDetails = ({ selectedDate, schedules = [], expenses = [] }) => {
    <View style={styles.sectionContainer}>
     <Text style={styles.sectionHeader}>Expenses Due Today</Text>
     {filteredExpenses.length > 0 ? (
-     filteredExpenses.map((item, idx) => (
-      <Text key={idx} style={styles.expenseText}>
-       {item.title}: ${item.amount}
-      </Text>
+     filteredExpenses.map((item) => (
+      <TouchableOpacity
+       key={item.expenseId}
+       onPress={() => handleExpensePress(item.expenseId)}
+       style={{ marginBottom: 6 }}
+      >
+       <Text
+        style={[
+         styles.expenseText,
+         paidExpenseIds.has(item.expenseId) && {
+          textDecorationLine: "line-through",
+          color: "gray",
+         },
+        ]}
+       >
+        {item.title}: ${item.amount}
+        {paidExpenseIds.has(item.expenseId) && " ✅ Paid"}
+       </Text>
+      </TouchableOpacity>
      ))
     ) : (
      <Text style={styles.emptyText}>No Expenses Due Today!</Text>
@@ -107,33 +145,24 @@ const DayDetails = ({ selectedDate, schedules = [], expenses = [] }) => {
     <Text style={styles.sectionHeader}>Tasks</Text>
     {taskList.length > 0 ? (
      taskList.map((item) => {
-      const isSelected = selectedTaskId === item.taskId;
+      const isSelected = selectedTaskIds.has(item.taskId);
       return (
-       <View key={item.taskId} style={{ marginBottom: 10 }}>
-        <TouchableOpacity
-         onPress={() => handleTaskPress(item.taskId)}
-         style={[styles.taskContainer, isSelected && styles.taskSelected]}
+       <TouchableOpacity
+        key={item.taskId}
+        onPress={() => handleTaskPress(item.taskId)}
+        style={[styles.taskContainer]}
+       >
+        <Text
+         style={[
+          styles.taskText,
+          item.isOverdue ? { color: "red" } : { color: "black" },
+          isSelected && { textDecorationLine: "line-through", opacity: 0.6 },
+         ]}
         >
-         <Text
-          style={[
-           styles.taskText,
-           item.isOverdue ? { color: "red" } : { color: "black" },
-          ]}
-         >
-          {item.title}
-          {item.isOverdue && item.dueDate ? ` (Due: ${item.dueDate})` : ""}
-         </Text>
-        </TouchableOpacity>
-        {isSelected && (
-         <View style={styles.completeButton}>
-          <Button
-           title="Set to Complete"
-           onPress={() => handleSetComplete(item.taskId)}
-           color="#2196F3"
-          />
-         </View>
-        )}
-       </View>
+         {item.title}
+         {item.isOverdue && item.dueDate ? ` (Due: ${item.dueDate})` : ""}
+        </Text>
+       </TouchableOpacity>
       );
      })
     ) : (
