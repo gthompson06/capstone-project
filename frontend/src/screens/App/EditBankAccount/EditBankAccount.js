@@ -8,12 +8,16 @@ import {
 } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
+
 import CustomInput from "../../../components/CustomInput";
+import CustomButton from "../../../components/CustomButton/CustomButton";
+import { AppStyles } from "../../../styles/AppStyles";
 
 const EditBankAccount = () => {
   const navigation = useNavigation();
   const route = useRoute();
   const { account } = route.params;
+  const styles = AppStyles;
 
   const [title, setTitle] = useState(account?.title || "");
   const [description, setDescription] = useState(account?.description || "");
@@ -30,7 +34,7 @@ const EditBankAccount = () => {
     };
 
     try {
-      const response = await fetch(`http://localhost:5161/accounts/${account.userId}/${account.accountId}`, {
+      const response = await fetch(`http://10.0.0.210:5161/accounts/${account.userId}/${account.accountId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -52,22 +56,19 @@ const EditBankAccount = () => {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <TouchableOpacity
-        style={{ marginLeft: 15, marginTop: 10, padding: 10 }}
-        onPress={() => navigation.goBack()}
-      >
-        <Ionicons name="arrow-back" size={30} color="black" />
+    <SafeAreaView style={styles.root}>
+      <TouchableOpacity style={styles.menuButton} onPress={() => navigation.goBack()}>
+        <Ionicons name="arrow-back" size={30} color="#1762a7" />
       </TouchableOpacity>
 
-      <ScrollView contentContainerStyle={{ padding: 20, alignItems: "center" }}>
-        <Text style={{ fontSize: 24, textAlign: "center", marginBottom: 20 }}>
-          Edit Account
-        </Text>
+      <View style={styles.screenHeader}>
+        <Text style={styles.screenTitle}>Edit Account</Text>
+      </View>
 
+      <ScrollView contentContainerStyle={{ alignItems: "center", paddingBottom: 40 }}>
         <CustomInput value={title} setValue={setTitle} placeholder="Enter title" />
         <CustomInput value={description} setValue={setDescription} placeholder="Enter description" />
-        <CustomInput value={type} setValue={setType} placeholder="Enter type" />
+        <CustomInput value={type} setValue={setType} placeholder="Enter type (e.g. Checking, Savings)" />
         <CustomInput
           value={balance}
           setValue={setBalance}
@@ -75,21 +76,7 @@ const EditBankAccount = () => {
           keyboardType="numeric"
         />
 
-        <TouchableOpacity
-          style={{
-            backgroundColor: "#007bff",
-            paddingVertical: 12,
-            paddingHorizontal: 20,
-            borderRadius: 8,
-            marginTop: 20,
-            width: "75%",
-            maxWidth: 450,
-            alignItems: "center",
-          }}
-          onPress={handleUpdate}
-        >
-          <Text style={{ color: "white", fontSize: 16 }}>Save Changes</Text>
-        </TouchableOpacity>
+        <CustomButton onPress={handleUpdate} text="Save Changes" />
       </ScrollView>
     </SafeAreaView>
   );

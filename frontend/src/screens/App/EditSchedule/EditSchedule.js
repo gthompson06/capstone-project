@@ -10,7 +10,10 @@ import {
 } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
+
 import CustomInput from "../../../components/CustomInput";
+import CustomButton from "../../../components/CustomButton/CustomButton";
+import { AppStyles } from "../../../styles/AppStyles";
 
 const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 const timeRegex = /^(0[1-9]|1[0-2]):([0-5][0-9]) (AM|PM)$/;
@@ -18,6 +21,7 @@ const timeRegex = /^(0[1-9]|1[0-2]):([0-5][0-9]) (AM|PM)$/;
 const EditSchedule = () => {
   const navigation = useNavigation();
   const { schedule } = useRoute().params;
+  const styles = AppStyles;
 
   const [title, setTitle] = useState(schedule?.title || "");
   const [description, setDescription] = useState(schedule?.description || "");
@@ -55,7 +59,7 @@ const EditSchedule = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:5161/schedules/${schedule.userId}/${schedule.scheduleId}`,
+        `http://10.0.0.210:5161/schedules/${schedule.userId}/${schedule.scheduleId}`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
@@ -78,58 +82,52 @@ const EditSchedule = () => {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <TouchableOpacity
-        style={{ marginLeft: 15, marginTop: 10, padding: 10 }}
-        onPress={() => navigation.goBack()}
-      >
-        <Ionicons name="arrow-back" size={30} color="black" />
+    <SafeAreaView style={styles.root}>
+      <TouchableOpacity style={styles.menuButton} onPress={() => navigation.goBack()}>
+        <Ionicons name="arrow-back" size={30} color="#1762a7" />
       </TouchableOpacity>
 
+      <View style={styles.screenHeader}>
+        <Text style={styles.screenTitle}>Edit Schedule</Text>
+      </View>
+
       <ScrollView
-        contentContainerStyle={{ padding: 20, alignItems: "center" }}
+        contentContainerStyle={{ alignItems: "center", paddingBottom: 40 }}
         showsVerticalScrollIndicator={false}
       >
-        <Text style={{ fontSize: 24, marginBottom: 20 }}>Edit Schedule</Text>
-
         <CustomInput value={title} setValue={setTitle} placeholder="Enter title" />
         <CustomInput value={description} setValue={setDescription} placeholder="Enter description" />
         <CustomInput value={type} setValue={setType} placeholder="Enter type" />
 
-        {/* Start Time */}
-        <View style={styles.inputWrapper}>
-          <Text style={styles.label}>Start Time</Text>
+        <View style={localStyles.inputWrapper}>
+          <Text style={localStyles.label}>Start Time</Text>
           <TextInput
             value={startTime}
             onChangeText={setStartTime}
             placeholder="e.g., 09:00 AM"
-            style={styles.textInput}
-            keyboardType="default"
+            style={localStyles.textInput}
           />
         </View>
 
-        {/* End Time */}
-        <View style={styles.inputWrapper}>
-          <Text style={styles.label}>End Time</Text>
+        <View style={localStyles.inputWrapper}>
+          <Text style={localStyles.label}>End Time</Text>
           <TextInput
             value={endTime}
             onChangeText={setEndTime}
             placeholder="e.g., 05:00 PM"
-            style={styles.textInput}
-            keyboardType="default"
+            style={localStyles.textInput}
           />
         </View>
 
-        {/* Day Selection */}
-        <Text style={[styles.label, { marginTop: 15 }]}>Select Days</Text>
-        <View style={styles.daysContainer}>
+        <Text style={[localStyles.label, { marginTop: 15 }]}>Select Days</Text>
+        <View style={localStyles.daysContainer}>
           {daysOfWeek.map((day) => (
             <TouchableOpacity
               key={day}
               onPress={() => toggleDay(day)}
               style={[
-                styles.dayButton,
-                selectedDays.includes(day) && styles.daySelected,
+                localStyles.dayButton,
+                selectedDays.includes(day) && localStyles.daySelected,
               ]}
             >
               <Text style={{ color: selectedDays.includes(day) ? "#fff" : "#000" }}>
@@ -139,33 +137,29 @@ const EditSchedule = () => {
           ))}
         </View>
 
-        <TouchableOpacity style={styles.saveBtn} onPress={handleUpdate}>
-          <Text style={{ color: "white", fontSize: 16 }}>Save Changes</Text>
-        </TouchableOpacity>
+        <CustomButton onPress={handleUpdate} text="Save Changes" />
       </ScrollView>
     </SafeAreaView>
   );
 };
 
-const styles = {
+const localStyles = {
   label: {
     alignSelf: "flex-start",
-    fontSize: 16,
-    fontWeight: "500",
-    marginBottom: 5,
+    fontSize: 18,
+    marginTop: 10,
     marginLeft: "12.5%",
+  },
+  inputWrapper: {
+    width: "75%",
+    maxWidth: 450,
+    marginBottom: 20,
   },
   textInput: {
     borderBottomWidth: 1,
     borderColor: "#ccc",
     paddingVertical: 8,
     width: "100%",
-    maxWidth: 450,
-  },
-  inputWrapper: {
-    width: "75%",
-    maxWidth: 450,
-    marginBottom: 10,
   },
   daysContainer: {
     flexDirection: "row",
@@ -186,16 +180,6 @@ const styles = {
   daySelected: {
     backgroundColor: "#007bff",
     borderColor: "#007bff",
-  },
-  saveBtn: {
-    backgroundColor: "#007bff",
-    paddingVertical: 12,
-    paddingHorizontal: 20,
-    borderRadius: 8,
-    marginTop: 20,
-    width: "75%",
-    maxWidth: 450,
-    alignItems: "center",
   },
 };
 

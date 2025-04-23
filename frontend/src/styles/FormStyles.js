@@ -29,10 +29,11 @@ export const FormStyles = StyleSheet.create({
     },
     header: {
         width: "100%",
-        height: 40,
+        height: "6%",
         display: "flex",
         flexDirection: "row",
         justifyContent: "space-between",
+        backgroundColor: "white"
     },
     headerLeft: {
 

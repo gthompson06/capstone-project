@@ -10,9 +10,11 @@ import {
 import axios from "axios";
 import dayjs from "dayjs";
 import { useAuth } from "../../contexts/AuthContext";
+import { AppStyles } from "../../styles/AppStyles";
 
 const DayDetails = ({ selectedDate, schedules = [], expenses = [] }) => {
  const { user } = useAuth();
+ const styles = AppStyles;
 
  const [taskList, setTaskList] = useState([]);
  const [selectedTaskIds, setSelectedTaskIds] = useState(new Set());
@@ -30,7 +32,7 @@ const DayDetails = ({ selectedDate, schedules = [], expenses = [] }) => {
 
  const fetchTasks = async () => {
   try {
-   const res = await axios.get(`http://localhost:5161/tasks/${user.userId}`);
+   const res = await axios.get(`http://10.0.0.210:5161/tasks/${user.userId}`);
    const fetched = res.data.map((task) => {
     let isOverdue = false;
     if (task.hasDueDate && task.dueDate) {
@@ -80,7 +82,7 @@ const DayDetails = ({ selectedDate, schedules = [], expenses = [] }) => {
 
  const handleSetComplete = async (taskId) => {
   try {
-   await axios.put(`http://localhost:5161/tasks/complete/${taskId}`);
+   await axios.put(`http://10.0.0.210:5161/tasks/complete/${taskId}`);
    fetchTasks();
    setSelectedTaskId(null);
   } catch (error) {
@@ -89,13 +91,13 @@ const DayDetails = ({ selectedDate, schedules = [], expenses = [] }) => {
  };
 
  return (
-  <SafeAreaView style={{ marginTop: 20, width: "100%", paddingHorizontal: 20 }}>
-   <Text style={{ fontSize: 18, fontWeight: "bold", textAlign: "center" }}>
+  <View>
+   <Text style={styles.date}>
     {formattedDate}
    </Text>
 
    {/* Schedules */}
-   <View style={styles.sectionContainer}>
+   
     <Text style={styles.sectionHeader}>On Your Schedule</Text>
     {filteredSchedules.length > 0 ? (
      filteredSchedules.map((item, idx) => (
@@ -109,10 +111,9 @@ const DayDetails = ({ selectedDate, schedules = [], expenses = [] }) => {
     ) : (
      <Text style={styles.emptyText}>Nothing on the Schedule Today!</Text>
     )}
-   </View>
+   
 
    {/* Expenses */}
-   <View style={styles.sectionContainer}>
     <Text style={styles.sectionHeader}>Expenses Due Today</Text>
     {filteredExpenses.length > 0 ? (
      filteredExpenses.map((item) => (
@@ -138,10 +139,8 @@ const DayDetails = ({ selectedDate, schedules = [], expenses = [] }) => {
     ) : (
      <Text style={styles.emptyText}>No Expenses Due Today!</Text>
     )}
-   </View>
 
    {/* Tasks */}
-   <View style={styles.sectionContainer}>
     <Text style={styles.sectionHeader}>Tasks</Text>
     {taskList.length > 0 ? (
      taskList.map((item) => {
@@ -168,71 +167,76 @@ const DayDetails = ({ selectedDate, schedules = [], expenses = [] }) => {
     ) : (
      <Text style={styles.emptyText}>No tasks!</Text>
     )}
-   </View>
-  </SafeAreaView>
+  </View>
  );
 };
 
-const styles = StyleSheet.create({
- sectionContainer: {
-  backgroundColor: "white",
-  borderRadius: 10,
-  padding: 15,
-  marginVertical: 10,
-  shadowColor: "#000",
-  shadowOffset: { width: 0, height: 1 },
-  shadowOpacity: 0.1,
-  shadowRadius: 2,
-  elevation: 1,
- },
- sectionHeader: {
-  fontSize: 16,
-  fontWeight: "600",
-  marginBottom: 8,
-  textAlign: "center",
- },
- scheduleItem: {
-  marginBottom: 6,
- },
- scheduleTitle: {
-  fontWeight: "500",
-  textAlign: "center",
- },
- scheduleTime: {
-  color: "#2196F3",
-  textAlign: "center",
- },
- taskContainer: {
-  backgroundColor: "#fff",
-  borderRadius: 8,
-  padding: 10,
-  shadowColor: "#000",
-  shadowOffset: { width: 0, height: 1 },
-  shadowOpacity: 0.08,
-  shadowRadius: 1.5,
-  elevation: 1,
- },
- taskSelected: {
-  opacity: 0.5,
- },
- taskText: {
-  fontWeight: "500",
-  textAlign: "center",
- },
- completeButton: {
-  marginTop: 6,
-  alignSelf: "center",
-  width: "60%",
- },
- expenseText: {
-  marginBottom: 6,
-  textAlign: "center",
-  color: "red",
- },
- emptyText: {
-  textAlign: "center",
-  color: "green",
- },
-});
+// const styles = StyleSheet.create({
+    
+//  sectionContainer: {
+//     backgroundColor: "white",
+//     borderRadius: 10,
+//     borderWidth: 1,
+//     borderColor: "#1762a7",
+//     width: "80%",
+//     padding: 15,
+//     marginVertical: 10,
+//     shadowColor: "#000",
+//     shadowOffset: { width: 0, height: 1 },
+//     shadowOpacity: 0.1,
+//     shadowRadius: 2,
+//     elevation: 1,
+//  },
+//  sectionHeader: {
+//   fontSize: 16,
+//   fontWeight: "600",
+//   marginBottom: 8,
+//   textAlign: "left",
+//  },
+//  scheduleItem: {
+//   marginBottom: 6,
+//   padding: "4%",
+//   borderWidth: 1
+//  },
+//  scheduleTitle: {
+//   fontWeight: "500",
+//   textAlign: "center",
+//  },
+//  scheduleTime: {
+//   color: "#2196F3",
+//   textAlign: "center",
+//  },
+//  taskContainer: {
+//   backgroundColor: "#fff",
+//   borderRadius: 8,
+//   padding: 10,
+//   shadowColor: "#000",
+//   shadowOffset: { width: 0, height: 1 },
+//   shadowOpacity: 0.08,
+//   shadowRadius: 1.5,
+//   elevation: 1,
+//  },
+//  taskSelected: {
+//   opacity: 0.5,
+//  },
+//  taskText: {
+//   fontWeight: "500",
+//   textAlign: "center",
+//  },
+//  completeButton: {
+//   marginTop: 6,
+//   alignSelf: "center",
+//   width: "80%",
+//  },
+//  expenseText: {
+//   marginBottom: 6,
+//   textAlign: "center",
+//   color: "red",
+//  },
+//  emptyText: {
+//   textAlign: "center",
+//   color: "green",
+//  },
+// });
 
 export default DayDetails;

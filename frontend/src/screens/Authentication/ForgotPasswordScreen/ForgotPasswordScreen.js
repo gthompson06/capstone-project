@@ -33,7 +33,7 @@ const ForgotPasswordScreen = () => {
     }
     setErrorMessage("");
 
-    const url = `http://localhost:5161/worthy/user/username/${username}`;
+    const url = `http://10.0.0.210:5161/worthy/user/username/${username}`;
 
     try {
       console.log("Sending request...");

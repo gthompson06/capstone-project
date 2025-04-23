@@ -42,8 +42,6 @@ const DrawerNavigator = ({ route }) => {
    <Drawer.Screen name="Finances" component={FinancesSCreen} />
    <Drawer.Screen name="Tasks" component={TasksScreen} />
    <Drawer.Screen name="Schedules" component={SchedulesScreen} />
-   <Drawer.Screen name="Profile" component={ProfileScreen} />
-   <Drawer.Screen name="Settings" component={SettingsScreen} />
   </Drawer.Navigator>
  );
 };

@@ -49,7 +49,7 @@ const ResetPasswordScreen = () => {
       return;
     }
 
-    const url = "http://localhost:5161/worthy/user/reset-password";
+    const url = "http://10.0.0.210:5161/worthy/user/reset-password";
 
     try {
       const response = await fetch(url, {
