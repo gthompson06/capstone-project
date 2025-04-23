@@ -176,7 +176,7 @@ const Tasks = () => {
       lastTaskId: tasks.at(-1)?.taskId ?? 0,
     })}
     >
-     <Ionicons name="add" size={30} color="black" />
+     <Ionicons name="add" size={30} color="#1762a7" />
     </TouchableOpacity>
    </View>
 

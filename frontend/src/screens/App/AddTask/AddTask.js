@@ -38,15 +38,7 @@ const AddTask = () => {
   const [showStartDatePicker, setShowStartDatePicker] = useState(false);
   const [showEndDatePicker, setShowEndDatePicker] = useState(false);
 
-  const route = useRoute();
   const { lastTaskId } = route.params || {};
-  const formatDate = (date) => {
-    if (!date) return "";
-    const dateObj = new Date(date);
-    return Platform.OS === "web"
-      ? dateObj.toISOString().slice(0, 10)
-      : dateObj.toLocaleDateString();
-  };
 
   const handleDateChange = (event, selectedDate, dateType) => {
     if (dateType === "dueDate") {
