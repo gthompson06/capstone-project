@@ -38,6 +38,8 @@ const AddTask = () => {
   const [showStartDatePicker, setShowStartDatePicker] = useState(false);
   const [showEndDatePicker, setShowEndDatePicker] = useState(false);
 
+  const route = useRoute();
+  const { lastTaskId } = route.params || {};
   const formatDate = (date) => {
     if (!date) return "";
     const dateObj = new Date(date);
@@ -68,7 +70,7 @@ const AddTask = () => {
 
     const taskData = {
       userId: user.userId,
-      taskId: taskCount + 1,
+      taskId: lastTaskId + 1,
       title,
       description,
       type,
@@ -113,7 +115,6 @@ const AddTask = () => {
         <CustomInput value={title} setValue={setTitle} placeholder="Enter title" />
         <CustomInput value={description} setValue={setDescription} placeholder="Enter description" />
         <CustomInput value={type} setValue={setType} placeholder="Enter type" />
-        <CustomInput value={order} setValue={setOrder} placeholder="Enter order (e.g. 1, 2, 3)" />
 
         <View style={localStyles.switchRow}>
           <Text style={localStyles.label}>Has Due Date</Text>

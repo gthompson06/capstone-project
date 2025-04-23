@@ -171,12 +171,14 @@ const Tasks = () => {
           Tasks
         </Text>
 
-        <TouchableOpacity
-          onPress={() => navigation.navigate("AddTask", { taskCount })}
-        >
-          <Ionicons name="add" size={30} color="#1762a7" />
-        </TouchableOpacity>
-      </View>
+    <TouchableOpacity
+     onPress={() => navigation.navigate("AddTask", {
+      lastTaskId: tasks.at(-1)?.taskId ?? 0,
+    })}
+    >
+     <Ionicons name="add" size={30} color="black" />
+    </TouchableOpacity>
+   </View>
 
       <ScrollView>
         <View style={styles.scrollContainer}>

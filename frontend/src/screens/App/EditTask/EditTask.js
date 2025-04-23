@@ -141,7 +141,6 @@ const EditTask = () => {
         <CustomInput value={title} setValue={setTitle} placeholder="Enter title" />
         <CustomInput value={description} setValue={setDescription} placeholder="Enter description" />
         <CustomInput value={type} setValue={setType} placeholder="Enter type" />
-        <CustomInput value={order} setValue={setOrder} placeholder="Enter order (e.g. 1, 2, 3)" />
 
         <View style={localStyles.switchRow}>
           <Text style={localStyles.label}>Has Due Date</Text>
