@@ -59,7 +59,7 @@ const EditSchedule = () => {
 
     try {
       const response = await fetch(
-        `http://10.0.0.210:5161/schedules/${schedule.userId}/${schedule.scheduleId}`,
+        `http://localhost:5161/schedules/${schedule.userId}/${schedule.scheduleId}`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },

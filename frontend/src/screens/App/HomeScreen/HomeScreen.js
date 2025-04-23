@@ -37,9 +37,9 @@ const HomeScreen = () => {
 
       try {
         const [tasksRes, expensesRes, schedulesRes] = await Promise.all([
-          axios.get(`http://10.0.0.210:5161/tasks/${user.userId}`),
-          axios.get(`http://10.0.0.210:5161/expenses/${user.userId}`),
-          axios.get(`http://10.0.0.210:5161/schedules/${user.userId}`),
+          axios.get(`http://localhost:5161/tasks/${user.userId}`),
+          axios.get(`http://localhost:5161/expenses/${user.userId}`),
+          axios.get(`http://localhost:5161/schedules/${user.userId}`),
         ]);
 
         setTasks(tasksRes.data || []);

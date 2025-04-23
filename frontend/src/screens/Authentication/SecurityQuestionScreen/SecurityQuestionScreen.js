@@ -64,7 +64,7 @@ const SecurityQuestionScreen = () => {
    setErrorMessage(null);
    console.log("fetching...\n", username, email, password, question, answer);
 
-   const url = "http://10.0.0.210:5161/worthy/user/register";
+   const url = "http://localhost:5161/worthy/user/register";
 
    try {
     console.log("Sending request...");

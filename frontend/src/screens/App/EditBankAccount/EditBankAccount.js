@@ -34,7 +34,7 @@ const EditBankAccount = () => {
     };
 
     try {
-      const response = await fetch(`http://10.0.0.210:5161/accounts/${account.userId}/${account.accountId}`, {
+      const response = await fetch(`http://localhost:5161/accounts/${account.userId}/${account.accountId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

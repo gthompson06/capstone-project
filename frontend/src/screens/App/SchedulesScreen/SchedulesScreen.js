@@ -98,7 +98,7 @@ const Schedules = () => {
   const fetchSchedules = async () => {
     if (user?.userId) {
       try {
-        const response = await fetch(`http://10.0.0.210:5161/schedules/${user.userId}`);
+        const response = await fetch(`http://localhost:5161/schedules/${user.userId}`);
         if (!response.ok) throw new Error("Network response was not ok");
         const data = await response.json();
         setSchedules(data);
@@ -118,7 +118,7 @@ const Schedules = () => {
 
   const handleDelete = async (scheduleId) => {
     try {
-      await fetch(`http://10.0.0.210:5161/schedules/${user.userId}/${scheduleId}`, {
+      await fetch(`http://localhost:5161/schedules/${user.userId}/${scheduleId}`, {
         method: "DELETE",
       });
       setSchedules((prev) => prev.filter((s) => s.scheduleId !== scheduleId));

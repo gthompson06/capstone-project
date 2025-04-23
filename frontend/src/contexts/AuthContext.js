@@ -24,7 +24,7 @@ export const AuthContext = ({ children }) => {
  const login = async (username, password) => {
   try {
    setLoading(true);
-   const url = "http://10.0.0.210:5161/worthy/user/login";
+   const url = "http://localhost:5161/worthy/user/login";
    const response = await fetch(url, {
     method: "POST",
     headers: {
@@ -80,7 +80,7 @@ export const AuthContext = ({ children }) => {
   console.log("Refreshing access token...");
   try {
    setLoading(true);
-   const url = "http://10.0.0.210:5161/worthy/auth/getNewAccessToken";
+   const url = "http://localhost:5161/worthy/auth/getNewAccessToken";
    const response = await fetch(url, {
     method: "GET",
    });

@@ -76,7 +76,7 @@ const AddTask = () => {
     };
 
     try {
-      const response = await fetch("http://10.0.0.210:5161/tasks", {
+      const response = await fetch("http://localhost:5161/tasks", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(taskData),

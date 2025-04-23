@@ -116,7 +116,7 @@ const Tasks = () => {
     if (user?.userId) {
       console.log("Fetching tasks for userId:", user.userId);
       try {
-        const response = await fetch(`http://10.0.0.210:5161/tasks/${user.userId}`);
+        const response = await fetch(`http://localhost:5161/tasks/${user.userId}`);
         const data = await response.json();
         setTasks(data);
       } catch (err) {
@@ -139,7 +139,7 @@ const Tasks = () => {
 
   const handleDelete = async (taskId) => {
     try {
-      await fetch(`http://10.0.0.210:5161/tasks/${user.userId}/${taskId}`, {
+      await fetch(`http://localhost:5161/tasks/${user.userId}/${taskId}`, {
         method: "DELETE",
       });
       setTasks((prevTasks) => prevTasks.filter((task) => task.taskId !== taskId));
