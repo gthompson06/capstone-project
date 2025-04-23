@@ -120,7 +120,6 @@ const Tasks = () => {
  const { user } = useAuth();
  const [tasks, setTasks] = useState([]);
  const [loading, setLoading] = useState(true);
- const taskCount = tasks.length;
 
  // Fetch tasks function
  const fetchTasks = async () => {
@@ -181,7 +180,9 @@ const Tasks = () => {
     </Text>
 
     <TouchableOpacity
-     onPress={() => navigation.navigate("AddTask", { taskCount })}
+     onPress={() => navigation.navigate("AddTask", {
+      lastTaskId: tasks.at(-1)?.taskId ?? 0,
+    })}
     >
      <Ionicons name="add" size={30} color="black" />
     </TouchableOpacity>
