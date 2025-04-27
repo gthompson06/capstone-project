@@ -12,11 +12,9 @@ const MiniWeekCalendar = ({
   currentWeekStart.add(i, "day")
  );
 
- // add a week
  const goToNextWeek = () =>
   setCurrentWeekStart(currentWeekStart.add(1, "week"));
 
- // subtract a week
  const goToPrevWeek = () =>
   setCurrentWeekStart(currentWeekStart.subtract(1, "week"));
 
