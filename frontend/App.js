@@ -9,12 +9,11 @@ import CreateAccountScreen from "./src/screens/Authentication/CreateAccountScree
 import HomeScreen from "./src/screens/App/HomeScreen";
 import ResetPasswordScreen from "./src/screens/Authentication/ResetPasswordScreen";
 import ForgotPasswordScreen from "./src/screens/Authentication/ForgotPasswordScreen/ForgotPasswordScreen";
-import ProfileScreen from "./src/screens/App/ProfileScreen";
-// import CalendarScreen from "./src/screens/App/CalendarScreen";
+// import ProfileScreen from "./src/screens/App/ProfileScreen";
 import FinancesSCreen from "./src/screens/App/FinancesScreen";
 import TasksScreen from "./src/screens/App/TasksScreen";
 import SchedulesScreen from "./src/screens/App/SchedulesScreen";
-import SettingsScreen from "./src/screens/App/SettingsScreen";
+// import SettingsScreen from "./src/screens/App/SettingsScreen";
 import HamburgerLogout from "./src/components/HamburgerLogout/HamburgerLogout";
 import SecurityQuestionScreen from "./src/screens/Authentication/SecurityQuestionScreen";
 import AddTask from "./src/screens/App/AddTask";

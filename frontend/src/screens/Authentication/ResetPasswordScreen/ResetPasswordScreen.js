@@ -27,7 +27,7 @@ const ResetPasswordScreen = () => {
   const route = useRoute();
   const styles = FormStyles;
 
-  const { data } = route.params || {};
+  const { data } = route.params || {}; // get passed params from ForgotPasswordScreen
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -51,6 +51,7 @@ const ResetPasswordScreen = () => {
 
     const url = "http://localhost:5161/worthy/user/reset-password";
 
+    // call reset-password endpoint for userService
     try {
       const response = await fetch(url, {
         method: "PUT",
