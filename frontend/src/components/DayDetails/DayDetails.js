@@ -40,7 +40,6 @@ const DayDetails = ({ selectedDate, schedules = [], expenses = [] }) => {
  const fetchTasks = async () => {
   try {
    const res = await axios.get(`http://10.0.0.210:5161/tasks/${user.userId}`);
-   // iterate through each task object in the returned JSON
    const fetched = res.data.map((task) => {
     let isOverdue = false;
     // check if the task due date is before the selected day on the calendar
@@ -53,7 +52,6 @@ const DayDetails = ({ selectedDate, schedules = [], expenses = [] }) => {
      isOverdue,
     };
    });
-   // update the task list to the data called 'fetched'
    setTaskList(fetched);
   } catch (error) {
    console.error("Error fetching tasks:", error);
