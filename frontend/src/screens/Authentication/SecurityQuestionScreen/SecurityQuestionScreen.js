@@ -30,7 +30,7 @@ const SecurityQuestionScreen = () => {
 
  const { height } = useWindowDimensions();
 
- const { u, e, p } = route.params || {};
+ const { u, e, p } = route.params || {}; // get passed params from CreateAccountScreen
  const [username, setUsername] = useState(u || "");
  const [email, setEmail] = useState(e || "");
  const [password, setPassword] = useState(p || "");
@@ -47,6 +47,7 @@ const SecurityQuestionScreen = () => {
   "What city were you born in?",
  ];
 
+ // Regex to verify 
  const isOnlyLetters = (str) => {
   const regex = /^[A-Za-z]+$/;
   return regex.test(str);
@@ -62,10 +63,11 @@ const SecurityQuestionScreen = () => {
   }
   if (isOnlyLetters(answer)) {
    setErrorMessage(null);
-   console.log("fetching...\n", username, email, password, question, answer);
+  //  console.log("fetching...\n", username, email, password, question, answer);
 
    const url = "http://10.0.0.210:5161/worthy/user/register";
 
+   // POST request to DB for creating a user
    try {
     console.log("Sending request...");
 

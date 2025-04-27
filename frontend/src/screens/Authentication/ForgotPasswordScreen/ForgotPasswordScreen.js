@@ -35,6 +35,7 @@ const ForgotPasswordScreen = () => {
 
     const url = `http://10.0.0.210:5161/worthy/user/username/${username}`;
 
+    // Check DB for user by username
     try {
       console.log("Sending request...");
 
@@ -53,6 +54,7 @@ const ForgotPasswordScreen = () => {
         return;
       } else {
         setErrorMessage("");
+        // pass received data to ResetPasswordScreen
         navigation.navigate("ResetPassword", {
           data: data,
         });
