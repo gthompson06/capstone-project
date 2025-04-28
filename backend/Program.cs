@@ -11,7 +11,6 @@ Env.Load();
 var awsAccessKey = Environment.GetEnvironmentVariable("AWS_ACCESS_KEY_ID");
 var awsSecretKey = Environment.GetEnvironmentVariable("AWS_SECRET_ACCESS_KEY");
 var awsRegion = Environment.GetEnvironmentVariable("AWS_REGION") ?? "us-east-1";
-
 var region = RegionEndpoint.GetBySystemName(awsRegion);
 
 var dynamoDbClient = new AmazonDynamoDBClient(
@@ -19,16 +18,11 @@ var dynamoDbClient = new AmazonDynamoDBClient(
     region
 );
 
-
 builder.Services.AddSingleton<IAmazonDynamoDB>(dynamoDbClient);
-
-
 builder.Services.AddSingleton<IDynamoDBContext>(new DynamoDBContext(dynamoDbClient));
 builder.Services.AddSingleton(new DynamoDBOperationConfig { IndexName = "UserName-index" });
 
-
 builder.Services.AddSingleton<JwtSecurityTokenHandler>();
-
 
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<Database>();
@@ -40,16 +34,12 @@ builder.Services.AddScoped<TaskService>();
 builder.Services.AddScoped<ScheduleService>();
 builder.Services.AddControllers();
 
-
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowCORS",
-        policy =>
-        {
-            policy.AllowAnyOrigin()
-                  .AllowAnyMethod()
-                  .AllowAnyHeader();
-        });
+    options.AddPolicy("AllowCORS", policy =>
+    {
+        policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+    });
 });
 
 var app = builder.Build();

@@ -19,30 +19,20 @@ public class UserController : ControllerBase
         _tokenService = tokenService;
         _passwordService = passwordService;
     }
+
     [HttpGet("")]
-    public IActionResult Load()
-    {
-        return Ok(new { Message = "Welcome" });
-    }
+    public IActionResult Load() => Ok(new { Message = "Welcome" });
 
     [HttpGet("allUsers")]
     public async Task<IActionResult> GetAllUsers()
     {
         var response = await _userService.GetAllUsers();
-        if (response == null)
-        {
-            return NotFound(new { Message = "Bad Request" });
-        }
-        else
-        {
-            return Ok(response);
-        }
+        return response == null ? NotFound(new { Message = "Bad Request" }) : Ok(response);
     }
 
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegistrationDTO request)
     {
-
         var result = await _userService.Register(request);
         return result.Success ? Ok(new { message = result.Message }) : BadRequest(new { message = result.Message });
     }
@@ -51,36 +41,22 @@ public class UserController : ControllerBase
     public async Task<IActionResult> Login([FromBody] LoginDTO request)
     {
         var user = await _userService.GetUserOnLogin(request);
-        if (user == null)
-        {
-            return Unauthorized(new { message = "Invalid username or password" });
-        }
+        if (user == null) return Unauthorized(new { message = "Invalid username or password" });
 
         var refreshToken = await _tokenService.GenerateRefreshTokenAsync(user.UserId);
         var accessToken = _tokenService.GenerateAccessToken();
 
-        return Ok(new
-        {
-            message = "Login successful",
-            user,
-            refreshToken,
-            accessToken
-        });
+        return Ok(new { message = "Login successful", user, refreshToken, accessToken });
     }
 
     [HttpPut("reset-password")]
     public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDTO request)
     {
         var user = await _userService.GetUserInfoByUsername(request.UserName);
-        if (user == null)
-        {
-            return NotFound(new { message = "User not found" });
-        }
+        if (user == null) return NotFound(new { message = "User not found" });
+
         var isCorrectAnswer = _passwordService.Verify(user.SecurityAnswer, request.SecurityAnswer);
-        if (!isCorrectAnswer)
-        {
-            return BadRequest(new { message = "Security answer is incorrect" });
-        }
+        if (!isCorrectAnswer) return BadRequest(new { message = "Security answer is incorrect" });
 
         user.HashedPassword = _passwordService.Hash(request.NewPassword);
         await _userService.UpdateUserInfo(user);
@@ -92,37 +68,21 @@ public class UserController : ControllerBase
     public async Task<IActionResult> GetUserInfo(int userId)
     {
         var response = await _userService.GetUserInfo(userId);
-        if (response == null)
-        {
-            return NotFound(new { Message = "404: User not found" });
-        }
-        else
-        {
-            return Ok(response);
-        }
+        return response == null ? NotFound(new { Message = "404: User not found" }) : Ok(response);
     }
+
     [HttpGet("username/{username}")]
     public async Task<IActionResult> GetUserByUserName(string username)
     {
         var response = await _userService.GetUserInfoByUsername(username);
-        if (response == null)
-        {
-            return NotFound(new { Message = "404: User not found" });
-        }
-        else
-        {
-            return Ok(response);
-        }
+        return response == null ? NotFound(new { Message = "404: User not found" }) : Ok(response);
     }
 
     [HttpPut("{userId}")]
     public async Task<IActionResult> UpdateUser(int userId, [FromBody] UserInfo updatedUser)
     {
         var response = await _userService.GetUserInfo(userId);
-        if (response == null)
-        {
-            return NotFound(new { Message = "User not found" });
-        }
+        if (response == null) return NotFound(new { Message = "User not found" });
 
         response.UserName = updatedUser.UserName ?? response.UserName;
         response.Email = updatedUser.Email ?? response.Email;
@@ -142,15 +102,9 @@ public class UserController : ControllerBase
     public async Task<IActionResult> DeleteUser(int userId)
     {
         var response = await _userService.GetUserInfo(userId);
-        if (response == null)
-        {
-            return NotFound(new { Message = "User not found" });
-        }
-        else
-        {
-            await _userService.DeleteUserInfo(userId);
-            return NoContent();
-        }
+        if (response == null) return NotFound(new { Message = "User not found" });
 
+        await _userService.DeleteUserInfo(userId);
+        return NoContent();
     }
 }
