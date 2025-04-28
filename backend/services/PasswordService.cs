@@ -10,7 +10,7 @@ public class PasswordService
 
     public string Hash(string password)
     {
-        var salt = RandomNumberGenerator.GetBytes(SaltSize);
+        var salt = RandomNumberGenerator.GetBytes(SaltSize); // goes in front of hashed password
         var hash = Rfc2898DeriveBytes.Pbkdf2(password, salt, Iterations, _hashAlgorithmName, KeySize);
 
         return string.Join(Delimiter, Convert.ToBase64String(salt), Convert.ToBase64String(hash));

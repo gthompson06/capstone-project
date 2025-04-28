@@ -1,12 +1,16 @@
+// Importing necessary components from 'react-native' and React itself
 import { View, Text, StyleSheet, Pressable } from "react-native";
 import React from "react";
 
+// CustomButton component definition
 const CustomButton = ({ onPress, text, type = "primary" }) => {
   return (
+    // Pressable component triggers the onPress function when pressed
     <Pressable
-      onPress={onPress}
-      style={styles.button}
+      onPress={onPress} // Event handler for when the button is pressed
+      style={styles.button} // Applying base button styles
     >
+      {/* Display the text passed through the 'text' prop inside a Text component */}
       <Text style={styles.buttonText}>{text}</Text>
     </Pressable>
   );

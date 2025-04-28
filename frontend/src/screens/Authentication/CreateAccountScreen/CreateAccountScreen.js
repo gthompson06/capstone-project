@@ -32,12 +32,14 @@ const CreateAccountScreen = () => {
 
   const navigation = useNavigation();
 
+  // verify if email contains '@' and '.com' using regular expression
   const isValidEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   };
 
   const register = async () => {
+    // checking invalid cases for input boxes
     if (!username || !email || !password || !confirmPassword) {
       setErrorMessage("No fields can be empty");
       return;
@@ -48,7 +50,7 @@ const CreateAccountScreen = () => {
       setErrorMessage("Email entry is incorrect");
       return;
     }
-    //   console.log(username, email, password);
+    // pass params to SecurityQuestionScreen
     navigation.navigate("SecurityQuestion", {
       u: username,
       e: email,
