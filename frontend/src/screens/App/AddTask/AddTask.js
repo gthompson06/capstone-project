@@ -1,3 +1,4 @@
+// Import necessary libraries and components
 import React, { useState } from "react";
 import {
   View,
@@ -12,34 +13,42 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
 
-import { useAuth } from "../../../contexts/AuthContext";
-import CustomInput from "../../../components/CustomInput";
-import CustomButton from "../../../components/CustomButton/CustomButton";
-import { AppStyles } from "../../../styles/AppStyles";
+import { useAuth } from "../../../contexts/AuthContext"; // Auth context to get user info
+import CustomInput from "../../../components/CustomInput"; // Custom input field
+import CustomButton from "../../../components/CustomButton/CustomButton"; // Custom button
+import { AppStyles } from "../../../styles/AppStyles"; // App-wide styling
 
 const AddTask = () => {
+  // Get user information from auth context
   const { user } = useAuth();
+  // Get navigation and route utilities
   const navigation = useNavigation();
   const route = useRoute();
-  const { taskCount } = route.params || {};
+  // Import app styles
   const styles = AppStyles;
 
+  // Set up states for task form inputs
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [type, setType] = useState("");
   const [order, setOrder] = useState("");
 
+  // States for due dates and start/end dates
   const [hasDueDate, setHasDueDate] = useState(false);
   const [dueDate, setDueDate] = useState(null);
   const [hasStartEnd, setHasStartEnd] = useState(false);
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
+
+  // States to control visibility of date pickers
   const [showDueDatePicker, setShowDueDatePicker] = useState(false);
   const [showStartDatePicker, setShowStartDatePicker] = useState(false);
   const [showEndDatePicker, setShowEndDatePicker] = useState(false);
 
+  // Get the last taskId passed from the previous screen (if any)
   const { lastTaskId } = route.params || {};
 
+  // Handles changes when user selects a date
   const handleDateChange = (event, selectedDate, dateType) => {
     if (dateType === "dueDate") {
       setShowDueDatePicker(false);
@@ -53,13 +62,16 @@ const AddTask = () => {
     }
   };
 
+  // Handle form submission
   const handleSubmit = async () => {
+    // Format a date to YYYY-MM-DD
     const formatDate = (date) => {
       if (!date) return null;
       const dateObj = new Date(date);
       return dateObj.toISOString().split("T")[0];
     };
 
+    // Create a task object with all input data
     const taskData = {
       userId: user.userId,
       taskId: lastTaskId + 1,
@@ -76,15 +88,18 @@ const AddTask = () => {
     };
 
     try {
-      const response = await fetch("http://10.0.0.210:5161/tasks", {
+      // Send the task data to backend API via POST request
+      const response = await fetch("http://localhost:5161/tasks", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(taskData),
       });
 
       if (response.ok) {
+        // If successful, go back to previous screen
         navigation.goBack();
       } else {
+        // If error, print error message
         const errorText = await response.text();
         console.error("Error creating task:", errorText);
       }
@@ -93,29 +108,37 @@ const AddTask = () => {
     }
   };
 
+  // Component rendering
   return (
     <SafeAreaView style={styles.root}>
+      {/* Back button */}
       <TouchableOpacity style={styles.menuButton} onPress={() => navigation.goBack()}>
         <Ionicons name="arrow-back" size={30} color="#1762a7" />
       </TouchableOpacity>
 
+      {/* Screen header */}
       <View style={styles.screenHeader}>
         <Text style={styles.screenTitle}>Add Task</Text>
       </View>
 
+      {/* Scrollable form content */}
       <ScrollView contentContainerStyle={{ alignItems: "center", paddingBottom: 40 }}>
+        {/* Form inputs */}
         <CustomInput value={title} setValue={setTitle} placeholder="Enter title" />
         <CustomInput value={description} setValue={setDescription} placeholder="Enter description" />
         <CustomInput value={type} setValue={setType} placeholder="Enter type" />
 
+        {/* Toggle for due date */}
         <View style={localStyles.switchRow}>
           <Text style={localStyles.label}>Has Due Date</Text>
           <Switch value={hasDueDate} onValueChange={setHasDueDate} />
         </View>
 
+        {/* Due date input (only shown if hasDueDate is true) */}
         {hasDueDate && (
           <>
             {Platform.OS === "web" ? (
+              // On web, use regular HTML input for date
               <View style={localStyles.datePickerBox}>
                 <input
                   type="date"
@@ -126,6 +149,7 @@ const AddTask = () => {
               </View>
             ) : (
               <>
+                {/* On mobile, use DateTimePicker */}
                 <TouchableOpacity
                   onPress={() => setShowDueDatePicker(true)}
                   style={localStyles.datePickerBox}
@@ -145,11 +169,13 @@ const AddTask = () => {
           </>
         )}
 
+        {/* Toggle for start and end date */}
         <View style={localStyles.switchRow}>
           <Text style={localStyles.label}>Has Start and End</Text>
           <Switch value={hasStartEnd} onValueChange={setHasStartEnd} />
         </View>
 
+        {/* Start and End date inputs (only shown if hasStartEnd is true) */}
         {hasStartEnd && (
           <>
             {Platform.OS === "web" ? (
@@ -173,6 +199,7 @@ const AddTask = () => {
               </>
             ) : (
               <>
+                {/* Mobile pickers for start and end dates */}
                 <TouchableOpacity
                   onPress={() => setShowStartDatePicker(true)}
                   style={localStyles.datePickerBox}
@@ -207,12 +234,14 @@ const AddTask = () => {
           </>
         )}
 
+        {/* Submit button */}
         <CustomButton onPress={handleSubmit} text="Submit" />
       </ScrollView>
     </SafeAreaView>
   );
 };
 
+// Local styles for label, switches, and date pickers
 const localStyles = {
   label: {
     alignSelf: "flex-start",

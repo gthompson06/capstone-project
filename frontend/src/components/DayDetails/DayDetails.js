@@ -39,7 +39,7 @@ const DayDetails = ({ selectedDate, schedules = [], expenses = [] }) => {
  // fetches all tasks associated with the users ID
  const fetchTasks = async () => {
   try {
-   const res = await axios.get(`http://10.0.0.210:5161/tasks/${user.userId}`);
+   const res = await axios.get(`http://localhost:5161/tasks/${user.userId}`);
    const fetched = res.data.map((task) => {
     let isOverdue = false;
     // check if the task due date is before the selected day on the calendar
@@ -93,7 +93,7 @@ const DayDetails = ({ selectedDate, schedules = [], expenses = [] }) => {
  // work in progess
  const handleSetComplete = async (taskId) => {
   try {
-   await axios.put(`http://10.0.0.210:5161/tasks/complete/${taskId}`);
+   await axios.put(`http://localhost:5161/tasks/complete/${taskId}`);
    fetchTasks();
    setSelectedTaskId(null);
   } catch (error) {

@@ -97,7 +97,7 @@ const Finances = () => {
   const fetchAccounts = async () => {
     if (user?.userId) {
       try {
-        const response = await fetch(`http://10.0.0.210:5161/accounts/${user.userId}`);
+        const response = await fetch(`http://localhost:5161/accounts/${user.userId}`);
         if (!response.ok) throw new Error("Failed to fetch accounts");
         const data = await response.json();
         setAccounts(data);
@@ -114,7 +114,7 @@ const Finances = () => {
 
   const handleDelete = async (accountId) => {
     try {
-      await fetch(`http://10.0.0.210:5161/accounts/${user.userId}/${accountId}`, {
+      await fetch(`http://localhost:5161/accounts/${user.userId}/${accountId}`, {
         method: "DELETE",
       });
       setAccounts((prev) => prev.filter((acc) => acc.accountId !== accountId));
